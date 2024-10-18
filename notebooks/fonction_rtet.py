@@ -39,7 +39,7 @@ def insertion_projection(nodes_ext, node_attr, edge_attr, gr, proxi, att_insert_
         dist = gr_ext.project_node(station, gr, proxi, att_edge=edge_attr)
         if not dist:
             geo_st = gr_ext.nodes[station]['geometry']
-            id_edge = gr.find_nearest_edge(geo_st, high_proxi_t)
+            id_edge = gr.find_nearest_edge(geo_st, proxi)
             if not id_edge: 
                 st_ko.append(station)
                 print('ko')
