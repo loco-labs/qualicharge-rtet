@@ -63,6 +63,7 @@ def analyse_saturation(gr_ext, gr, non_sature, seuil):
         dist_inter_st = gr.weight_extend(edge, gr_ext_st, radius=seuil, n_attribute='dist_node_ext', n_active=non_sature)
         if not dist_inter_st or dist_inter_st > 2 * seuil :
             saturation.append(edge)
-    gr_satur = nx.subgraph_view(gr, filter_edge=(lambda x1, x2: (x1, x2) in saturation))
+    # gr_satur = nx.subgraph_view(gr, filter_edge=(lambda x1, x2: (x1, x2) in saturation))
+    gr_satur = gr.edge_subgraph(saturation)
     return gr_stat_satur, gr_satur
 
