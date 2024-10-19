@@ -54,13 +54,15 @@ def insertion_projection(nodes_ext, node_attr, edge_attr, gr, proxi, att_insert_
             gr_ext.project_node(station, gr, 0, target_node=id_node, att_edge=edge_attr)
     return gr_ext, st_ko
 
-def analyse_saturation(gr_ext, gr, non_sature, seuil): 
+def analyse_saturation(g_tot, gr_ext, gr, non_sature, seuil): 
     '''identifie les tronçons qui ont au moins un point à une distance supérieure à 'seuil' de la plus proche station non saturée''' 
     saturation = []
-    gr_stat_satur = nx.subgraph_view(gr, filter_node=(lambda x: not gr.nodes[x].get(non_sature, True)))
+    #gr_stat_satur = nx.subgraph_view(gr, filter_node=(lambda x: not gr.nodes[x].get(non_sature, True)))
+    gr_stat_satur = gr_ext.node_subgraph([nd for nd in gr_ext.nodes if not gr_ext.nodes[nd].get(non_sature, True)])
     gr_ext_st = nx.subgraph_view(gr_ext, filter_node=(lambda x: isinstance(x, str) and x[:2] == 'st'))
     for edge in gr.edges:
-        dist_inter_st = gr.weight_extend(edge, gr_ext_st, radius=seuil, n_attribute='dist_node_ext', n_active=non_sature)
+        dist_inter_st = g_tot.weight_extend(edge, gr_ext_st, radius=seuil, n_attribute='dist_node_ext', n_active=non_sature)
+        #dist_inter_st = gr.weight_extend(edge, gr_ext_st, radius=seuil, n_attribute='dist_node_ext', n_active=non_sature)
         if not dist_inter_st or dist_inter_st > 2 * seuil :
             saturation.append(edge)
     # gr_satur = nx.subgraph_view(gr, filter_edge=(lambda x1, x2: (x1, x2) in saturation))
