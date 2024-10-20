@@ -45,7 +45,8 @@ def insertion_projection(nodes_ext, node_attr, edge_attr, gr, proxi, att_insert_
                 print('ko')
                 continue 
             # on ajoute un noeud et on crée le lien 
-            id_node = int(max(cast_id(gr.nodes, only_int=True)) + 1)
+            id_node = max(max(gr.nodes) + 1, max(gr_ext.nodes) + 1)
+            print(id_node)
             dis = gr.insert_node(geo_st, id_node, id_edge, att_node=att_insert_node, adjust=False) 
             if not dis: # cas à clarifier  
                 st_ko.append(station)
@@ -58,8 +59,9 @@ def analyse_saturation(g_tot, gr_ext, gr, non_sature, seuil):
     '''identifie les tronçons qui ont au moins un point à une distance supérieure à 'seuil' de la plus proche station non saturée''' 
     saturation = []
     #gr_stat_satur = nx.subgraph_view(gr, filter_node=(lambda x: not gr.nodes[x].get(non_sature, True)))
-    gr_stat_satur = gr_ext.node_subgraph([nd for nd in gr_ext.nodes if not gr_ext.nodes[nd].get(non_sature, True)])
-    gr_ext_st = nx.subgraph_view(gr_ext, filter_node=(lambda x: isinstance(x, str) and x[:2] == 'st'))
+    gr_stat_satur = nx.induced_subgraph(gr_ext, [nd for nd in gr_ext.nodes if not gr_ext.nodes[nd].get(non_sature, True)])
+    #gr_ext_st = nx.subgraph_view(gr_ext, filter_node=(lambda x: isinstance(x, str) and x[:2] == 'st'))
+    gr_ext_st = nx.subgraph_view(gr_ext, filter_node=(lambda x: 'nature' in gr_ext.nodes[x] and gr_ext.nodes[x]['nature'] == 'station_irve'))
     for edge in gr.edges:
         dist_inter_st = g_tot.weight_extend(edge, gr_ext_st, radius=seuil, n_attribute='dist_node_ext', n_active=non_sature)
         #dist_inter_st = gr.weight_extend(edge, gr_ext_st, radius=seuil, n_attribute='dist_node_ext', n_active=non_sature)
