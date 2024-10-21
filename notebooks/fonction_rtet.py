@@ -46,7 +46,7 @@ def insertion_projection(nodes_ext, node_attr, edge_attr, gr, proxi, att_insert_
                 continue 
             # on ajoute un noeud et on crée le lien 
             id_node = max(max(gr.nodes) + 1, max(gr_ext.nodes) + 1)
-            print(id_node)
+            # print(id_node)
             dis = gr.insert_node(geo_st, id_node, id_edge, att_node=att_insert_node, adjust=False) 
             if not dis: # cas à clarifier  
                 st_ko.append(station)
@@ -55,19 +55,37 @@ def insertion_projection(nodes_ext, node_attr, edge_attr, gr, proxi, att_insert_
             gr_ext.project_node(station, gr, 0, target_node=id_node, att_edge=edge_attr)
     return gr_ext, st_ko
 
-def analyse_saturation(g_tot, gr_ext, gr, non_sature, seuil): 
+def analyse_saturation(g_tot, gr_ext, gr, dispo, seuil): 
     '''identifie les tronçons qui ont au moins un point à une distance supérieure à 'seuil' de la plus proche station non saturée''' 
     saturation = []
-    #gr_stat_satur = nx.subgraph_view(gr, filter_node=(lambda x: not gr.nodes[x].get(non_sature, True)))
-    gr_stat_satur = nx.induced_subgraph(gr_ext, [nd for nd in gr_ext.nodes if not gr_ext.nodes[nd].get(non_sature, True)])
+    #gr_stat_satur = nx.subgraph_view(gr, filter_node=(lambda x: not gr.nodes[x].get(dispo, True)))
+    gr_stat_satur = nx.induced_subgraph(gr_ext, [nd for nd in gr_ext.nodes if not gr_ext.nodes[nd].get(dispo, True)])
     #gr_ext_st = nx.subgraph_view(gr_ext, filter_node=(lambda x: isinstance(x, str) and x[:2] == 'st'))
     gr_ext_st = nx.subgraph_view(gr_ext, filter_node=(lambda x: 'nature' in gr_ext.nodes[x] and gr_ext.nodes[x]['nature'] == 'station_irve'))
     for edge in gr.edges:
-        dist_inter_st = g_tot.weight_extend(edge, gr_ext_st, radius=seuil, n_attribute='dist_node_ext', n_active=non_sature)
-        #dist_inter_st = gr.weight_extend(edge, gr_ext_st, radius=seuil, n_attribute='dist_node_ext', n_active=non_sature)
+        dist_inter_st = g_tot.weight_extend(edge, gr_ext_st, radius=seuil, n_attribute='dist_node_ext', n_active=dispo)
+        #dist_inter_st = gr.weight_extend(edge, gr_ext_st, radius=seuil, n_attribute='dist_node_ext', n_active=dispo)
         if not dist_inter_st or dist_inter_st > 2 * seuil :
             saturation.append(edge)
     # gr_satur = nx.subgraph_view(gr, filter_edge=(lambda x1, x2: (x1, x2) in saturation))
     gr_satur = gr.edge_subgraph(saturation)
     return gr_stat_satur, gr_satur
 
+def extend_saturation(gr_satur, g_tot, dispo):
+    '''complète gr_satur avec les tronçons allant jusqu'à une bifurcation ou une station disponible'''
+    nd_sat = set(gr_satur.nodes())
+    ed_extend = set(gr_satur.edges())
+    for node in gr_satur.nodes():
+        adjs = set(nd for nd in g_tot.adj[node] 
+                   if nd not in nd_sat and (dispo not in g_tot.nodes[nd] or g_tot.nodes[nd][dispo])
+                  ) - nd_sat
+        #print('adjs init ', adjs)
+        while len(adjs) == 1:
+            nd_sat.add(node)
+            new_node = list(adjs)[0]
+            ed_extend.add((node, new_node))
+            node = new_node
+            adjs = set(nd for nd in g_tot.adj[node] 
+                       if nd not in nd_sat and (dispo not in g_tot.nodes[nd] or g_tot.nodes[nd][dispo])
+                      ) - nd_sat
+    return g_tot.edge_subgraph(ed_extend)
