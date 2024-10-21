@@ -55,7 +55,7 @@ def insertion_projection(nodes_ext, node_attr, edge_attr, gr, proxi, att_insert_
             gr_ext.project_node(station, gr, 0, target_node=id_node, att_edge=edge_attr)
     return gr_ext, st_ko
 
-def analyse_saturation(g_tot, gr_ext, gr, dispo, seuil): 
+def troncons_non_mailles(g_tot, gr_ext, gr, dispo, seuil): 
     '''identifie les tronçons qui ont au moins un point à une distance supérieure à 'seuil' de la plus proche station non saturée''' 
     saturation = []
     #gr_stat_satur = nx.subgraph_view(gr, filter_node=(lambda x: not gr.nodes[x].get(dispo, True)))
@@ -71,7 +71,7 @@ def analyse_saturation(g_tot, gr_ext, gr, dispo, seuil):
     gr_satur = gr.edge_subgraph(saturation)
     return gr_stat_satur, gr_satur
 
-def extend_saturation(gr_satur, g_tot, dispo):
+def troncons_peu_mailles(gr_satur, g_tot, dispo):
     '''complète gr_satur avec les tronçons allant jusqu'à une bifurcation ou une station disponible'''
     nd_sat = set(gr_satur.nodes())
     ed_extend = set(gr_satur.edges())
