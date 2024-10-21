@@ -10,9 +10,9 @@ import networkx as nx
 import geo_nx as gnx
 from geo_nx import cast_id
 
-def insertion_noeuds(noeuds, gr, proxi, att_node):
-    '''insertion de 'noeuds' sur le graph 'gr'et retourne le graphe des 'noeuds' '''
-    troncons = gr.to_geopandas_edgelist()
+def insertion_noeuds(noeuds, gr, proxi, att_node, troncons=None):
+    '''insere des 'noeuds' sur le graph 'gr' pour des troncons définis et retourne le graphe des 'noeuds' '''
+    troncons = troncons if troncons else gr.to_geopandas_edgelist()
     join = gpd.sjoin(noeuds, troncons.set_geometry(troncons.buffer(proxi))) # filtrage des tronçons
     noeuds_ok = noeuds[noeuds.index.isin(join.index)]
     gs_noeuds = gnx.from_geopandas_nodelist(noeuds_ok, node_attr=True) # réseau des noeuds supplémentaires
