@@ -10,18 +10,21 @@ import networkx as nx
 import geo_nx as gnx
 from geo_nx import cast_id
 
-def insertion_noeuds(noeuds, gr, proxi, att_node, troncons=None, adjust=False):
+def insertion_noeuds(noeuds, gr, proxi, att_node=None, troncons=None, adjust=False):
     '''insere des 'noeuds' sur le graph 'gr' pour des troncons définis et retourne le graphe des 'noeuds' '''
     troncons = troncons if troncons is not None else gr.to_geopandas_edgelist()
     join = gpd.sjoin(noeuds, troncons.set_geometry(troncons.buffer(proxi))) # filtrage des tronçons
-    noeuds_ok = noeuds[noeuds.index.isin(join.index)]
-    gs_noeuds = gnx.from_geopandas_nodelist(noeuds_ok, node_attr=True) # réseau des noeuds supplémentaires
+    noeuds_ok = noeuds[noeuds.index.isin(join.index)].copy()
+    noeuds_ok['node_id'] = range(max(gr.nodes)+1, len(noeuds_ok)+max(gr.nodes)+1)
+    gs_noeuds = gnx.from_geopandas_nodelist(noeuds_ok, node_id='node_id', node_attr=True) # réseau des noeuds supplémentaires
     # à vectoriser
-    for noeuds in gs_noeuds:
-        geo_st = gs_noeuds.nodes[noeuds]['geometry']
+    for noeud in gs_noeuds:
+        geo_st = gs_noeuds.nodes[noeud]['geometry']
         id_edge = gr.find_nearest_edge(geo_st, proxi) # recherche du troncon le plus proche
-        id_node = int(max(cast_id(gr.nodes, only_int=True)) + 1)
-        gr.insert_node(geo_st, id_node, id_edge, att_node=att_node, adjust=adjust) # ajout du noeud     
+        #id_node = int(max(cast_id(gr.nodes, only_int=True)) + 1)
+        #id_node = gs_noeuds.nodes[noeud]['node_id']
+        att_node = att_node if att_node is not None else {key: val for key, val in gs_noeuds.nodes[noeud].items() if key not in ['node_id', 'geometry']}
+        gr.insert_node(geo_st, noeud, id_edge, att_node=att_node, adjust=adjust) # ajout du noeud
     return gs_noeuds
 
 def proximite(noeuds_ext, cible, proxi):
