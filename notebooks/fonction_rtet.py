@@ -10,18 +10,22 @@ import networkx as nx
 import geo_nx as gnx
 from geo_nx import cast_id
 
+GEOM = 'geometry'
+NODE_ID = 'node_id'
+NATURE = 'nature'
+
 def insertion_noeuds(noeuds, gr, proxi, att_node=None, troncons=None, adjust=False):
     '''insere des 'noeuds' sur le graph 'gr' pour des troncons définis et retourne le graphe des 'noeuds' '''
     troncons = troncons if troncons is not None else gr.to_geopandas_edgelist()
     join = gpd.sjoin(noeuds, troncons.set_geometry(troncons.buffer(proxi))) # filtrage des tronçons
     noeuds_ok = noeuds[noeuds.index.isin(join.index)].copy()
-    noeuds_ok['node_id'] = range(max(gr.nodes)+1, len(noeuds_ok)+max(gr.nodes)+1)
-    gs_noeuds = gnx.from_geopandas_nodelist(noeuds_ok, node_id='node_id', node_attr=True) # réseau des noeuds supplémentaires
+    noeuds_ok[NODE_ID] = range(max(gr.nodes)+1, len(noeuds_ok)+max(gr.nodes)+1)
+    gs_noeuds = gnx.from_geopandas_nodelist(noeuds_ok, node_id=NODE_ID, node_attr=True) # réseau des noeuds supplémentaires
     # à vectoriser
     for noeud in gs_noeuds:
-        geo_st = gs_noeuds.nodes[noeud]['geometry']
+        geo_st = gs_noeuds.nodes[noeud][GEOM]
         id_edge = gr.find_nearest_edge(geo_st, proxi) # recherche du troncon le plus proche
-        att_node = att_node if att_node is not None else {key: val for key, val in gs_noeuds.nodes[noeud].items() if key not in ['node_id', 'geometry']}
+        att_node = att_node if att_node is not None else {key: val for key, val in gs_noeuds.nodes[noeud].items() if key not in [NODE_ID, GEOM]}
         gr.insert_node(geo_st, noeud, id_edge, att_node=att_node, adjust=adjust) # ajout du noeud
     return gs_noeuds
 
@@ -34,12 +38,12 @@ def proximite(noeuds_ext, cible, proxi):
 def insertion_projection(nodes_ext, node_attr, edge_attr, gr, proxi, att_insert_node):
     '''création du graphe des stations avec projection sur des noeuds inserés dans le graphe 'gr' '''
     gr_ext = gnx.from_geopandas_nodelist(nodes_ext, node_id='node_id', node_attr=node_attr)
-    stations = list(nodes_ext['node_id'])
+    stations = list(nodes_ext[NODE_ID])
     st_ko =[]
     for station in stations: # à vectoriser
         dist = gr_ext.project_node(station, gr, proxi, att_edge=edge_attr)
         if not dist:
-            geo_st = gr_ext.nodes[station]['geometry']
+            geo_st = gr_ext.nodes[station][GEOM]
             id_edge = gr.find_nearest_edge(geo_st, proxi)
             if not id_edge: 
                 st_ko.append(station)
@@ -55,11 +59,11 @@ def insertion_projection(nodes_ext, node_attr, edge_attr, gr, proxi, att_insert_
             gr_ext.project_node(station, gr, 0, target_node=id_node, att_edge=edge_attr)
     return gr_ext, st_ko
 
-def troncons_non_mailles(g_tot, gr_ext, gr, dispo, seuil, n_attribute='dist_actives'): 
+def troncons_non_mailles(g_tot, gr_ext, gr, dispo, seuil, n_attribute='dist_actives', stat_attribute='station_irve'): 
     '''identifie les tronçons qui ont au moins un point à une distance supérieure à 'seuil' de la plus proche station non saturée''' 
     saturation = []
     gr_stat_satur = nx.induced_subgraph(gr_ext, [nd for nd in gr_ext.nodes if not gr_ext.nodes[nd].get(dispo, True)])
-    gr_ext_st = nx.subgraph_view(gr_ext, filter_node=(lambda x: 'nature' in gr_ext.nodes[x] and gr_ext.nodes[x]['nature'] == 'station_irve'))
+    gr_ext_st = nx.subgraph_view(gr_ext, filter_node=(lambda x: NATURE in gr_ext.nodes[x] and gr_ext.nodes[x][NATURE] == stat_attribute))
     for edge in gr.edges:
         dist_inter_st = g_tot.weight_extend(edge, gr_ext_st, radius=seuil, n_attribute=n_attribute, n_active=dispo)
         if not dist_inter_st or dist_inter_st > 2 * seuil :
