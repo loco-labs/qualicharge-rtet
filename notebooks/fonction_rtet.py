@@ -21,8 +21,6 @@ def insertion_noeuds(noeuds, gr, proxi, att_node=None, troncons=None, adjust=Fal
     for noeud in gs_noeuds:
         geo_st = gs_noeuds.nodes[noeud]['geometry']
         id_edge = gr.find_nearest_edge(geo_st, proxi) # recherche du troncon le plus proche
-        #id_node = int(max(cast_id(gr.nodes, only_int=True)) + 1)
-        #id_node = gs_noeuds.nodes[noeud]['node_id']
         att_node = att_node if att_node is not None else {key: val for key, val in gs_noeuds.nodes[noeud].items() if key not in ['node_id', 'geometry']}
         gr.insert_node(geo_st, noeud, id_edge, att_node=att_node, adjust=adjust) # ajout du noeud
     return gs_noeuds
@@ -49,7 +47,6 @@ def insertion_projection(nodes_ext, node_attr, edge_attr, gr, proxi, att_insert_
                 continue 
             # on ajoute un noeud et on crée le lien 
             id_node = max(max(gr.nodes) + 1, max(gr_ext.nodes) + 1)
-            # print(id_node)
             dis = gr.insert_node(geo_st, id_node, id_edge, att_node=att_insert_node, adjust=False) 
             if not dis: # cas à clarifier  
                 st_ko.append(station)
@@ -58,19 +55,15 @@ def insertion_projection(nodes_ext, node_attr, edge_attr, gr, proxi, att_insert_
             gr_ext.project_node(station, gr, 0, target_node=id_node, att_edge=edge_attr)
     return gr_ext, st_ko
 
-def troncons_non_mailles(g_tot, gr_ext, gr, dispo, seuil): 
+def troncons_non_mailles(g_tot, gr_ext, gr, dispo, seuil, n_attribute='dist_actives'): 
     '''identifie les tronçons qui ont au moins un point à une distance supérieure à 'seuil' de la plus proche station non saturée''' 
     saturation = []
-    #gr_stat_satur = nx.subgraph_view(gr, filter_node=(lambda x: not gr.nodes[x].get(dispo, True)))
     gr_stat_satur = nx.induced_subgraph(gr_ext, [nd for nd in gr_ext.nodes if not gr_ext.nodes[nd].get(dispo, True)])
-    #gr_ext_st = nx.subgraph_view(gr_ext, filter_node=(lambda x: isinstance(x, str) and x[:2] == 'st'))
     gr_ext_st = nx.subgraph_view(gr_ext, filter_node=(lambda x: 'nature' in gr_ext.nodes[x] and gr_ext.nodes[x]['nature'] == 'station_irve'))
     for edge in gr.edges:
-        dist_inter_st = g_tot.weight_extend(edge, gr_ext_st, radius=seuil, n_attribute='dist_node_ext', n_active=dispo)
-        #dist_inter_st = gr.weight_extend(edge, gr_ext_st, radius=seuil, n_attribute='dist_node_ext', n_active=dispo)
+        dist_inter_st = g_tot.weight_extend(edge, gr_ext_st, radius=seuil, n_attribute=n_attribute, n_active=dispo)
         if not dist_inter_st or dist_inter_st > 2 * seuil :
             saturation.append(edge)
-    # gr_satur = nx.subgraph_view(gr, filter_edge=(lambda x1, x2: (x1, x2) in saturation))
     gr_satur = gr.edge_subgraph(saturation)
     return gr_stat_satur, gr_satur
 
@@ -82,7 +75,6 @@ def troncons_peu_mailles(gr_satur, g_tot, dispo):
         adjs = set(nd for nd in g_tot.adj[node] 
                    if nd not in nd_sat and (dispo not in g_tot.nodes[nd] or g_tot.nodes[nd][dispo])
                   ) - nd_sat
-        #print('adjs init ', adjs)
         while len(adjs) == 1:
             nd_sat.add(node)
             new_node = list(adjs)[0]
