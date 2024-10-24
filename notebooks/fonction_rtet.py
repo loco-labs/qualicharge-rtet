@@ -13,6 +13,7 @@ from geo_nx import cast_id
 GEOM = 'geometry'
 NODE_ID = 'node_id'
 NATURE = 'nature'
+WEIGHT = 'weight'
 
 def insertion_noeuds(noeuds, gr, proxi, att_node=None, troncons=None, adjust=False):
     '''insere des 'noeuds' sur le graph 'gr' pour des troncons définis et retourne le graphe des 'noeuds' '''
@@ -60,6 +61,18 @@ def insertion_projection(nodes_ext, node_attr, edge_attr, gr, proxi, att_insert_
     return gr_ext, st_ko
 
 def troncons_non_mailles(g_tot, gr_ext, gr, dispo, seuil, n_attribute='dist_actives', stat_attribute='station_irve'): 
+    '''identifie les tronçons dont la distance entre les stations disponibles les plus proches est supérieure à 'seuil' ''' 
+    troncons_non_mailles = []
+    gr_ext_indispo = nx.induced_subgraph(gr_ext, [nd for nd in gr_ext.nodes if not gr_ext.nodes[nd].get(dispo, True)])
+    gr_ext_st = nx.subgraph_view(gr_ext, filter_node=(lambda x: NATURE in gr_ext.nodes[x] and gr_ext.nodes[x][NATURE] == stat_attribute))
+    for edge in gr.edges:
+        distance_max = seuil - g_tot.edges[edge][WEIGHT]
+        dist_inter_st = g_tot.weight_extend(edge, gr_ext_st, radius=distance_max, n_attribute=n_attribute, n_active=dispo)
+        if not dist_inter_st or dist_inter_st > seuil :
+            troncons_non_mailles.append(edge)
+    return gr_ext_indispo, gr.edge_subgraph(troncons_non_mailles)
+
+def troncons_non_mailles_old(g_tot, gr_ext, gr, dispo, seuil, n_attribute='dist_actives', stat_attribute='station_irve'): 
     '''identifie les tronçons qui ont au moins un point à une distance supérieure à 'seuil' de la plus proche station non saturée''' 
     saturation = []
     gr_stat_satur = nx.induced_subgraph(gr_ext, [nd for nd in gr_ext.nodes if not gr_ext.nodes[nd].get(dispo, True)])
@@ -88,3 +101,60 @@ def troncons_peu_mailles(gr_satur, g_tot, dispo):
                        if nd not in nd_sat and (dispo not in g_tot.nodes[nd] or g_tot.nodes[nd][dispo])
                       ) - nd_sat
     return g_tot.edge_subgraph(ed_extend)
+
+"""
+# partie Nicolas à intégrer
+
+vertices = pd.DataFrame(g_tot.edges.data()).rename(columns= {0: "source", 1: "target"})
+vertices[vertices[2].apply(pd.Series).columns] = vertices[2].apply(pd.Series)
+if VL:
+    vertices = vertices.drop(columns=[2, "geometry", "GEO_LENGTH", "type"])
+else: vertices = vertices.drop(columns=[2, "geometry", "GEO_LENGTH"])
+
+nodes = pd.DataFrame(g_tot.nodes.data()).rename(columns= {0: "node_id"})
+nodes[nodes[1].apply(pd.Series).columns] = nodes[1].apply(pd.Series)
+if VL:
+    nodes = nodes.drop(columns=[1, "geometry", "id_station", "amenageur", "p_cum"]).set_index("node_id")
+else: nodes = nodes.drop(columns=[1, "geometry", "id_station", "amenageur"]).set_index("node_id")
+
+def aretes_adjacentes(node_index, distance = 60000.0, excl_list: list = []):
+    ext_vertices = vertices.drop(excl_list).copy()
+    aretes_adj = ext_vertices[(ext_vertices["source"] == node_index) | (ext_vertices["target"] == node_index)].copy()
+    aretes_adj["ext"] = aretes_adj[["source", "target"]].apply(lambda row: row["target"] if row["target"] != node_index else row["source"], 1)
+    aretes_adj = aretes_adj[aretes_adj["weight"] < distance]
+    aretes_adj = aretes_adj.reset_index().merge(nodes.reset_index(), left_on="ext", right_on="node_id").set_index("index")
+    aretes_adj["station"] = aretes_adj["nature"] == "station_irve" 
+    aretes_adj.loc[~aretes_adj["station"], "distance_restante"] = distance - aretes_adj.loc[~aretes_adj["station"], "weight"]
+
+# for _, row in aretes_adj[~aretes_adj["station"]].iterrows():
+#     print(aretes_adjacentes(row["fin"], row["distance_restante"]))
+return aretes_adj
+def green_list(node, distance_restante: float = 60000.0, excl_list = []):
+    return_list = []
+    adj = aretes_adjacentes(node, distance_restante, excl_list)
+    return_list += adj[adj["station"]].index.to_list()
+    for n, r in adj[~adj["station"]].iterrows():
+        excl_list.append(n)
+        recur_list = green_list(r["ext"], r["distance_restante"], excl_list)
+        return_list += recur_list
+        if len(recur_list) > 0: return_list.append(n)
+    return return_list
+
+def gr_maillage(distance: float = 60000.0):
+    edge_ids = []
+    for st in nodes[nodes["nature"] == "station_irve"].index:
+        edge_ids+= green_list(st, distance_restante= distance)
+    green_vert = [(src, tgt) for src, tgt in zip(vertices.loc[edge_ids, "source"], vertices.loc[edge_ids, "target"])]
+    return nx.subgraph_view(g_tot, filter_edge=(lambda x1, x2: (x1, x2) in green_vert))
+
+param_maille= {'e_name': 'saturation', 'e_color': '#00ff00', 'n_color': 'green'}
+refmap = {'tiles': 'cartodbpositron', 'location': [43.8, 5], 'zoom_start': 9}
+
+gmaille = nx.subgraph_view(g_tot, filter_edge=(lambda x1, x2: (x1, x2) in green_vert))
+
+carte = gs.explore(refmap=refnat, param_exp_gs)
+carte = gr.explore(refmap=carte, param_exp_gr)
+carte = gmaille.explore(refmap=carte, layercontrol=True, nodes=False, display_core=True, france=True, **param_maille)
+carte
+
+"""
