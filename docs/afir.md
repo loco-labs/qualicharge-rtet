@@ -23,14 +23,14 @@ DENOMINATEUR : longueur totale du réseau concerné
 
 ## Règlementation véhicules légers
 
-### Exigences TRE-T central
+### Exigences RTE-T central
 
 - parc déployé dans chaque sens
 - 60 km mini entre chaque parc proche du réseau RTE-T avec
 - 31/12/2025: 400 kW par parc et un point de recharge à plus de 150 kW 
 - 31/12/2027: 600 kW par parc et deux points de recharge à plus de 150 kW
 
-### Exigences TRE-T global
+### Exigences RTE-T global
 
 - parc déployé dans chaque sens
 - 60 km mini entre chaque parc proche du réseau RTE-T
@@ -55,7 +55,7 @@ DENOMINATEUR : longueur totale du réseau concerné
   - 120 km mini entre chaque parc proche du réseau RTE-T avec sur 50% du réseau
   - RTE-T central : 2 800 kW par parc et un point de recharge à plus de 350 kW 
   - RTE-T global : 1 400 kW par parc et un point de recharge à plus de 350 kW 
-- 31/12/2030: RTE-T central 
+- 31/12/2030: RTE-T central
   - 60 km mini entre chaque parc proche du réseau RTE-T
   - 3 600 kW par parc et deux points de recharge à plus de 350 kW 
 - 31/12/2030: RTE-T global
@@ -137,4 +137,6 @@ Plusieurs approches sont possibles pour évaluer l'option 1:
 - approche par noeud :
 
   Pour chaque noeud, on recherche tous les trajets valides. Les tronçons associés à ces trajets sont alors validés.
-  Cette méthode nécessite d'explorer pour chaque noeud l'arbre des noeuds situés à moins de 60 km (fonction spécifique ou bien combinaison des fonctions `ego_graph` et `shortest_path_length` de NetworkX)
+  Cette méthode nécessite d'explorer pour chaque noeud l'arbre des noeuds situés à moins de 60 km (fonction spécifique ou bien combinaison des fonctions `ego_graph` et `shortest_path_length` de NetworkX).
+
+Nota: L'approche par tronçon permet de traiter simplement des distances maximales différentes entre RTE-T central (ex.60 km) et global (ex. 100 km).
