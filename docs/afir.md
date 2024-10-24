@@ -78,16 +78,17 @@ DENOMINATEUR : longueur totale du réseau concerné
 ## Distance entre stations
 
 La règlementation s'appuie sur la longueur des tronçons entre stations mais d'un autre coté, elle se mesure par un ratio de longueur de tronçons routiers.
- Un tronçon entre station étant constitué d'un ensemble de tronçons routiers, il convient de décliner l'exigence de distance entre stations au niveau des tronçons routiers. 
+Un tronçon entre stations étant constitué d'un ensemble de tronçons routiers, il convient de décliner l'exigence de distance entre stations au niveau des tronçons routiers.
 
-Pour un réseau linéaire, cette exigence peut être transposée aux tronçons routiers de la façon directe :
+Pour un réseau linéaire, cette exigence peut être transposée aux tronçons routiers de façon directe :
 
-- un tronçon routier est valide si le trajet entre les stations les plus proches de chaque extrémité du tonçon respecte l'exigence de distance
+- un tronçon routier est valide si la distance entre les stations les plus proches de chaque extrémité du tonçon respecte l'exigence de distance
 
-Pour un réseau maillé, la transposition est moins directe compte tenu du partage des tronçons routiers entre plusieurs tronçons entre stations. 
+Pour un réseau maillé, la transposition est moins directe compte tenu du partage des tronçons routiers entre plusieurs trajets entre stations.
 
-Par exemple, si l'on considère un réseau en étoile de trois stations A, B et C situées chacune à 50 km (A), 5 km (B) et 30 km (C) du centre de l'étoile, 
-la distance entre stations est de :
+### Exemple 1
+
+Par exemple, si l'on considère un réseau en étoile de trois stations A, B et C situées chacune à 50 km (A), 5 km (B) et 30 km (C) du centre de l'étoile, la distance entre stations serait de :
 
 - A-B : 55 km
 - A-C : 80 km
@@ -95,9 +96,10 @@ la distance entre stations est de :
 
 Deux interprétations de l'exigence de distance entre stations sont alors possibles :
 
-- option 1 : Chaque tronçon routier appartient à au moins un tronçon entre stations inférieur à 60 km, il peut alors être considéré comme valide,
-- option 2 : Le tronçon entre A et le centre de l'étoile induit au moins un tronçon entre stations non valide (A-C), il peut alors être considéré comme non valide. 
-C'est également le cas du tronçon entre C et le centre de l'étoile. 
+- option 1 : Comme chaque tronçon routier appartient à au moins un tronçon entre stations inférieur à 60 km, on peut alors considérer que l'exigence est respectée pour tous les tronçonc routiers.
+- option 2 : La distance entre A et C ne respecte pas la distance de 60 km, on peut dans ce cas considérer que les deux tronçons routiers qui constituent le trajet A-C sont non valides.
+
+### Exemple 2
 
 Si maintenant la distance de B au centre de l'étoile est de 20 km, les distances entre stations deviennent :
 
@@ -107,10 +109,32 @@ Si maintenant la distance de B au centre de l'étoile est de 20 km, les distance
 
 Dans ce cas, l'application des deux options donne les résultats suivants :
 
-- option 1 : Les tronçons qui composent le tronçon B-C sont valides, le tronçon de A au centre de l'étoile ne l'est pas
-'appartient à aucun tronçon entre stations inférieur à 60 km. Pour les deux options,  et si on enlève ce tronçon, on a bien un réseau valide.
+- option 1 : Les tronçons qui composent le tronçon B-C sont valides puisqu'ils permettent de respecter une distance interstations de 60km, ce qui n'est pas le cas pour le tronçon de A au centre de l'étoile
+- option 2 : Les distance A-C et A-B ne repectent pas l'exigence de distance, on peut alors considérer que les tronçons routiers qui les composent (c'est à dire tous les tronçons) ne sont pas valides.
 
-On peut donc décliner la règle d'une distance à respecter entre stations de deux façons :
+### Analyse
 
-- un tronçon routier est valide si tous les trajets entre les stations les plus proches qui incluent ce tronçon routier sont valides
-- un tronçon routier est valide si au moins un trajet entre deux stations qui inclut ce tronçon routier est valide
+En s'appuyant sur les exemples précédents, on peut donc décliner la règle d'une distance à respecter entre stations de deux façons :
+
+- option 1 : un tronçon routier est valide s'il appartient à au moins un trajet valide entre deux stations
+- option 2 : un tronçon routier est valide si tous les trajets entre les stations les plus proches qui incluent ce tronçon routier sont valides
+
+Dans l'exemple 1, on peut remarquer que pour effectuer le trajet A-C, on peut effectuer d'abord A-B puis B-C qui respectent tous les deux l'exigence de distance (ce qui appuierait l'option 1).
+Dans l'exemple 2, on peut remarquer également que si l'on enlève le tronçon entre A et le centre de l'étoile, le réseau qui ne contient plus que B et C est valide (ce qui contredirait l'option 2).
+On peut aussi préciser que l'option 2 est plus difficile à évaluer et cache peut-être des incohérences.
+
+La proposition qui serait à retenir est donc de retenir l'option 1.
+
+## Implémentation
+
+Plusieurs approches sont possibles pour évaluer l'option 1:
+
+- approche par tronçon :
+
+  Pour chaque tronçon, on calcule pour chaque extrémité la distance de la station la plus proche. Si la somme de la longueur du tronçon et des deux distances est inférieure au seuil, le tronçon est valide.
+  Cette méthode est simple et nécessite un calcul de distance minimale pour chaque noeud du réseau (fonctions `ego_graph` et `shortest_path_length` de NetworkX).
+
+- approche par noeud :
+
+  Pour chaque noeud, on recherche tous les trajets valides. Les tronçons associés à ces trajets sont alors validés.
+  Cette méthode nécessite d'explorer pour chaque noeud l'arbre des noeuds situés à moins de 60 km (fonction spécifique ou bien combinaison des fonctions `ego_graph` et `shortest_path_length` de NetworkX)
