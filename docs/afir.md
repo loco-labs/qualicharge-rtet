@@ -120,10 +120,12 @@ En s'appuyant sur les exemples précédents, on peut donc décliner la règle d'
 - option 2 : un tronçon routier est valide si tous les trajets entre les stations les plus proches qui incluent ce tronçon routier sont valides
 
 Dans l'exemple 1, on peut remarquer que pour effectuer le trajet A-C, on peut effectuer d'abord A-B puis B-C qui respectent tous les deux l'exigence de distance (ce qui appuierait l'option 1).
+
 Dans l'exemple 2, on peut remarquer également que si l'on enlève le tronçon entre A et le centre de l'étoile, le réseau qui ne contient plus que B et C est valide (ce qui contredirait l'option 2).
+
 On peut aussi préciser que l'option 2 est plus difficile à évaluer et cache peut-être des incohérences.
 
-La proposition qui serait à retenir est donc de retenir l'option 1.
+L'option qui serait à retenir est donc l'option 1.
 
 ## Implémentation
 
