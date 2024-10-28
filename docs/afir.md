@@ -14,6 +14,16 @@ Parc : une ou plusieurs stations de recharge en un lieu spécifique
 Puissance mini des points de recharge: 1,3 kW
 Station proche du réseau RTE-T : Station à moins de 3 km d'une sortie
 
+Typologie des parcs (stations) suivant la règlementation:
+
+- p_cum > 300 et p_max > 150
+- p_cum > 400 et p_max > 150 (2025 core)
+- p_cum > 600 et p_max > 150 (2 pdc)
+- p_cum > 1400 et p_max > 350 (2025 core)
+- p_cum > 1500 et p_max > 350
+- p_cum > 2800 et p_max > 350 
+- p_cum > 3600 et p_max > 350 (2 pdc)
+
 ## Ratio réseau
 
 RATIO = NUMERATEUR / DENOMINATEUR avec

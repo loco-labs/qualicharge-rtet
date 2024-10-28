@@ -90,7 +90,7 @@ def troncons_peu_mailles(gr_satur, g_tot, dispo):
                       ) - nd_sat
     return g_tot.edge_subgraph(ed_extend)
 
-def aretes_adjacentes(node_index, nodes, vertices, distance = 60000.0, excl_list: list = []):
+def aretes_adjacentes(node_index, nodes, vertices, distance, excl_list):
     ext_vertices = vertices.drop(excl_list).copy()
     aretes_adj = ext_vertices[(ext_vertices["source"] == node_index) | (ext_vertices["target"] == node_index)].copy()
     aretes_adj["ext"] = aretes_adj[["source", "target"]].apply(lambda row: row["target"] if row["target"] != node_index else row["source"], 1)
@@ -102,7 +102,7 @@ def aretes_adjacentes(node_index, nodes, vertices, distance = 60000.0, excl_list
     #     print(aretes_adjacentes(row["fin"], row["distance_restante"]))
     return aretes_adj
     
-def green_list(node, nodes, vertices, distance_restante: float = 60000.0, excl_list = []):
+def green_list(node, nodes, vertices, distance_restante, excl_list):
     return_list = []
     adj = aretes_adjacentes(node, nodes, vertices, distance_restante, excl_list)
     return_list += adj[adj["station"]].index.to_list()
@@ -114,9 +114,13 @@ def green_list(node, nodes, vertices, distance_restante: float = 60000.0, excl_l
     return return_list
 
 def gr_maillage(gr_tot, nodes, vertices, distance: float = 60000.0):
-    edge_ids = []
+    #edge_ids = []
+    edge_ids = set()
+    #excl_list = []    
     for st in nodes[nodes["nature"] == "station_irve"].index:
-        edge_ids+= green_list(st, nodes, vertices, distance_restante= distance)
+        excl_list = []
+        #edge_ids+= green_list(st, nodes, vertices, distance, excl_list)
+        edge_ids |= set(green_list(st, nodes, vertices, distance, excl_list))
+    edge_ids = list(edge_ids)
     green_vert = [(src, tgt) for src, tgt in zip(vertices.loc[edge_ids, "source"], vertices.loc[edge_ids, "target"])]
     return nx.subgraph_view(gr_tot, filter_edge=(lambda x1, x2: (x1, x2) in green_vert))
-    
