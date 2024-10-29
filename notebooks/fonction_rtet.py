@@ -113,7 +113,7 @@ def green_list(node, nodes, vertices, distance_restante, excl_list):
         if len(recur_list) > 0: return_list.append(n)
     return return_list
 
-def gr_maillage(gr_tot, nodes, vertices, distance: float = 60000.0):
+def gr_maillage(gr_tot, nodes, vertices, distance):
     #edge_ids = []
     edge_ids = set()
     #excl_list = []    
