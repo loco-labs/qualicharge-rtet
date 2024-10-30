@@ -114,13 +114,16 @@ def green_list(node, nodes, vertices, distance_restante, excl_list):
     return return_list
 
 def gr_maillage(gr_tot, nodes, vertices, distance):
-    #edge_ids = []
+    edge_ids_old = []
     edge_ids = set()
     #excl_list = []    
     for st in nodes[nodes["nature"] == "station_irve"].index:
         excl_list = []
-        #edge_ids+= green_list(st, nodes, vertices, distance, excl_list)
-        edge_ids |= set(green_list(st, nodes, vertices, distance, excl_list))
+        green_l = green_list(st, nodes, vertices, distance, excl_list)
+        edge_ids_old += green_l
+        edge_ids |= set(green_l)
+        #edge_ids |= set(green_list(st, nodes, vertices, distance, excl_list))
     edge_ids = list(edge_ids)
+    print(len(edge_ids), len(edge_ids_old))
     green_vert = [(src, tgt) for src, tgt in zip(vertices.loc[edge_ids, "source"], vertices.loc[edge_ids, "target"])]
     return nx.subgraph_view(gr_tot, filter_edge=(lambda x1, x2: (x1, x2) in green_vert))
