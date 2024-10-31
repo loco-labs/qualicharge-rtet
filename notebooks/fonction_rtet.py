@@ -2,13 +2,9 @@
 """
 Ce module contient les fonctions utilisées dans l'analyse du réseau RTET des infrastructure IRVE.
 """
-import math
-import pandas as pd
-import numpy as np
 import geopandas as gpd
 import networkx as nx
 import geo_nx as gnx
-from geo_nx import cast_id
 
 GEOM = 'geometry'
 NODE_ID = 'node_id'
