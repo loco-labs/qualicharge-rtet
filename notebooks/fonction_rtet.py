@@ -56,11 +56,48 @@ def insertion_projection(nodes_ext, node_attr, edge_attr, gr, proxi, att_insert_
             gr_ext.project_node(station, gr, 0, target_node=id_node, att_edge=edge_attr)
     return gr_ext, st_ko
 
+def association_stations(gr, stations_afir):
+    
+    high_proxi_t = 100 
+    high_proxi_n = 300
+    low_proxi = 2000
+    
+    noeuds = gr.to_geopandas_nodelist()
+    noeuds_station = noeuds.loc[noeuds[NATURE]=='aire de service']
+    troncons = gr.to_geopandas_edgelist()
+    troncons_hors_autoroute = troncons.loc[troncons[NATURE]=='troncon hors autoroute']
+    
+    st_low_proxi, st_out = proximite(stations_afir, troncons, low_proxi)
+    st_high_proxi_n, st_proxi_t = proximite(st_low_proxi, noeuds_station, high_proxi_n)
+    st_high_proxi_t, st_low_proxi = proximite(st_proxi_t, troncons_hors_autoroute, high_proxi_t)
+    print('Nb stations (st, pre_st, ext, out, total) : ', len(st_high_proxi_n), len(st_high_proxi_t), len(st_low_proxi), len(st_out), len(stations_afir))
+    
+    node_attr = ['amenageur', 'operateur', 'p_cum', 'p_max', 'id_station', NATURE]
+    
+    # IRVE très proches des stations
+    edge_attr = {NATURE: 'liaison aire de service'}
+    gs_station, st_ko = gnx.project_graph(st_high_proxi_n, noeuds, high_proxi_n, node_attr, edge_attr)
+    print('liaison aire de service KO : ', len(st_ko))
+    
+    # IRVE proches d'un tronçon
+    edge_attr = {NATURE: 'liaison exterieur'}
+    filter = (noeuds[NATURE]=='echangeur') | (noeuds[NATURE]=='rond-point')
+    gs_externe, st_ko = gnx.project_graph(st_low_proxi, noeuds.loc[filter], low_proxi, node_attr, edge_attr)
+    print('liaison exterieur KO : ', len(st_ko))
+    
+    # IRVE très proches d'un tronçon
+    edge_attr = {NATURE: 'liaison aire de recharge'}
+    att_node_insert = {NATURE: 'aire de recharge'}
+    gs_pre_station, st_ko = insertion_projection(st_high_proxi_t, node_attr, edge_attr, gr, high_proxi_t, att_node_insert)
+    print('liaison aire de recharge KO : ', len(st_ko))
+    return gnx.compose_all([gr, gs_externe, gs_pre_station, gs_station])
+    
 def troncons_non_mailles(g_tot, gr_ext, gr, dispo, seuil, n_attribute='dist_actives', stat_attribute='station_irve'): 
     '''identifie les tronçons dont la distance entre les stations disponibles les plus proches est supérieure à 'seuil' ''' 
+    stat_attribute = stat_attribute if isinstance(stat_attribute, list) else [stat_attribute]
     troncons_non_mailles = []
     gr_ext_indispo = nx.induced_subgraph(gr_ext, [nd for nd in gr_ext.nodes if not gr_ext.nodes[nd].get(dispo, True)])
-    gr_ext_st = nx.subgraph_view(gr_ext, filter_node=(lambda x: NATURE in gr_ext.nodes[x] and gr_ext.nodes[x][NATURE] == stat_attribute))
+    gr_ext_st = nx.subgraph_view(gr_ext, filter_node=(lambda x: NATURE in gr_ext.nodes[x] and gr_ext.nodes[x][NATURE] in stat_attribute))
     for edge in gr.edges:
         distance_max = seuil - g_tot.edges[edge][WEIGHT]
         dist_inter_st = g_tot.weight_extend(edge, gr_ext_st, radius=distance_max, n_attribute=n_attribute, n_active=dispo)
