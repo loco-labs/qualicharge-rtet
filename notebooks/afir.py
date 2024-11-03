@@ -44,7 +44,7 @@ class Afir():
         self.dist = dist
         if central:
             sub = nx.subgraph_view(
-                rtet, filter_edge=lambda x, y: rtet[x][y][CORE] == True)
+                rtet, filter_edge=lambda x, y: rtet[x][y][CORE])
             rtet_core = nx.induced_subgraph(sub, nx.utils.flatten(sub.edges()))
             self.rtet = gnx.GeoGraph(rtet_core)
         else:
@@ -53,68 +53,63 @@ class Afir():
 
     @property
     def gr_rtet(self):
-        def filter_edge(x, y): return self.rtet[x][y][NATURE][:7] == 'troncon'
-        sub = nx.subgraph_view(self.rtet, filter_edge=filter_edge)
+        sub = nx.subgraph_view(self.rtet, filter_edge=(
+            lambda x, y: self.rtet[x][y][NATURE][:7] == 'troncon'))
         return nx.induced_subgraph(sub, nx.utils.flatten(sub.edges()))
 
     @property
     def gr_autoroute(self):
-        def filter_edge(
-            x, y): return self.rtet[x][y][NATURE] == 'troncon autoroute'
-        sub = nx.subgraph_view(self.rtet, filter_edge=filter_edge)
+        sub = nx.subgraph_view(self.rtet, filter_edge=(
+            lambda x, y: self.rtet[x][y][NATURE] == 'troncon autoroute'))
         return nx.induced_subgraph(sub, nx.utils.flatten(sub.edges()))
 
     @property
     def gr_hors_autoroute(self):
-        def filter_edge(
-            x, y): return self.rtet[x][y][NATURE] == 'troncon hors autoroute'
-        sub = nx.subgraph_view(self.rtet, filter_edge=filter_edge)
+        sub = nx.subgraph_view(self.rtet, filter_edge=(
+            lambda x, y: self.rtet[x][y][NATURE] == 'troncon hors autoroute'))
         return nx.induced_subgraph(sub, nx.utils.flatten(sub.edges()))
 
     @property
     def gr_rtet_central(self):
-        def filter_edge(x, y): return self.rtet[x][y]["core"]
-        sub = nx.subgraph_view(self.rtet, filter_edge=filter_edge)
+        sub = nx.subgraph_view(self.rtet, filter_edge=(
+            lambda x, y: self.rtet[x][y]["core"]))
         return nx.induced_subgraph(sub, nx.utils.flatten(sub.edges()))
 
     @property
     def gr_rtet_global(self):
-        def filter_edge(x, y): return not self.rtet[x][y]["core"]
-        sub = nx.subgraph_view(self.rtet, filter_edge=filter_edge)
+        sub = nx.subgraph_view(self.rtet, filter_edge=(
+            lambda x, y: not self.rtet[x][y]["core"]))
         return nx.induced_subgraph(sub, nx.utils.flatten(sub.edges()))
 
     @property
     def gr_aire_service(self):
-        def filter_node(
-            x): return self.reseau.nodes[x]["nature"] == 'aire de service'
-        return nx.subgraph_view(self.reseau, filter_node=filter_node)
+        return nx.subgraph_view(self.reseau, filter_node=(
+            lambda x: self.reseau.nodes[x][NATURE] == 'aire de service'))
 
     @property
     def gr_echangeur(self):
-        def filter_node(
-            x): return self.reseau.nodes[x]["nature"] == 'echangeur'
-        return nx.subgraph_view(self.reseau, filter_node=filter_node)
+        return nx.subgraph_view(self.reseau, filter_node=(
+            lambda x: self.reseau.nodes[x][NATURE] == 'echangeur'))
 
     @property
     def gr_rond_point(self):
-        def filter_node(
-            x): return self.reseau.nodes[x]["nature"] == 'rond-point'
-        return nx.subgraph_view(self.reseau, filter_node=filter_node)
+        return nx.subgraph_view(self.reseau, filter_node=(
+            lambda x: self.reseau.nodes[x][NATURE] == 'rond-point'))
 
     @property
     def gs_station(self):
-        filter_node = (lambda x: self.reseau[x][list(self.reseau.adj[x])[0]]
-                       ["nature"] == 'liaison aire de service')
-        return nx.subgraph_view(self.reseau, filter_node=filter_node)
+        return nx.subgraph_view(self.reseau, filter_node=(
+            lambda x: self.reseau[x][list(self.reseau.adj[x])[0]]
+            [NATURE] == 'liaison aire de service'))
 
     @property
     def gs_pre_station(self):
-        filter_node = (lambda x: self.reseau[x][list(self.reseau.adj[x])[0]]
-                       ["nature"] == 'liaison aire de recharge')
-        return nx.subgraph_view(self.reseau, filter_node=filter_node)
+        return nx.subgraph_view(self.reseau, filter_node=(
+            lambda x: self.reseau[x][list(self.reseau.adj[x])[0]]
+            [NATURE] == 'liaison aire de recharge'))
 
     @property
     def gs_externe(self):
-        filter_node = (lambda x: self.reseau[x][list(self.reseau.adj[x])[0]]
-                       ["nature"] == 'liaison exterieur')
-        return nx.subgraph_view(self.reseau, filter_node=filter_node)
+        return nx.subgraph_view(self.reseau, filter_node=(
+            lambda x: self.reseau[x][list(self.reseau.adj[x])[0]]
+            [NATURE] == 'liaison exterieur'))
