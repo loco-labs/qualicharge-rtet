@@ -47,14 +47,13 @@ noeuds_nat = noeuds.set_index('NAT_DETAIL')
 
 noeuds_aires = noeuds_nat.loc[aires, ['ID', 'geometry']]  # -> 75
 noeuds_aires_gpd = gpd.GeoDataFrame(noeuds_aires, crs=2154).reset_index()
-noeuds_aires_gpd.to_file("./BDCARTO/noeuds_aires.geojson", driver= "GeoJSON")
+noeuds_aires_gpd.to_file("../data/BDCARTO/noeuds_aires.geojson", driver= "GeoJSON")
+
+noeuds_ech = noeuds_nat.loc[echangeurs, ['ID', 'geometry']]  # -> 75
+noeuds_ech_gpd = gpd.GeoDataFrame(noeuds_ech, crs=2154).reset_index()
+noeuds_ech_gpd.to_file("../data/BDCARTO/noeuds_ech.geojson", driver= "GeoJSON")
+
 '''
-noeuds_ech_gpd = gpd.GeoDataFrame(noeuds_ech, crs=2154)
-noeuds_ech_gpd.to_file("noeuds_ech.geojson", driver= "GeoJSON")
-
-noeuds_ech_gpd = gpd.GeoDataFrame(noeuds_ech, crs=2154)
-noeuds_ech_gpd.to_file("noeuds_ech.geojson", driver= "GeoJSON")
-
 noeuds_rp = noeuds_nat.loc[rond_point, ['INSEE_COMM', 'geometry']]  # -> 20506
 noeuds_rp_gpd = gpd.GeoDataFrame(noeuds_rp, crs=2154)
 noeuds_rp_gpd.to_file("noeuds_rp.geojson", driver= "GeoJSON")

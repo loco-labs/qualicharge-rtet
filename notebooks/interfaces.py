@@ -37,7 +37,7 @@ def creation_pandas_aires(file):
     del asfa['dict']
     asfa[GEOM] = asfa['coords'].map(json.loads).map(lambda x: [x[1], x[0]]).map(Point)
     asfa[NATURE] = 'aire de service'
-    asfa.drop_duplicates(subset=[GEOM], inplace=True)
+    #asfa.drop_duplicates(subset=[GEOM], inplace=True)
     return gpd.GeoDataFrame(asfa, crs='4326').to_crs(2154)
     
 def creation_pandas_stations(file, nature="station_irve", first_id=0):
