@@ -52,7 +52,7 @@ class Afir():
         self.reseau = association_stations(self.rtet, self.stations)
 
     @property
-    def gr_rtet(self):
+    def gr_all(self):
         sub = nx.subgraph_view(self.rtet, filter_edge=(
             lambda x, y: self.rtet[x][y][NATURE][:7] == 'troncon'))
         return nx.induced_subgraph(sub, nx.utils.flatten(sub.edges()))
@@ -97,19 +97,36 @@ class Afir():
             lambda x: self.reseau.nodes[x][NATURE] == 'rond-point'))
 
     @property
+    def gs_all(self):
+        return nx.subgraph_view(self.reseau, filter_node=(
+            lambda x: self.reseau.nodes[x][NATURE] == "station_irve"))
+
+    @property
     def gs_station(self):
         return nx.subgraph_view(self.reseau, filter_node=(
-            lambda x: self.reseau[x][list(self.reseau.adj[x])[0]]
+            lambda x: self.reseau.nodes[x][NATURE] == "station_irve" and
+            self.reseau.edges[x, list(self.reseau.adj[x])[0]]
             [NATURE] == 'liaison aire de service'))
 
     @property
     def gs_pre_station(self):
         return nx.subgraph_view(self.reseau, filter_node=(
-            lambda x: self.reseau[x][list(self.reseau.adj[x])[0]]
-            [NATURE] == 'liaison aire de recharge'))
-
+            lambda x: self.reseau.edges[x, list(self.reseau.adj[x])[0]]
+            [NATURE] == 'liaison aire de recharge' and 
+            self.reseau.nodes[x][NATURE] == "station_irve"))
+ 
     @property
     def gs_externe(self):
         return nx.subgraph_view(self.reseau, filter_node=(
-            lambda x: self.reseau[x][list(self.reseau.adj[x])[0]]
-            [NATURE] == 'liaison exterieur'))
+            lambda x: self.reseau.edges[x, list(self.reseau.adj[x])[0]]
+            [NATURE] == 'liaison exterieur' and 
+            self.reseau.nodes[x][NATURE] == "station_irve"))
+
+    def gp_trajet(self, source, target, graph=True):
+        path = nx.shortest_path(self.reseau, source=source, target=target, weight='weight')
+        if not graph:
+            return path
+        return nx.subgraph_view(self.reseau, filter_edge=(
+            lambda x, y: x in path and y in path and 
+            abs(path.index(y) - path.index(x)) == 1),
+            filter_node=lambda x: x in path)

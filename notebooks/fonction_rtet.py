@@ -19,12 +19,15 @@ def insertion_noeuds(noeuds, gr, proxi, att_node=None, troncons=None, adjust=Fal
     noeuds_ok[NODE_ID] = range(max(gr.nodes)+1, len(noeuds_ok)+max(gr.nodes)+1)
     gs_noeuds = gnx.from_geopandas_nodelist(noeuds_ok, node_id=NODE_ID, node_attr=True) # réseau des noeuds supplémentaires
     # à vectoriser
+    added_nodes = []
     for noeud in gs_noeuds:
         geo_st = gs_noeuds.nodes[noeud][GEOM]
         id_edge = gr.find_nearest_edge(geo_st, proxi) # recherche du troncon le plus proche
         att_node = att_node if att_node is not None else {key: val for key, val in gs_noeuds.nodes[noeud].items() if key not in [NODE_ID, GEOM]}
-        gr.insert_node(geo_st, noeud, id_edge, att_node=att_node, adjust=adjust) # ajout du noeud
-    return gs_noeuds
+        dis = gr.insert_node(geo_st, noeud, id_edge, att_node=att_node, adjust=adjust) # ajout du noeud
+        if dis is not None:
+            added_nodes.append(noeud)
+    return added_nodes
 
 def proximite(noeuds_ext, cible, proxi):
     '''sépare les noeuds proches (distance < proxi) et non proches''' 
@@ -44,15 +47,16 @@ def insertion_projection(nodes_ext, node_attr, edge_attr, gr, proxi, att_insert_
             id_edge = gr.find_nearest_edge(geo_st, proxi)
             if not id_edge: 
                 st_ko.append(station)
-                print('ko')
+                print('ko', station)
                 continue 
             # on ajoute un noeud et on crée le lien 
             id_node = max(max(gr.nodes) + 1, max(gr_ext.nodes) + 1)
             dis = gr.insert_node(geo_st, id_node, id_edge, att_node=att_insert_node, adjust=False) 
-            if not dis: # cas à clarifier  
-                st_ko.append(station)
-                print(id_node, id_edge, geo_st)
-                continue
+            if dis is None:
+                dist0 = geo_st.distance(gr.nodes[id_edge[0]][GEOM])
+                dist1 = geo_st.distance(gr.nodes[id_edge[1]][GEOM])
+                id_node = id_edge[0] if dist0 <= dist1 else id_edge[1]
+                print(id_node, id_edge, dist0, dist1, geo_st)
             gr_ext.project_node(station, gr, 0, target_node=id_node, att_edge=edge_attr)
     return gr_ext, st_ko
 
