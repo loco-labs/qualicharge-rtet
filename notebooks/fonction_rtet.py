@@ -62,6 +62,8 @@ def insertion_projection(nodes_ext, node_attr, edge_attr, gr, proxi, att_insert_
 
 def association_stations(gr, stations_afir):
     
+    if gr is None or stations_afir is None:
+        return None
     high_proxi_t = 100 
     high_proxi_n = 300
     low_proxi = 2000
