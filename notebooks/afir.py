@@ -6,7 +6,8 @@ Ce module contient la classe Afir .
 import copy
 import networkx as nx
 import geo_nx as gnx
-from fonction_rtet import association_stations
+from fonction_rtet import (association_stations, troncons_non_mailles,
+                           troncons_peu_mailles)
 
 GEOM = 'geometry'
 NODE_ID = 'node_id'
@@ -171,6 +172,20 @@ class Afir():
             [NATURE] == 'liaison exterieur' and 
             self._reseau.nodes[x][NATURE] == "station_irve"))
 
+    def gr_non_maille(self, etendu=False, dispo='dispo'):
+        dist_actives = 'dist_actives' 
+        non_maille =  troncons_non_mailles(self.reseau,
+                            self.gs_all,
+                            self.gr_all, 
+                            dispo, 
+                            self.dist, 
+                            n_attribute=dist_actives, 
+                            stat_attribute='station_irve')[1]
+        self.gr_all.remove_attribute(dist_actives, edges=False)
+        if etendu: 
+            return troncons_peu_mailles(non_maille, self.reseau, dispo)
+        return non_maille
+    
     def gp_trajet(self, source, target, graph=True):
         path = nx.shortest_path(self._reseau, source=source, target=target, weight='weight')
         if not graph:
