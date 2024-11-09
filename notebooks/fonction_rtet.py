@@ -11,7 +11,12 @@ NODE_ID = 'node_id'
 NATURE = 'nature'
 WEIGHT = 'weight'
 
-def insertion_noeuds(noeuds, gr, proxi, att_node=None, troncons=None, adjust=False):
+def insertion_noeuds(noeuds: gpd.GeoDataFrame,
+                     gr: gnx.GeoGraph,
+                     proxi: float,
+                     att_node: None | dict = None,
+                     troncons: None | list = None,
+                     adjust: bool = False) -> list[int]:
     '''insere des 'noeuds' sur le graph 'gr' pour des troncons définis et retourne le graphe des 'noeuds' '''
     troncons = troncons if troncons is not None else gr.to_geopandas_edgelist()
     join = gpd.sjoin(noeuds, troncons.set_geometry(troncons.buffer(proxi))) # filtrage des tronçons
@@ -29,13 +34,17 @@ def insertion_noeuds(noeuds, gr, proxi, att_node=None, troncons=None, adjust=Fal
             added_nodes.append(noeud)
     return added_nodes
 
-def proximite(noeuds_ext, cible, proxi):
+def proximite(noeuds_ext: gpd.GeoDataFrame,
+              cible: gpd.GeoDataFrame,
+              proxi: float) -> tuple[gpd.GeoDataFrame, gpd.GeoDataFrame]:
     '''sépare les noeuds proches (distance < proxi) et non proches''' 
     st_join = gpd.sjoin(noeuds_ext, cible.set_geometry(cible.buffer(proxi)))
     st_ok = noeuds_ext.index.isin(st_join.index)
     return (noeuds_ext[st_ok], noeuds_ext[~st_ok])
 
-def insertion_projection(nodes_ext, node_attr, edge_attr, gr, proxi, att_insert_node):
+def insertion_projection(nodes_ext: gpd.GeoDataFrame,
+                         node_attr: bool | str | list[str],
+                         edge_attr, gr, proxi, att_insert_node):
     '''création du graphe des stations avec projection sur des noeuds inserés dans le graphe 'gr' '''
     gr_ext = gnx.from_geopandas_nodelist(nodes_ext, node_id='node_id', node_attr=node_attr)
     stations = list(nodes_ext[NODE_ID])
