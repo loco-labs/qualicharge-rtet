@@ -44,7 +44,10 @@ def proximite(noeuds_ext: gpd.GeoDataFrame,
 
 def insertion_projection(nodes_ext: gpd.GeoDataFrame,
                          node_attr: bool | str | list[str],
-                         edge_attr, gr, proxi, att_insert_node):
+                         edge_attr: None | dict,
+                         gr: gnx.GeoGraph,
+                         proxi: float,
+                         att_insert_node: None | dict) -> tuple[gnx.GeoGraph, list]:
     '''création du graphe des stations avec projection sur des noeuds inserés dans le graphe 'gr' '''
     gr_ext = gnx.from_geopandas_nodelist(nodes_ext, node_id='node_id', node_attr=node_attr)
     stations = list(nodes_ext[NODE_ID])
@@ -69,8 +72,9 @@ def insertion_projection(nodes_ext: gpd.GeoDataFrame,
             gr_ext.project_node(station, gr, 0, target_node=id_node, att_edge=edge_attr)
     return gr_ext, st_ko
 
-def association_stations(gr, stations_afir):
-    
+def association_stations(gr: gnx.GeoGraph, 
+                         stations_afir: gpd.GeoDataFrame) -> None | gnx.GeoGraph:
+    '''intègre les stations au graphe routier'''
     if gr is None or stations_afir is None:
         return None
     high_proxi_t = 100 
@@ -107,8 +111,15 @@ def association_stations(gr, stations_afir):
     print('liaison aire de recharge KO : ', len(st_ko))
     return gnx.compose_all([gr, gs_externe, gs_pre_station, gs_station])
     
-def troncons_non_mailles(g_tot, gr_ext, gr, dispo, seuil, n_attribute='dist_actives', stat_attribute='station_irve'): 
-    '''identifie les tronçons dont la distance entre les stations disponibles les plus proches est supérieure à 'seuil' ''' 
+def troncons_non_mailles(g_tot: gnx.GeoGraph,
+                         gr_ext: gnx.GeoGraph,
+                         gr: gnx.GeoGraph,
+                         dispo: str,
+                         seuil: float,
+                         n_attribute: str ='dist_actives',
+                         stat_attribute: str ='station_irve') -> tuple[gnx.GeoGraph, gnx.GeoGraph]: 
+    '''identifie les tronçons dont la distance entre les stations disponibles 
+    les plus proches est supérieure à 'seuil' ''' 
     stat_attribute = stat_attribute if isinstance(stat_attribute, list) else [stat_attribute]
     troncons_non_mailles = []
     gr_ext_indispo = nx.induced_subgraph(gr_ext, [nd for nd in gr_ext.nodes if not gr_ext.nodes[nd].get(dispo, True)])
@@ -120,7 +131,9 @@ def troncons_non_mailles(g_tot, gr_ext, gr, dispo, seuil, n_attribute='dist_acti
             troncons_non_mailles.append(edge)
     return gr_ext_indispo, gr.edge_subgraph(troncons_non_mailles)
 
-def troncons_peu_mailles(gr_satur, g_tot, dispo):
+def troncons_peu_mailles(gr_satur: gnx.GeoGraph,
+                         g_tot: gnx.GeoGraph,
+                         dispo: str) -> gnx.GeoGraph:
     '''complète gr_satur avec les tronçons allant jusqu'à une bifurcation ou une station disponible'''
     nd_sat = set(gr_satur.nodes())
     ed_extend = set(gr_satur.edges())
@@ -138,7 +151,11 @@ def troncons_peu_mailles(gr_satur, g_tot, dispo):
                       ) - nd_sat
     return g_tot.edge_subgraph(ed_extend)
 
-def aretes_adjacentes(node_index, nodes, vertices, distance, excl_list):
+def aretes_adjacentes(node_index: int,
+                      nodes: gpd.GeoDataFrame,
+                      vertices: gpd.GeoDataFrame,
+                      distance: float, 
+                      excl_list: list[int]) -> gpd.GeoDataFrame:
     ext_vertices = vertices.drop(excl_list).copy()
     aretes_adj = ext_vertices[(ext_vertices["source"] == node_index) | (ext_vertices["target"] == node_index)].copy()
     aretes_adj["ext"] = aretes_adj[["source", "target"]].apply(lambda row: row["target"] if row["target"] != node_index else row["source"], 1)
@@ -150,7 +167,11 @@ def aretes_adjacentes(node_index, nodes, vertices, distance, excl_list):
     #     print(aretes_adjacentes(row["fin"], row["distance_restante"]))
     return aretes_adj
     
-def green_list(node, nodes, vertices, distance_restante, excl_list):
+def green_list(node: int, 
+               nodes: gpd.GeoDataFrame, 
+               vertices: gpd.GeoDataFrame, 
+               distance_restante: float, 
+               excl_list: list) -> list[int]:
     return_list = []
     adj = aretes_adjacentes(node, nodes, vertices, distance_restante, excl_list)
     return_list += adj[adj["station"]].index.to_list()
@@ -161,7 +182,12 @@ def green_list(node, nodes, vertices, distance_restante, excl_list):
         if len(recur_list) > 0: return_list.append(n)
     return return_list
 
-def gr_maillage(gr_tot, nodes, vertices, distance):
+def gr_maillage(gr_tot: gnx.GeoGraph,
+                nodes: gpd.GeoDataFrame,
+                vertices: gpd.GeoDataFrame,
+                distance: float) -> gnx.GeoGraph:
+    '''identifie les tronçons dont la distance entre les stations disponibles 
+    les plus proches est supérieure à un seuil (méthode par noeud)''' 
     edge_ids_old = []
     edge_ids = set()
     #excl_list = []    
