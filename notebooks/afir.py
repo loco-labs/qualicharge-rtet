@@ -28,7 +28,7 @@ class Afir:
     """
 
     def __init__(
-        self, rtet=None, stations=None, central=True, pcum=400, pmax=150, dist=60
+        self, rtet=None, stations=None, central=True, pcum=400, pmax=150, dist=60, log=False
     ):
         """The initialization of an Afir scenario includes :
         - GeoGraph is identical to a Graph initialization.
@@ -50,10 +50,10 @@ class Afir:
         self._pmax = pmax
         self._dist = dist
 
-        self.set_rtet(rtet)
-        self.set_stations(stations)
+        self.set_rtet(rtet, log=log)
+        self.set_stations(stations, log=log)
 
-    def set_rtet(self, rtet):
+    def set_rtet(self, rtet, log=False):
         if not rtet:
             return
         rtet = copy.deepcopy(rtet)
@@ -63,15 +63,15 @@ class Afir:
             sub = nx.subgraph_view(rtet, filter_edge=lambda x, y: rtet[x][y][CORE])
             rtet_core = nx.induced_subgraph(sub, nx.utils.flatten(sub.edges()))
             self._rtet = gnx.GeoGraph(rtet_core)
-        self._reseau = association_stations(self._rtet, self._stations)
+        self._reseau = association_stations(self._rtet, self._stations, log=log)
         return
 
-    def set_stations(self, stations):
+    def set_stations(self, stations, log=False):
         if stations is not None:
             self._stations = stations[
                 (stations["p_max"] > self._pmax) & (stations["p_cum"] > self._pcum)
             ].reset_index()
-            self._reseau = association_stations(self._rtet, self._stations)
+            self._reseau = association_stations(self._rtet, self._stations,log=log)
 
     def set_reseau(self, reseau):
         self._reseau = reseau

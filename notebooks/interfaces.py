@@ -40,21 +40,39 @@ def creation_pandas_aires(file):
     #asfa.drop_duplicates(subset=[GEOM], inplace=True)
     return gpd.GeoDataFrame(asfa, crs='4326').to_crs(2154)
     
-def creation_pandas_stations(file, nature="station_irve", first_id=0):
-    # Chargement des points de recharge de la consolidation Gireve
-    csl = pd.read_csv(file, sep=";", encoding="latin")
-    csl["puissance_nominale"] = csl["puissance_nominale"].astype(float)
+def creation_pandas_stations(file, nature="station_irve", first_id=0, source='gireve') -> pd.DataFrame:
+    """generation d'un DataFrame des stations
     
-    # Les stations respectant les critères AFIR sont obtenues après un groupby sur les coordonnées
-    stations_csl = csl.groupby("coordonneesXY").agg(
-        p_max = ("puissance_nominale", "max"), 
-        p_cum = ("puissance_nominale", "sum"),
-        id_station = ("id_pdc_regroupement", "first"),
-        amenageur = ("nom_amenageur", "first"),
-        operateur = ("nom_operateur", "first"))
-    stations = stations_csl.reset_index()
-    stations[GEOM] = stations["coordonneesXY"].apply(lambda x: Point(str.split(x, ',')))
-    stations = gpd.GeoDataFrame(stations, crs=4326).to_crs(2154)
+    Champs du DataFrame:
+    - geometry : Point
+    - amenageur : nom de l amenageur
+    - operateur : nom de l operateur
+    - p_cum : puissance cumulée de la station
+    - p_max : puissance maxi des points de recharge
+    - node_id : numéro de node
+    - id_station : identifiant de la station
+    - nature : type de station
+    """
+    if source == 'gireve':
+        # Chargement des points de recharge de la consolidation Gireve
+        csl = pd.read_csv(file, sep=";", encoding="latin")
+        csl["puissance_nominale"] = csl["puissance_nominale"].astype(float)
+        
+        # Les stations respectant les critères AFIR sont obtenues après un groupby sur les coordonnées
+        stations_csl = csl.groupby("coordonneesXY").agg(
+            p_max = ("puissance_nominale", "max"), 
+            p_cum = ("puissance_nominale", "sum"),
+            id_station = ("id_pdc_regroupement", "first"),
+            amenageur = ("nom_amenageur", "first"),
+            operateur = ("nom_operateur", "first"))
+        stations = stations_csl.reset_index()
+        stations[GEOM] = stations["coordonneesXY"].apply(lambda x: Point(str.split(x, ',')))
+        stations = gpd.GeoDataFrame(stations, crs=4326).to_crs(2154)
+    elif source == 'qualicharge':
+        csl = pd.read_csv(file, sep=",")
+        geom = gpd.points_from_xy(csl.longitude, csl.latitude)
+        stations = gpd.GeoDataFrame(csl, geometry=geom, crs=4326).to_crs(2154)
     stations[NODE_ID] = range(first_id, len(stations) + first_id)
-    stations[NATURE] = nature
-    return stations
+    stations[NATURE] = nature        
+        
+    return stations[['p_cum', 'p_max', 'id_station', 'operateur', 'amenageur', GEOM, NODE_ID, NATURE]]
