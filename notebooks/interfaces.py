@@ -40,7 +40,7 @@ def creation_pandas_aires(file):
     #asfa.drop_duplicates(subset=[GEOM], inplace=True)
     return gpd.GeoDataFrame(asfa, crs='4326').to_crs(2154)
     
-def creation_pandas_stations(file, nature="station_irve", first_id=0, source='gireve') -> pd.DataFrame:
+def creation_pandas_stations(data: str | pd.DataFrame, nature="station_irve", first_id=0, source='gireve') -> pd.DataFrame:
     """generation d'un DataFrame des stations
     
     Champs du DataFrame:
@@ -55,7 +55,7 @@ def creation_pandas_stations(file, nature="station_irve", first_id=0, source='gi
     """
     if source == 'gireve':
         # Chargement des points de recharge de la consolidation Gireve
-        csl = pd.read_csv(file, sep=";", encoding="latin")
+        csl = pd.read_csv(data, sep=";", encoding="latin") if isinstance(data, str) else data
         csl["puissance_nominale"] = csl["puissance_nominale"].astype(float)
         
         # Les stations respectant les critères AFIR sont obtenues après un groupby sur les coordonnées
@@ -69,7 +69,7 @@ def creation_pandas_stations(file, nature="station_irve", first_id=0, source='gi
         stations[GEOM] = stations["coordonneesXY"].apply(lambda x: Point(str.split(x, ',')))
         stations = gpd.GeoDataFrame(stations, crs=4326).to_crs(2154)
     elif source == 'qualicharge':
-        csl = pd.read_csv(file, sep=",")
+        csl = pd.read_csv(data, sep=",") if isinstance(data, str) else data
         geom = gpd.points_from_xy(csl.longitude, csl.latitude)
         stations = gpd.GeoDataFrame(csl, geometry=geom, crs=4326).to_crs(2154)
     stations[NODE_ID] = range(first_id, len(stations) + first_id)
