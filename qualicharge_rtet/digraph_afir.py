@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Feb 19 15:42:55 2025
-
-@author: a lab in the Air
+Ce module contient les fonctions de convertion entre un graphe directionnel et non directionnel
 """
 from itertools import product
 
@@ -60,7 +58,7 @@ def to_macro_node(dgr, node: int, uturn: bool=False) -> tuple:
     i_edges : list
         internals edges.
     '''
-    e_nodes, s_nodes, i_edges = macro_node(dgr, node, uturn)
+    e_nodes, s_nodes, i_edges = macro_node(len(list(dgr.neighbors(node))), node, uturn)
     pred_nodes = list(dgr.predecessors(node))
     succ_nodes = list(dgr.successors(node))
     for e_node, pnd in zip(e_nodes, pred_nodes):
