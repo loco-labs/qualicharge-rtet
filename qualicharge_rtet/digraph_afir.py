@@ -3,6 +3,7 @@
 Ce module contient les fonctions de convertion entre un graphe directionnel et non directionnel
 """
 from itertools import product
+import networkx as nx
 
 SLICE = 10000
 
@@ -62,12 +63,22 @@ def to_macro_node(dgr, node: int, uturn: bool=False) -> tuple:
     pred_nodes = list(dgr.predecessors(node))
     succ_nodes = list(dgr.successors(node))
     for e_node, pnd in zip(e_nodes, pred_nodes):
+        attr = dgr.edges[pnd, node]
         dgr.remove_edge(pnd, node)
-        dgr.add_edge(pnd, e_node)
+        dgr.add_edges_from([(pnd, e_node, attr)])
+        #dgr.add_edge(pnd, e_node)
     for s_node, snd in zip(s_nodes, succ_nodes):
+        attr = dgr.edges[node, snd]
         dgr.remove_edge(node, snd)
-        dgr.add_edge(s_node, snd)    
+        #dgr.add_edge(s_node, snd)    
     dgr.add_edges_from(i_edges)
+    dg_node = dgr.subgraph(e_nodes + s_nodes)
+    nx.set_node_attributes(dg_node, 'connecteur', 'nature')
+    nx.set_node_attributes(dg_node, None, 'geometry')
+    nx.set_edge_attributes(dg_node, 'connexion', 'nature')
+    nx.set_edge_attributes(dg_node, None, 'geometry')
+    nx.set_edge_attributes(dg_node, 0, 'weight')
+    nx.set_edge_attributes(dg_node, None, 'NATIONALRO')
     return (e_nodes, s_nodes, i_edges)
 
 def to_undirected_edges(edges: list) -> list:
