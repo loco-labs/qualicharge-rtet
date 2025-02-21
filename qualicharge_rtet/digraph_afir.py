@@ -67,11 +67,15 @@ def to_macro_node(dgr, node: int, uturn: bool=False) -> tuple:
         dgr.remove_edge(pnd, node)
         dgr.add_edges_from([(pnd, e_node, attr)])
         #dgr.add_edge(pnd, e_node)
+        #print(list(dgr.predecessors(e_node)))
     for s_node, snd in zip(s_nodes, succ_nodes):
         attr = dgr.edges[node, snd]
         dgr.remove_edge(node, snd)
+        dgr.add_edges_from([(s_node, snd, attr)])
         #dgr.add_edge(s_node, snd)    
+        #print(list(dgr.successors(node)))
     dgr.add_edges_from(i_edges)
+    dgr.remove_node(node)
     dg_node = dgr.subgraph(e_nodes + s_nodes)
     nx.set_node_attributes(dg_node, 'connecteur', 'nature')
     nx.set_node_attributes(dg_node, None, 'geometry')

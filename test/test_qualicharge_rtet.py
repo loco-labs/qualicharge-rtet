@@ -33,9 +33,16 @@ class TestMacroNode(unittest.TestCase):
         for node in nodes:
             to_macro_node(dgr, node)
         self.assertEqual(to_undirected_edges(dgr.edges), list(gr.edges))
+        path = nx.shortest_path(dgr, source=20001, target=40002)
+        self.assertEqual(path, [20001, 30006, 30001, 40002])
+
+        dgr = gr.to_directed()
+        nodes = list(dgr.nodes)
         for node in nodes:
             to_macro_node(dgr, node, uturn=True)
         self.assertEqual(to_undirected_edges(dgr.edges), list(gr.edges))
+        path = nx.shortest_path(dgr, source=20001, target=40002)
+        self.assertEqual(path, [20001, 30006, 30001, 40002])
 
 class TestGraphDigraph(unittest.TestCase):
     """tests convertion Graph DiGraph"""
