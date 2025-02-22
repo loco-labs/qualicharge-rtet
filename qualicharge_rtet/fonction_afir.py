@@ -182,6 +182,9 @@ def troncons_non_mailles(
             and gr_ext.nodes[x][NATURE] in stat_attribute
         ),
     )
+    
+    is_dgr = isinstance(g_tot, gnx.geodigraph.GeoDiGraph)
+    gr_rev = g_tot.reverse() if is_dgr else None
     for edge in gr.edges:
         distance_max = seuil - g_tot.edges[edge][WEIGHT]
         dist_inter_st = g_tot.weight_extend(
@@ -190,6 +193,7 @@ def troncons_non_mailles(
             radius=distance_max,
             n_attribute=n_attribute,
             n_active=dispo,
+            gr_rev=gr_rev
         )
         if not dist_inter_st or dist_inter_st > seuil:
             troncons_non_mailles.append(edge)
