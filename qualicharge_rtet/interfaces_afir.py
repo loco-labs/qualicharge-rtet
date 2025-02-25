@@ -27,12 +27,28 @@ def creation_reseau_rtet(shp_file):
     
     gr = gnx.from_geopandas_edgelist(rtet, edge_attr=["CORRIDORS", "INTROADNUM", "NATIONALRO", "ID", GEOM, NATURE, CORE])
     gr.erase_linear_nodes(keep_attr=[NATURE, CORE])
-    nx.set_node_attributes(gr, "connecteur", name=NATURE)
+    nx.set_node_attributes(gr, "noeud rtet", name=NATURE)
+    
+    #tot = 0
+    #list_nodes = list(gr.nodes)
+    for node in list(gr.nodes):
+        autoroute = True
+        for neighbors in gr.neighbors(node):
+            if gr.edges[neighbors, node]['nature'] != 'troncon autoroute':
+                autoroute = False
+                break
+        if autoroute:
+            #nx.set_node_attributes(gr, "noeud autoroute", name=NATURE)
+            gr.nodes[node][NATURE] = 'noeud autoroute'
+            #tot += 1
+    #print(tot)
     return gr
 
 def creation_pandas_aires(file):
     asfa = pd.read_csv(file)
-    asfa = pd.concat([asfa, pd.json_normalize(asfa['dict'].map(lambda x: str.replace(x, '"', "")).map(lambda x: str.replace(x, "'", '"')).map(json.loads))], axis=1)
+    asfa = pd.concat([asfa, pd.json_normalize(asfa['dict'].map(
+        lambda x: str.replace(x, '"', "")).map(
+        lambda x: str.replace(x, "'", '"')).map(json.loads))], axis=1)
     del asfa['Unnamed: 0']
     del asfa['dict']
     asfa[GEOM] = asfa['coords'].map(json.loads).map(lambda x: [x[1], x[0]]).map(Point)
