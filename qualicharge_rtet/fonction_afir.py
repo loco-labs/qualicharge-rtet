@@ -37,7 +37,7 @@ def insertion_noeuds(
         id_edge = gr.find_nearest_edge(
             geo_st, proxi
         )  # recherche du troncon le plus proche
-        att_node = (
+        att_noeud = (
             att_node
             if att_node is not None
             else {
@@ -47,7 +47,7 @@ def insertion_noeuds(
             }
         )
         dis = gr.insert_node(
-            geo_st, noeud, id_edge, att_node=att_node, adjust=adjust
+            geo_st, noeud, id_edge, att_node=att_noeud, adjust=adjust
         )  # ajout du noeud
         if dis is not None:
             added_nodes.append(noeud)
