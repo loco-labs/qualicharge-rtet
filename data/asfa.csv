@@ -3682,8 +3682,8 @@
 3680,"[46.3874, 2.69665]","[0, 1]",EC,Bedun,{'roadname': 'A714'}
 3681,"[46.3836, 2.69116]","[0, 1]",EC,Croix de Fragne,{'roadname': 'A714'}
 3682,"[46.3972, 2.71478]","[0, 1]",EC,Montlu&ccedil;on (Jonction A714),"{'numero': '10', 'roadname': 'A71'}"
-3683,"[46.3559, 2.80243]","[0.9981129999999999, 0.061397]",AS,Allier Doyet,{'roadname': 'A71'}
-3684,"[46.3559, 2.80243]","[-0.892822, 0.45041000000000003]",AS,Allier Saulzet,{'roadname': 'A71'}
+3683,"[46.3559, 2.80243]","[0.9981129999999999, 0.061397]",AS,Allier Doyet Ouest,{'roadname': 'A71'}
+3684,"[46.3559, 2.80243]","[-0.892822, 0.45041000000000003]",AS,Allier Saulzet Est,{'roadname': 'A71'}
 3685,"[46.5163, 2.58182]","[0.617173, -0.7868269999999999]",AR,Grand Meaulnes,{'roadname': 'A71'}
 3686,"[46.5163, 2.58182]","[-0.856177, 0.516683]",AR,Vallon,{'roadname': 'A71'}
 3687,"[46.5098, 2.6305]","[0, 1]",EC,For&ecirc;t De Tron&ccedil;ais,"{'numero': '9', 'roadname': 'A71'}"
@@ -4408,12 +4408,12 @@
 4406,"[49.3992, 1.03186]","[0, 1]",EC,Petit Couronne,{'roadname': 'N338'}
 4407,"[49.3539, 1.02958]","[0.573576, 0.819152]",AS,Grand Couronne,{'roadname': 'N138'}
 4408,"[46.7189, 2.45509]","[0, 1]",EC,Saint Amand,"{'numero': '8', 'roadname': 'A71'}"
-4409,"[46.7523, 2.41733]","[-0.5, 0.8660249999999999]",AS,Centre de la France-Bru&egrave;re / Bru&egrave;re Allichamp,{'roadname': 'A71'}
-4410,"[46.7523, 2.41733]","[0.5, -0.8660249999999999]",AS,Centre de la France-Farges / Farges Allichamp,{'roadname': 'A71'}
+4409,"[46.7523, 2.41733]","[-0.5, 0.8660249999999999]",AS,Centre de la France-Bru&egrave;re / Bru&egrave;re Allichamp Est,{'roadname': 'A71'}
+4410,"[46.7523, 2.41733]","[0.5, -0.8660249999999999]",AS,Centre de la France-Farges / Farges Allichamp Ouest,{'roadname': 'A71'}
 4411,"[47.2443, 2.06994]","[0, 1]",EC,Vierzon Centre,"{'numero': '5', 'roadname': 'A71'}"
 4412,"[47.2078, 2.11979]","[0, 1]",EC,Vierzon Est,"{'numero': '6', 'roadname': 'A71'}"
-4413,"[47.0952, 2.24148]","[-0.685183, 0.728371]",AS,Bourges-Marmagne,{'roadname': 'A71'}
-4414,"[47.0952, 2.24148]","[0.791437, -0.611251]",AS,Bourges-Ste Thorette,{'roadname': 'A71'}
+4413,"[47.0952, 2.24148]","[-0.685183, 0.728371]",AS,Bourges-Marmagne Est,{'roadname': 'A71'}
+4414,"[47.0952, 2.24148]","[0.791437, -0.611251]",AS,Bourges-Ste Thorette Ouest,{'roadname': 'A71'}
 4415,"[47.0429, 2.33981]","[0, 1]",EC,Bourges,"{'numero': '7', 'roadname': 'A71'}"
 4416,"[46.9822, 2.41731]","[0.387837, -0.921728]",AR,Gite aux Loups,{'roadname': 'A71'}
 4417,"[47.0256, 2.37912]","[-0.171757, 0.985139]",AR,Bois des Dames,{'roadname': 'A71'}
@@ -4437,16 +4437,16 @@
 4435,"[47.2947, 1.9237900000000001]","[-0.995227, 0.0975829]",AR,La Grange Rouge,{'roadname': 'A85'}
 4436,"[47.2893, 2.04383]","[0, 1]",BI,Bifuration A71/A85,{'roadname': 'A71'}
 4437,"[47.2893, 2.04383]","[0, 1]",BI,Bifurcation A85/A71,{'roadname': 'A85'}
-4438,"[47.3487, 2.04943]","[0.0977566, 0.99521]",AS,Salbris La Loge,{'roadname': 'A71'}
-4439,"[47.3487, 2.04943]","[-0.107305, -0.9942259999999999]",AS,Salbris Theillay,{'roadname': 'A71'}
+4438,"[47.3487, 2.04943]","[0.0977566, 0.99521]",AS,Salbris La Loge Est,{'roadname': 'A71'}
+4439,"[47.3487, 2.04943]","[-0.107305, -0.9942259999999999]",AS,Salbris Theillay Ouest,{'roadname': 'A71'}
 4440,"[47.447, 2.00565]","[-0.168661, 0.9856739999999999]",AR,La Saulot,{'roadname': 'A71'}
 4441,"[47.4696, 2.00768]","[-0.08541689999999999, -0.9963449999999999]",AR,Les Maremberts,{'roadname': 'A71'}
 4442,"[47.4178, 2.02116]","[0, 1]",EC,Salbris,"{'numero': '4', 'roadname': 'A71'}"
 4443,"[47.5466, 2.0085]","[0.134851, 0.9908659999999999]",AR,La Briganderie,{'roadname': 'A71'}
 4444,"[47.5594, 2.00824]","[0.140556, -0.990073]",AR,L&apos;Etang du Maras,{'roadname': 'A71'}
 4445,"[47.5813, 1.99538]","[0, 1]",EC,Lamotte-Beuvron,"{'numero': '3', 'roadname': 'A71'}"
-4446,"[47.6644, 1.92766]","[0.51444, -0.8575269999999999]",AS,Chaumont sur Tharonne,{'roadname': 'A71'}
-4447,"[47.6644, 1.92766]","[-0.371368, 0.9284859999999999]",AS,La Fert&eacute; St Aubin,{'roadname': 'A71'}
+4446,"[47.6644, 1.92766]","[0.51444, -0.8575269999999999]",AS,Chaumont sur Tharonne Ouest,{'roadname': 'A71'}
+4447,"[47.6644, 1.92766]","[-0.371368, 0.9284859999999999]",AS,La Fert&eacute; St Aubin Est,{'roadname': 'A71'}
 4448,"[47.8089, 1.8537400000000002]","[-0.16711299999999998, -0.985938]",AR,Bois de Bailly,{'roadname': 'A71'}
 4449,"[47.8089, 1.8537400000000002]","[0.154193, 0.988041]",AR,Bois du T&eacute;l&eacute;graphe,{'roadname': 'A71'}
 4450,"[47.8414, 1.86521]","[0, 1]",EC,Olivet,"{'numero': '2', 'roadname': 'A71'}"
@@ -5515,8 +5515,8 @@
 5513,"[43.5455, 5.42965]","[0, 1]",EC,La Chevali&egrave;re,"{'numero': '9', 'roadname': 'N296'}"
 5514,"[43.5187, 5.42837]","[0, 1]",BI,Jonction A9/A51,{'roadname': 'A51'}
 5515,"[43.5284, 5.42758]","[0, 1]",EC,Aix Jas de Bouffan,"{'numero': '7', 'roadname': 'A51'}"
-5516,"[43.6323, 5.49434]","[-0.052684499999999995, 0.9986109999999999]",AR,Meyrargues,{'roadname': 'A51'}
-5517,"[43.6323, 5.49434]","[0.0481525, -0.9988400000000001]",AS,Meyrargues - Fontbelle,{'roadname': 'A51'}
+5516,"[43.6323, 5.49434]","[-0.052684499999999995, 0.9986109999999999]",AR,Meyrargues Est,{'roadname': 'A51'}
+5517,"[43.6323, 5.49434]","[0.0481525, -0.9988400000000001]",AS,Meyrargues - Fontbelle Ouest,{'roadname': 'A51'}
 5518,"[43.5732, 5.46904]","[0, 1]",EC,Les Platanes,"{'numero': '12', 'roadname': 'A51'}"
 5519,"[43.5932, 5.48371]","[0, 1]",EC,Venelles,"{'numero': '13', 'roadname': 'A51'}"
 5520,"[43.5627, 5.45931]","[0, 1]",LI,Aix limite A51,{'roadname': 'A51'}
