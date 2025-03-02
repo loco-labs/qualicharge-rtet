@@ -87,7 +87,8 @@ def insertion_projection(
                 print("ko", station)
                 continue
             # on ajoute un noeud et on crée le lien
-            id_node = max(max(gr.nodes) + 1, max(gr_ext.nodes) + 1)
+            #id_node = max(max(gr.nodes) + 1, max(gr_ext.nodes) + 1)
+            id_node = max(gr.nodes) + 1
             dis = gr.insert_node(
                 geo_st, id_node, id_edge, att_node=att_insert_node, adjust=False
             )
@@ -95,7 +96,6 @@ def insertion_projection(
                 dist0 = geo_st.distance(gr.nodes[id_edge[0]][GEOM])
                 dist1 = geo_st.distance(gr.nodes[id_edge[1]][GEOM])
                 id_node = id_edge[0] if dist0 <= dist1 else id_edge[1]
-                print(id_node, id_edge, dist0, dist1, geo_st)
             gr_ext.project_node(station, gr, 0, target_node=id_node, att_edge=edge_attr)
     return gr_ext, st_ko
 
@@ -129,7 +129,6 @@ def association_stations(
             len(st_out),
             len(stations_afir),
         )
-
     node_attr = ["amenageur", "operateur", "p_cum", "p_max", "id_station", NATURE]
 
     # IRVE très proches des stations
@@ -137,7 +136,6 @@ def association_stations(
     gs_station, st_ko = gnx.project_graph(
         st_high_proxi_n, noeuds, high_proxi_n, node_attr, edge_attr
     )
-    # print("liaison aire de service KO : ", len(st_ko))
 
     # IRVE proches d'un tronçon
     edge_attr = {NATURE: "liaison exterieur"}
@@ -145,7 +143,6 @@ def association_stations(
     gs_externe, st_ko = gnx.project_graph(
         st_low_proxi, noeuds.loc[filter], low_proxi, node_attr, edge_attr
     )
-    # print("liaison exterieur KO : ", len(st_ko))
 
     # IRVE très proches d'un tronçon
     edge_attr = {NATURE: "liaison aire de recharge"}
@@ -153,7 +150,6 @@ def association_stations(
     gs_pre_station, st_ko = insertion_projection(
         st_high_proxi_t, node_attr, edge_attr, gr, high_proxi_t, att_node_insert
     )
-    # print("liaison aire de recharge KO : ", len(st_ko))
     return gnx.compose_all([gr, gs_externe, gs_pre_station, gs_station])
 
 
