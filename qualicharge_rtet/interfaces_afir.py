@@ -4,6 +4,7 @@ Ce module contient les fonctions d'interface utilisées dans l'analyse du résea
 """
 import json
 import pandas as pd
+import numpy as np
 import geopandas as gpd
 import networkx as nx
 import geo_nx as gnx
@@ -72,7 +73,8 @@ def creation_pandas_stations(data: str | pd.DataFrame, nature="station_irve", fi
     if source == 'gireve':
         # Chargement des points de recharge de la consolidation Gireve
         csl = pd.read_csv(data, sep=";", encoding="latin") if isinstance(data, str) else data
-        csl["puissance_nominale"] = csl["puissance_nominale"].astype(float)
+        if csl["puissance_nominale"].dtype != np.dtype('float64'):
+            csl["puissance_nominale"] = csl["puissance_nominale"].str.replace(',', '.').astype(float)
         
         # Les stations respectant les critères AFIR sont obtenues après un groupby sur les coordonnées
         stations_csl = csl.groupby("coordonneesXY").agg(
