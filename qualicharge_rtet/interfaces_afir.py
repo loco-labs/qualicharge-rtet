@@ -9,6 +9,7 @@ import geopandas as gpd
 import networkx as nx
 import geo_nx as gnx
 from shapely import Point
+from qualicharge_rtet.fonction_afir import get_rtet_attr_station, get_parc_id_station
 
 GEOM = 'geometry'
 NODE_ID = 'node_id'
@@ -29,20 +30,6 @@ def creation_reseau_rtet(shp_file):
     gr = gnx.from_geopandas_edgelist(rtet, edge_attr=["CORRIDORS", "INTROADNUM", "NATIONALRO", "ID", GEOM, NATURE, CORE])
     gr.erase_linear_nodes(keep_attr=[NATURE, CORE])
     nx.set_node_attributes(gr, "noeud rtet", name=NATURE)
-    
-    #tot = 0
-    #list_nodes = list(gr.nodes)
-    for node in list(gr.nodes):
-        autoroute = True
-        for neighbors in gr.neighbors(node):
-            if gr.edges[neighbors, node]['nature'] != 'troncon autoroute':
-                autoroute = False
-                break
-        if autoroute:
-            #nx.set_node_attributes(gr, "noeud autoroute", name=NATURE)
-            gr.nodes[node][NATURE] = 'noeud autoroute'
-            #tot += 1
-    #print(tot)
     return gr
 
 def creation_pandas_aires(file):
@@ -94,3 +81,14 @@ def creation_pandas_stations(data: str | pd.DataFrame, nature="station_irve", fi
     stations[NATURE] = nature        
         
     return stations[['p_cum', 'p_max', 'id_station', 'operateur', 'amenageur', GEOM, NODE_ID, NATURE]]
+
+def export_stations_parcs(graph: gnx.GeoGraph) -> pd.DataFrame:
+    """Extraction et export des stations et parc de recharge d'un graphe"""
+    gr_stations = nx.subgraph_view(graph, filter_node=lambda x: graph.nodes[x][NATURE] == 'station_irve')
+    stations = gr_stations.to_geopandas_nodelist()
+    stations[CORE] = stations['node_id'].apply(get_rtet_attr_station, args=(graph, CORE))
+    stations['parc_nature'] = stations['node_id'].apply(get_rtet_attr_station, args=(graph, NATURE))
+    stations['parc_geometry'] = stations['node_id'].apply(get_rtet_attr_station, args=(graph, GEOM))
+    stations['parc_id'] = stations['node_id'].apply(get_parc_id_station, args=(graph,))
+
+    return stations
