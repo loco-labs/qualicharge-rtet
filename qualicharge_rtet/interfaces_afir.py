@@ -82,13 +82,16 @@ def creation_pandas_stations(data: str | pd.DataFrame, nature="station_irve", fi
         
     return stations[['p_cum', 'p_max', 'id_station', 'operateur', 'amenageur', GEOM, NODE_ID, NATURE]]
 
-def export_stations_parcs(graph: gnx.GeoGraph) -> pd.DataFrame:
-    """Extraction et export des stations et parc de recharge d'un graphe"""
+def export_stations_parcs(graph: gnx.GeoGraph, simple:bool=False) -> pd.DataFrame:
+    """Extraction et export des stations et parcs de recharge d'un graphe"""
     gr_stations = nx.subgraph_view(graph, filter_node=lambda x: graph.nodes[x][NATURE] == 'station_irve')
     stations = gr_stations.to_geopandas_nodelist()
     stations[CORE] = stations['node_id'].apply(get_rtet_attr_station, args=(graph, CORE))
     stations['parc_nature'] = stations['node_id'].apply(get_rtet_attr_station, args=(graph, NATURE))
     stations['parc_geometry'] = stations['node_id'].apply(get_rtet_attr_station, args=(graph, GEOM))
     stations['parc_id'] = stations['node_id'].apply(get_parc_id_station, args=(graph,))
+    stations['id_station_itinerance'] = stations['id_station']
 
+    if simple:
+        return stations[['id_station_itinerance', CORE, NODE_ID, 'parc_nature', 'parc_geometry', 'parc_id']]
     return stations

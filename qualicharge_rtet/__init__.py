@@ -18,3 +18,5 @@ from qualicharge_rtet.fonction_afir import aretes_adjacentes, green_list, gr_mai
 from qualicharge_rtet.fonction_afir import get_rtet_attr_station, get_parc_id_station, propagation_attributs_core, propagation_attributs_edges
 
 from qualicharge_rtet.interfaces_afir import creation_reseau_rtet, creation_pandas_aires, creation_pandas_stations, export_stations_parcs
+
+from qualicharge_rtet.stations_parcs_rtet_qualicharge import filter_stations_parcs
