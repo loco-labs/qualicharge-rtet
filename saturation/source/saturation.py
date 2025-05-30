@@ -95,7 +95,7 @@ def to_sampled_state_grp_h(state_grp: pd.DataFrame, group_name: str, echantillon
     Le temps passé dans chaque état est restitué en minutes.
     Deux états horaires booléens 'sature_h' et 'surcharge_h' sont calculé à partir d'un seuil de temps passé dans l'état."""
     nb_ech_hour = echantillons / 24
-    print(echantillons, nb_ech_hour)
+    # print(echantillons, nb_ech_hour)
     
     sampled = state_grp.reset_index()
     sampled['periode_h'] = sampled['periode'].dt.hour

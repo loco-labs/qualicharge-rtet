@@ -5,8 +5,8 @@ Ce module contient la classe Afir .
 import copy
 import networkx as nx
 import geo_nx as gnx
-from qualicharge_rtet.fonction_afir import (
-    association_stations,
+from qualicharge_rtet.fonction_afir import association_stations
+from qualicharge_rtet.fonction_afir_maillage import (
     troncons_non_mailles,
     troncons_peu_mailles,
 )
