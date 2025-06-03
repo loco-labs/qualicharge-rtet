@@ -72,20 +72,23 @@ def to_sampled_state_grp(state_pdc: pd.DataFrame, pdc_group: pd.DataFrame, group
     La surcharge est activée à moins de 20% de pdc libres et la saturation à moins de 10%.
     Chaque état est restitué par un booléen ainsi que par une valeur aggrégée numérique 
     ('hs': 1, 'inactif': 2, 'actif': 3, 'surcharge': 4, 'sature': 5)."""
+    nb_pdc = pdc_group.groupby([group_name]).count().rename(columns={'id_pdc_itinerance': 'nb_pdc'})
     merged =  pd.merge(state_pdc, pdc_group, how='left', on='id_pdc_itinerance')
     merged['occupe'] = merged['state'] == 'occupe'
     merged['hors_service'] = merged['state'] == 'hors_service'
     merged['libre'] = merged['state'] == 'libre'
     print(len(state_pdc), len(merged))
     
-    grouped = merged[[group_name, 'periode', 'occupe', 'hors_service', 'libre']].groupby([group_name, 'periode']).sum()
-    grouped['nb_pdc'] = grouped['occupe'] + grouped['hors_service'] + grouped['libre']
+    grouped = merged[[group_name, 'periode', 'occupe', 'hors_service', 'libre']].groupby([group_name, 'periode']).sum().reset_index()
+    grouped = pd.merge(grouped, nb_pdc, how='left', on=group_name)
+
     grouped['hs'] = (grouped['libre'] + grouped['occupe'] == 0) & (grouped['hors_service'] > 0)
     grouped['inactif'] = ~grouped['hs'] & (grouped['occupe'] == 0)
     grouped['sature'] = ~grouped['hs'] & ~grouped['inactif'] & (grouped['libre']/grouped['nb_pdc'] < 0.1)
     grouped['surcharge'] = ~grouped['hs'] & ~grouped['inactif'] & ~grouped['sature'] & (grouped['libre']/grouped['nb_pdc'] < 0.2)
     grouped['actif'] = ~grouped['hs'] & ~grouped['inactif'] & ~grouped['sature'] & ~grouped['surcharge']
     grouped['state'] = grouped['hs'] + grouped['inactif'] * 2 + grouped['actif'] * 3 + grouped['surcharge'] * 4 + grouped['sature'] * 5
+
     
     return grouped
 
@@ -108,7 +111,8 @@ def to_sampled_state_grp_h(state_grp: pd.DataFrame, group_name: str, echantillon
     sampled_h['nb_pdc'] = sampled_h['nb_pdc'].astype('int')
     
     sampled_h['sature_h'] = sampled_h['sature'] > duree_etat_min
-    sampled_h['surcharge_h'] = sampled_h['surcharge'] > duree_etat_min
+    # sampled_h['surcharge_h'] = sampled_h['surcharge'] > duree_etat_min
+    sampled_h['surcharge_h'] = ~sampled_h['sature_h'] & ((sampled_h['surcharge'] + sampled_h['sature']) > duree_etat_min) # à tester
     
     return sampled_h[['nb_pdc', 'hs', 'inactif', 'sature', 'surcharge', 'actif', 'sature_h', 'surcharge_h']]
 
