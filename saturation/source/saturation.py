@@ -11,6 +11,9 @@ Les étapes d'évaluation de la saturation sont :
 
 import geopandas as gpd
 import pandas as pd
+import shapely
+import folium
+from folium.plugins import TimestampedGeoJson
 
 def to_sampled_statuses(data: pd.DataFrame, init_data: pd.DataFrame, timestamp: pd.Timestamp, echantillons: int) -> pd.DataFrame:
     """Génère les statuts échantillonnés pour une date donnée à partir d'un ensemble de statuts et de valeurs initiales. 
@@ -110,9 +113,76 @@ def to_sampled_state_grp_h(state_grp: pd.DataFrame, group_name: str, echantillon
         sampled_h[etat] = sampled_h[etat] * 60
     sampled_h['nb_pdc'] = sampled_h['nb_pdc'].astype('int')
     
-    sampled_h['sature_h'] = sampled_h['sature'] > duree_etat_min
-    # sampled_h['surcharge_h'] = sampled_h['surcharge'] > duree_etat_min
-    sampled_h['surcharge_h'] = ~sampled_h['sature_h'] & ((sampled_h['surcharge'] + sampled_h['sature']) > duree_etat_min) # à tester
+    #sampled_h['sature_h'] = sampled_h['sature'] > duree_etat_min
+    sampled_h['sature_h'] = (sampled_h['sature'] + sampled_h['hs']) > duree_etat_min
+    #sampled_h['surcharge_h'] = ~sampled_h['sature_h'] & ((sampled_h['surcharge'] + sampled_h['sature']) > duree_etat_min)
+    sampled_h['surcharge_h'] = ~sampled_h['sature_h'] & ((sampled_h['surcharge'] + sampled_h['sature'] + sampled_h['hs']) > duree_etat_min)
     
     return sampled_h[['nb_pdc', 'hs', 'inactif', 'sature', 'surcharge', 'actif', 'sature_h', 'surcharge_h']]
 
+
+# all_state_h:pd.DataFrame, animate_state_h: pd.DataFrame
+def animate_features(state_station_h:pd.DataFrame, surcharge: pd.DataFrame, stations_parcs: pd.DataFrame, colors:list, period_min:int) -> list[dict]:
+    """Génère les features utilisées pour l'animation temporelle des stations saturées.
+    
+    Une couleur est affactée pour chacun des deux états.
+    L'animation démarre après l'heure définie par period_min."""
+    def set_color(row:pd.Series):
+        #print([row['sature_h'], row['surcharge_h']])
+        match [bool(row['sature_h']), bool(row['surcharge_h'])]:
+            case [True, _]:
+                return colors[0]
+            case [_, True]: 
+                return colors[1]
+            case _:
+                return 'white'
+    surcharge_f = surcharge[surcharge['periode_h'] > period_min]        
+    state_station_h_f = state_station_h[state_station_h['periode_h'] > period_min]
+    stations_surcharge = surcharge_f['id_station_itinerance'].unique()
+    surcharge_station_h = state_station_h_f[state_station_h_f['id_station_itinerance'].isin(stations_surcharge)]
+    surcharge_station_h = pd.merge(surcharge_station_h, stations_parcs[['id_station_itinerance', 'parc_id', 'operateur', 'parc_nature', 'geometry']], how='left', on='id_station_itinerance')
+    #surcharge_station_h['periode_iso'] = (surcharge_station_h["periode"].astype('datetime64[s]') + pd.Timedelta("1 hour") * surcharge_station_h["periode_h"] ).astype('str')
+    surcharge_station_h['coordinates'] = surcharge_station_h['geometry'].apply(lambda x: shapely.get_coordinates(x).tolist()[0])
+    
+    surcharge_station_h['color'] = surcharge_station_h[['sature_h', 'surcharge_h']].apply(set_color, axis=1)    
+
+    features = [
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": row[1]["coordinates"],
+            },
+            "properties": {
+                "time": row[1]["periode_iso"],
+                "icon": "circle",
+                "style": {
+                    "color": row[1]["color"],
+                    "weight": 0,
+                    "radius": 5,
+                    "fillOpacity": 0 if row[1]["color"] == "white" else 1
+                },     
+            },
+        }
+        for row in surcharge_station_h.iterrows()
+    ]
+    return features
+
+def animate(refmap:folium.Map | dict, features:list[dict], **param):
+    """Ajoute une couche d'animation temporelle sur une carte."""
+    param = {
+        "period": "PT1H",
+        "auto_play": False,
+        "loop": False,
+        "max_speed": 1,
+        "loop_button": True,
+        "date_options": "YYYY/MM/DD-HH",
+        "time_slider_drag_update": True,
+        "duration": "PT0H"
+    } | param
+    refmap = folium.Map(**refmap) if isinstance(refmap, dict) else refmap
+    folium.plugins.TimestampedGeoJson(
+        {"type": "FeatureCollection", "features": features},
+        **param
+    ).add_to(refmap)
+    return refmap
