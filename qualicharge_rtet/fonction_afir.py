@@ -102,7 +102,7 @@ def insertion_projection(
 
 
 def association_stations(
-    gr: gnx.GeoGraph, stations_afir: gpd.GeoDataFrame, log: bool = False
+    gr: gnx.GeoGraph, stations_afir: gpd.GeoDataFrame, log: bool = False, only_mandatory: bool=False, id_station: str = "id_station"
 ) -> None | gnx.GeoGraph:
     """intègre les stations au graphe routier"""
     if gr is None or stations_afir is None:
@@ -131,7 +131,8 @@ def association_stations(
             len(st_out),
             len(stations_afir),
         )
-    node_attr = ["amenageur", "operateur", "p_cum", "p_max", "id_station", NATURE]
+    add_fields = [] if only_mandatory else ["amenageur", "operateur"]
+    node_attr = add_fields + ["p_cum", "p_max", id_station, NATURE]
 
     # IRVE très proches des stations
     edge_attr = {NATURE: "liaison aire de service"}
