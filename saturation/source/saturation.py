@@ -122,13 +122,13 @@ def to_sampled_state_grp_h(state_grp: pd.DataFrame, group_name: str, echantillon
 
 
 # all_state_h:pd.DataFrame, animate_state_h: pd.DataFrame
-def animate_features(state_station_h:pd.DataFrame, surcharge: pd.DataFrame, stations_parcs: pd.DataFrame, colors:list, period_min:int) -> list[dict]:
+def animate_features(state_station_h:pd.DataFrame, surcharge: pd.DataFrame, stations_parcs: pd.DataFrame, colors:list, sizes:dict, period_min:int) -> list[dict]:
     """Génère les features utilisées pour l'animation temporelle des stations saturées.
-    
-    Une couleur est affactée pour chacun des deux états.
+
+    Une couleur est affectée pour chacun des deux états.
+    La taille des points est choisie en fonction du nombre de pdc.
     L'animation démarre après l'heure définie par period_min."""
-    def set_color(row:pd.Series):
-        #print([row['sature_h'], row['surcharge_h']])
+    def set_color(row:pd.Series)-> str:
         match [bool(row['sature_h']), bool(row['surcharge_h'])]:
             case [True, _]:
                 return colors[0]
@@ -136,6 +136,12 @@ def animate_features(state_station_h:pd.DataFrame, surcharge: pd.DataFrame, stat
                 return colors[1]
             case _:
                 return 'white'
+    def set_radius(nb_pdc:int)-> int:
+        if nb_pdc < min(sizes['nb_pdc']):
+            return min(sizes['radius'])
+        if nb_pdc > max(sizes['nb_pdc']):
+            return max(sizes['radius'])
+        return sizes['radius'][1]
     surcharge_f = surcharge[surcharge['periode_h'] > period_min]        
     state_station_h_f = state_station_h[state_station_h['periode_h'] > period_min]
     stations_surcharge = surcharge_f['id_station_itinerance'].unique()
@@ -144,7 +150,8 @@ def animate_features(state_station_h:pd.DataFrame, surcharge: pd.DataFrame, stat
     #surcharge_station_h['periode_iso'] = (surcharge_station_h["periode"].astype('datetime64[s]') + pd.Timedelta("1 hour") * surcharge_station_h["periode_h"] ).astype('str')
     surcharge_station_h['coordinates'] = surcharge_station_h['geometry'].apply(lambda x: shapely.get_coordinates(x).tolist()[0])
     
-    surcharge_station_h['color'] = surcharge_station_h[['sature_h', 'surcharge_h']].apply(set_color, axis=1)    
+    surcharge_station_h['color'] = surcharge_station_h[['sature_h', 'surcharge_h']].apply(set_color, axis=1)
+    surcharge_station_h['radius'] = surcharge_station_h['nb_pdc'].apply(set_radius)
 
     features = [
         {
@@ -159,7 +166,7 @@ def animate_features(state_station_h:pd.DataFrame, surcharge: pd.DataFrame, stat
                 "style": {
                     "color": row[1]["color"],
                     "weight": 0,
-                    "radius": 5,
+                    "radius": row[1]["radius"],
                     "fillOpacity": 0 if row[1]["color"] == "white" else 1
                 },     
             },
