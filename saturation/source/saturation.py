@@ -122,7 +122,7 @@ def to_sampled_state_grp_h(state_grp: pd.DataFrame, group_name: str, echantillon
 
 
 # all_state_h:pd.DataFrame, animate_state_h: pd.DataFrame
-def animate_features(state_station_h:pd.DataFrame, surcharge: pd.DataFrame, stations_parcs: pd.DataFrame, colors:list, sizes:dict, period_min:int) -> list[dict]:
+def animate_features(state_station_h:pd.DataFrame, surcharge: pd.DataFrame, stations_parcs: pd.DataFrame, group_pdc:str, geometry:str, colors:list, sizes:dict, period_min:int) -> list[dict]:
     """Génère les features utilisées pour l'animation temporelle des stations saturées.
 
     Une couleur est affectée pour chacun des deux états.
@@ -144,11 +144,12 @@ def animate_features(state_station_h:pd.DataFrame, surcharge: pd.DataFrame, stat
         return sizes['radius'][1]
     surcharge_f = surcharge[surcharge['periode_h'] > period_min]        
     state_station_h_f = state_station_h[state_station_h['periode_h'] > period_min]
-    stations_surcharge = surcharge_f['id_station_itinerance'].unique()
-    surcharge_station_h = state_station_h_f[state_station_h_f['id_station_itinerance'].isin(stations_surcharge)]
-    surcharge_station_h = pd.merge(surcharge_station_h, stations_parcs[['id_station_itinerance', 'parc_id', 'operateur', 'parc_nature', 'geometry']], how='left', on='id_station_itinerance')
+    stations_surcharge = surcharge_f[group_pdc].unique()
+    surcharge_station_h = state_station_h_f[state_station_h_f[group_pdc].isin(stations_surcharge)]
+    #surcharge_station_h = pd.merge(surcharge_station_h, stations_parcs[[group_pdc, 'parc_id', 'operateur', 'parc_nature', geometry]], how='left', on=group_pdc)
+    surcharge_station_h = pd.merge(surcharge_station_h, stations_parcs[[group_pdc, 'operateur', 'parc_nature', geometry]], how='left', on=group_pdc)
     #surcharge_station_h['periode_iso'] = (surcharge_station_h["periode"].astype('datetime64[s]') + pd.Timedelta("1 hour") * surcharge_station_h["periode_h"] ).astype('str')
-    surcharge_station_h['coordinates'] = surcharge_station_h['geometry'].apply(lambda x: shapely.get_coordinates(x).tolist()[0])
+    surcharge_station_h['coordinates'] = surcharge_station_h[geometry].apply(lambda x: shapely.get_coordinates(x).tolist()[0])
     
     surcharge_station_h['color'] = surcharge_station_h[['sature_h', 'surcharge_h']].apply(set_color, axis=1)
     surcharge_station_h['radius'] = surcharge_station_h['nb_pdc'].apply(set_radius)
