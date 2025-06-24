@@ -69,7 +69,7 @@ def to_sampled_state_pdc(sessions: pd.DataFrame, statuses: pd.DataFrame) -> pd.D
     
     return merged.sort_values(by=['id_pdc_itinerance', 'periode']).reset_index(drop=True)
 
-def to_sampled_state_grp(state_pdc: pd.DataFrame, pdc_group: pd.DataFrame, group_name: str) -> pd.DataFrame:
+def to_sampled_state_grp(state_pdc: pd.DataFrame, pdc_group: pd.DataFrame, group_name: str, pourcent_sature:float, pourcent_surcharge: float) -> pd.DataFrame:
     """Génère l'état d'un ensemble de pdc à partir de l'état de chaque pdc.
 
     La surcharge est activée à moins de 20% de pdc libres et la saturation à moins de 10%.
@@ -87,8 +87,8 @@ def to_sampled_state_grp(state_pdc: pd.DataFrame, pdc_group: pd.DataFrame, group
 
     grouped['hs'] = (grouped['libre'] + grouped['occupe'] == 0) & (grouped['hors_service'] > 0)
     grouped['inactif'] = ~grouped['hs'] & (grouped['occupe'] == 0)
-    grouped['sature'] = ~grouped['hs'] & ~grouped['inactif'] & (grouped['libre']/grouped['nb_pdc'] < 0.1)
-    grouped['surcharge'] = ~grouped['hs'] & ~grouped['inactif'] & ~grouped['sature'] & (grouped['libre']/grouped['nb_pdc'] < 0.2)
+    grouped['sature'] = ~grouped['hs'] & ~grouped['inactif'] & (grouped['libre']/grouped['nb_pdc'] < pourcent_sature)
+    grouped['surcharge'] = ~grouped['hs'] & ~grouped['inactif'] & ~grouped['sature'] & (grouped['libre']/grouped['nb_pdc'] < pourcent_surcharge)
     grouped['actif'] = ~grouped['hs'] & ~grouped['inactif'] & ~grouped['sature'] & ~grouped['surcharge']
     grouped['state'] = grouped['hs'] + grouped['inactif'] * 2 + grouped['actif'] * 3 + grouped['surcharge'] * 4 + grouped['sature'] * 5
 
