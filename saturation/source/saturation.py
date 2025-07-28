@@ -70,8 +70,8 @@ def to_sampled_state_pdc(sessions: pd.DataFrame, statuses: pd.DataFrame) -> pd.D
     return merged.sort_values(by=['id_pdc_itinerance', 'periode']).reset_index(drop=True)
 
 def to_sampled_state_grp(state_pdc: pd.DataFrame, pdc_group: pd.DataFrame, group_name: str, pourcent_sature:float, pourcent_surcharge: float) -> pd.DataFrame:
-    """Génère l'état d'un ensemble de pdc à partir de l'état de chaque pdc.
-
+    """Génère le cumul du nombre de pdc par état et l'état d'un ensemble de pdc à partir de l'état de chaque pdc.
+    
     La surcharge est activée à moins de 20% de pdc libres et la saturation à moins de 10%.
     Chaque état est restitué par un booléen ainsi que par une valeur aggrégée numérique 
     ('hs': 1, 'inactif': 2, 'actif': 3, 'surcharge': 4, 'sature': 5)."""
@@ -93,7 +93,7 @@ def to_sampled_state_grp(state_pdc: pd.DataFrame, pdc_group: pd.DataFrame, group
     grouped['state'] = grouped['hs'] + grouped['inactif'] * 2 + grouped['actif'] * 3 + grouped['surcharge'] * 4 + grouped['sature'] * 5
 
     
-    return grouped
+    return grouped[[group_name, 'periode', 'occupe', 'hors_service', 'libre', 'nb_pdc', 'hs', 'inactif', 'sature', 'surcharge', 'actif', 'state']]
 
 def to_sampled_state_grp_h(state_grp: pd.DataFrame, group_name: str, echantillons: int, duree_etat_min: float) -> pd.DataFrame:
     """Génère les états horaires à partir de l'état échantillonné d'un ensemble de pdc.
@@ -120,15 +120,34 @@ def to_sampled_state_grp_h(state_grp: pd.DataFrame, group_name: str, echantillon
     
     return sampled_h[['nb_pdc', 'hs', 'inactif', 'sature', 'surcharge', 'actif', 'sature_h', 'surcharge_h']]
 
+def filter_animate(state_station_h:pd.DataFrame, surcharge: pd.DataFrame, stations_parcs: pd.DataFrame, group_pdc:str, geometry:str, period_min:int) -> pd.DataFrame:
+    """Définit les features à créer pour l'animation"""
+    surcharge_f = surcharge[surcharge['periode_h'] > period_min]        
+    state_station_h_f = state_station_h[state_station_h['periode_h'] > period_min]
+    stations_surcharge = surcharge_f[group_pdc].unique()
+    surcharge_station_h = state_station_h_f[state_station_h_f[group_pdc].isin(stations_surcharge)]
+    surcharge_station_h = pd.merge(surcharge_station_h, stations_parcs[[group_pdc, 'operateur', 'parc_nature', geometry]], how='left', on=group_pdc)
+    return  surcharge_station_h
 
-# all_state_h:pd.DataFrame, animate_state_h: pd.DataFrame
-def animate_features(state_station_h:pd.DataFrame, surcharge: pd.DataFrame, stations_parcs: pd.DataFrame, group_pdc:str, geometry:str, colors:list, sizes:dict, period_min:int) -> list[dict]:
+def add_filter_animate(sample_state_parc_h, surcharge_parc, stations_parcs, group_pdc, id_station, geometry, period_min):
+    surcharge_parc_f = surcharge_parc[(surcharge_parc['periode_h'] > period_min) & surcharge_parc['sature_h']] 
+    state_parc_h_f = sample_state_parc_h[(sample_state_parc_h['periode_h'] > period_min) & surcharge_parc['sature_h']]
+    parcs_surcharge = surcharge_parc_f[group_pdc].unique()
+    parc_nb_stations = stations_parcs[[group_pdc, id_station]].groupby([group_pdc]).count().rename(columns={id_station: 'nb_station'}).reset_index()
+    parcs_multi_station = parc_nb_stations[parc_nb_stations['nb_station'] > 1][group_pdc].unique()
+    parc_sature_max = state_parc_h_f[(state_parc_h_f[group_pdc].isin(parcs_surcharge)) & (state_parc_h_f[group_pdc].isin(parcs_multi_station))]
+    parc_sature_max = pd.merge(parc_sature_max, stations_parcs[[group_pdc, 'parc_nature', geometry]], how='left', on=group_pdc)
+    return parc_sature_max
+
+def animate_features(surcharge_station_h:pd.DataFrame, geometry:str, colors:list, sizes:dict) -> list[dict]:
     """Génère les features utilisées pour l'animation temporelle des stations saturées.
 
     Une couleur est affectée pour chacun des deux états.
     La taille des points est choisie en fonction du nombre de pdc.
     L'animation démarre après l'heure définie par period_min."""
-    def set_color(row:pd.Series)-> str:
+
+    def set_animate_color(row:pd.Series)-> str:
+        """Génère une couleur à partir de l'état saturé (color 1) ou surchargé (color 2)"""
         match [bool(row['sature_h']), bool(row['surcharge_h'])]:
             case [True, _]:
                 return colors[0]
@@ -136,23 +155,18 @@ def animate_features(state_station_h:pd.DataFrame, surcharge: pd.DataFrame, stat
                 return colors[1]
             case _:
                 return 'white'
-    def set_radius(nb_pdc:int)-> int:
+                
+    def set_animate_radius(nb_pdc:int)-> int:
+        """Choisit la taille à restituer en fonction du nombre de points de charge"""
         if nb_pdc < min(sizes['nb_pdc']):
             return min(sizes['radius'])
         if nb_pdc > max(sizes['nb_pdc']):
             return max(sizes['radius'])
         return sizes['radius'][1]
-    surcharge_f = surcharge[surcharge['periode_h'] > period_min]        
-    state_station_h_f = state_station_h[state_station_h['periode_h'] > period_min]
-    stations_surcharge = surcharge_f[group_pdc].unique()
-    surcharge_station_h = state_station_h_f[state_station_h_f[group_pdc].isin(stations_surcharge)]
-    #surcharge_station_h = pd.merge(surcharge_station_h, stations_parcs[[group_pdc, 'parc_id', 'operateur', 'parc_nature', geometry]], how='left', on=group_pdc)
-    surcharge_station_h = pd.merge(surcharge_station_h, stations_parcs[[group_pdc, 'operateur', 'parc_nature', geometry]], how='left', on=group_pdc)
-    #surcharge_station_h['periode_iso'] = (surcharge_station_h["periode"].astype('datetime64[s]') + pd.Timedelta("1 hour") * surcharge_station_h["periode_h"] ).astype('str')
     surcharge_station_h['coordinates'] = surcharge_station_h[geometry].apply(lambda x: shapely.get_coordinates(x).tolist()[0])
     
-    surcharge_station_h['color'] = surcharge_station_h[['sature_h', 'surcharge_h']].apply(set_color, axis=1)
-    surcharge_station_h['radius'] = surcharge_station_h['nb_pdc'].apply(set_radius)
+    surcharge_station_h['color'] = surcharge_station_h[['sature_h', 'surcharge_h']].apply(set_animate_color, axis=1)
+    surcharge_station_h['radius'] = surcharge_station_h['nb_pdc'].apply(set_animate_radius)
 
     features = [
         {
@@ -174,6 +188,8 @@ def animate_features(state_station_h:pd.DataFrame, surcharge: pd.DataFrame, stat
         }
         for row in surcharge_station_h.iterrows()
     ]
+
+    
     return features
 
 def animate(refmap:folium.Map | dict, features:list[dict], **param):
