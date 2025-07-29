@@ -42,7 +42,6 @@ def to_sampled_sessions(data: pd.DataFrame, init_data: pd.DataFrame, timestamp: 
     
     Les états de sortie ('occupation_pdc') sont soit 'occupe', soit 'f_libre. 
     La valeur 'inconnu' n'est pas prise en compte."""
-    null_date = pd.Timestamp('2000-01-01T00:00:00+02:00')
     samples = pd.date_range(start=timestamp, end=timestamp+pd.Timedelta(days=1), periods=echantillons+1)
     periode = pd.DataFrame( {'periode': samples[0:echantillons]})
     sessions = pd.concat([data, init_data]).sort_values(by=['id_pdc_itinerance', 'start'])
@@ -121,9 +120,11 @@ def to_sampled_state_grp_h(state_grp: pd.DataFrame, group_name: str, echantillon
     return sampled_h[['nb_pdc', 'hs', 'inactif', 'sature', 'surcharge', 'actif', 'sature_h', 'surcharge_h']]
 
 def filter_animate(state_station_h:pd.DataFrame, surcharge: pd.DataFrame, stations_parcs: pd.DataFrame, group_pdc:str, geometry:str, period_min:int) -> pd.DataFrame:
-    """Définit les features à créer pour l'animation"""
-    surcharge_f = surcharge[surcharge['periode_h'] > period_min]        
-    state_station_h_f = state_station_h[state_station_h['periode_h'] > period_min]
+    """Définit les features à créer pour l'animation
+    
+    On ne prend que les heure supérieure ou égale à periode_min (UTC)"""
+    surcharge_f = surcharge[surcharge['periode_h'] >= period_min]        
+    state_station_h_f = state_station_h[state_station_h['periode_h'] >= period_min]
     stations_surcharge = surcharge_f[group_pdc].unique()
     
     surcharge_station_h = state_station_h_f[state_station_h_f[group_pdc].isin(stations_surcharge)]
@@ -131,8 +132,8 @@ def filter_animate(state_station_h:pd.DataFrame, surcharge: pd.DataFrame, statio
     return  surcharge_station_h
 
 def add_filter_animate(sample_state_parc_h, surcharge_parc, stations_parcs, group_pdc, id_station, geometry, period_min, multi_station=0):
-    surcharge_parc_f = surcharge_parc[(surcharge_parc['periode_h'] > period_min) & surcharge_parc['sature_h']] 
-    state_parc_h_f = sample_state_parc_h[(sample_state_parc_h['periode_h'] > period_min) & sample_state_parc_h['sature_h']]
+    surcharge_parc_f = surcharge_parc[(surcharge_parc['periode_h'] >= period_min) & surcharge_parc['sature_h']] 
+    state_parc_h_f = sample_state_parc_h[(sample_state_parc_h['periode_h'] >= period_min) & sample_state_parc_h['sature_h']]
     parcs_surcharge = surcharge_parc_f[group_pdc].unique()
     parc_nb_stations = stations_parcs[[group_pdc, id_station]].groupby([group_pdc]).count().rename(columns={id_station: 'nb_station'}).reset_index()
     parcs_multi_station = parc_nb_stations[parc_nb_stations['nb_station'] >= multi_station][group_pdc].unique()
@@ -165,7 +166,9 @@ def animate_features(surcharge_station_h:pd.DataFrame, geometry:str, colors:list
             return max(sizes['radius'])
         return sizes['radius'][1]
     surcharge_station_h['coordinates'] = surcharge_station_h[geometry].apply(lambda x: shapely.get_coordinates(x).tolist()[0])
-    
+    periode_paris = pd.to_datetime(surcharge_station_h['periode_iso']).dt.tz_localize("UTC").dt.tz_convert("Europe/Paris")
+    surcharge_station_h['periode_iso_paris'] = periode_paris.dt.date.astype('str') + ' ' + periode_paris.dt.time.astype('str')
+
     surcharge_station_h['color'] = surcharge_station_h[['sature_h', 'surcharge_h']].apply(set_animate_color, axis=1)
     surcharge_station_h['radius'] = surcharge_station_h['nb_pdc'].apply(set_animate_radius)
 
@@ -178,7 +181,7 @@ def animate_features(surcharge_station_h:pd.DataFrame, geometry:str, colors:list
                 "coordinates": row[1]["coordinates"],
             },
             "properties": {
-                "time": row[1]["periode_iso"],
+                "time": row[1]["periode_iso_paris"],
                 "icon": "circle",
                 "style": {
                     "color": row[1]["color"],
