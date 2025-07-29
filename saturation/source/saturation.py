@@ -125,16 +125,17 @@ def filter_animate(state_station_h:pd.DataFrame, surcharge: pd.DataFrame, statio
     surcharge_f = surcharge[surcharge['periode_h'] > period_min]        
     state_station_h_f = state_station_h[state_station_h['periode_h'] > period_min]
     stations_surcharge = surcharge_f[group_pdc].unique()
+    
     surcharge_station_h = state_station_h_f[state_station_h_f[group_pdc].isin(stations_surcharge)]
     surcharge_station_h = pd.merge(surcharge_station_h, stations_parcs[[group_pdc, 'operateur', 'parc_nature', geometry]], how='left', on=group_pdc)
     return  surcharge_station_h
 
-def add_filter_animate(sample_state_parc_h, surcharge_parc, stations_parcs, group_pdc, id_station, geometry, period_min):
+def add_filter_animate(sample_state_parc_h, surcharge_parc, stations_parcs, group_pdc, id_station, geometry, period_min, multi_station=0):
     surcharge_parc_f = surcharge_parc[(surcharge_parc['periode_h'] > period_min) & surcharge_parc['sature_h']] 
-    state_parc_h_f = sample_state_parc_h[(sample_state_parc_h['periode_h'] > period_min) & surcharge_parc['sature_h']]
+    state_parc_h_f = sample_state_parc_h[(sample_state_parc_h['periode_h'] > period_min) & sample_state_parc_h['sature_h']]
     parcs_surcharge = surcharge_parc_f[group_pdc].unique()
     parc_nb_stations = stations_parcs[[group_pdc, id_station]].groupby([group_pdc]).count().rename(columns={id_station: 'nb_station'}).reset_index()
-    parcs_multi_station = parc_nb_stations[parc_nb_stations['nb_station'] > 1][group_pdc].unique()
+    parcs_multi_station = parc_nb_stations[parc_nb_stations['nb_station'] >= multi_station][group_pdc].unique()
     parc_sature_max = state_parc_h_f[(state_parc_h_f[group_pdc].isin(parcs_surcharge)) & (state_parc_h_f[group_pdc].isin(parcs_multi_station))]
     parc_sature_max = pd.merge(parc_sature_max, stations_parcs[[group_pdc, 'parc_nature', geometry]], how='left', on=group_pdc)
     return parc_sature_max
@@ -168,6 +169,7 @@ def animate_features(surcharge_station_h:pd.DataFrame, geometry:str, colors:list
     surcharge_station_h['color'] = surcharge_station_h[['sature_h', 'surcharge_h']].apply(set_animate_color, axis=1)
     surcharge_station_h['radius'] = surcharge_station_h['nb_pdc'].apply(set_animate_radius)
 
+    #features = [] if not features else features
     features = [
         {
             "type": "Feature",
@@ -188,8 +190,6 @@ def animate_features(surcharge_station_h:pd.DataFrame, geometry:str, colors:list
         }
         for row in surcharge_station_h.iterrows()
     ]
-
-    
     return features
 
 def animate(refmap:folium.Map | dict, features:list[dict], **param):
