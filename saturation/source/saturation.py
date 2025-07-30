@@ -131,7 +131,8 @@ def filter_animate(state_station_h:pd.DataFrame, surcharge: pd.DataFrame, statio
     surcharge_station_h = pd.merge(surcharge_station_h, stations_parcs[[group_pdc, 'operateur', 'parc_nature', geometry]], how='left', on=group_pdc)
     return  surcharge_station_h
 
-def add_filter_animate(sample_state_parc_h, surcharge_parc, stations_parcs, group_pdc, id_station, geometry, period_min, multi_station=0):
+def add_filter_animate(sample_state_parc_h, surcharge_parc, stations_parcs, group_pdc, id_station, geometry, period_min, multi_station=1):
+    """Ajout des parcs lorsqu'ils sont saturés et lorqu'ils regroupent le nombre de stations défini par 'multi_station'"""
     surcharge_parc_f = surcharge_parc[(surcharge_parc['periode_h'] >= period_min) & surcharge_parc['sature_h']] 
     state_parc_h_f = sample_state_parc_h[(sample_state_parc_h['periode_h'] >= period_min) & sample_state_parc_h['sature_h']]
     parcs_surcharge = surcharge_parc_f[group_pdc].unique()
@@ -141,7 +142,7 @@ def add_filter_animate(sample_state_parc_h, surcharge_parc, stations_parcs, grou
     parc_sature_max = pd.merge(parc_sature_max, stations_parcs[[group_pdc, 'parc_nature', geometry]], how='left', on=group_pdc)
     return parc_sature_max
 
-def animate_features(surcharge_station_h:pd.DataFrame, geometry:str, colors:list, sizes:dict) -> list[dict]:
+def animate_features(surcharge_station_h:pd.DataFrame, geometry:str, colors:list, sizes:dict, size_sature:bool=False) -> list[dict]:
     """Génère les features utilisées pour l'animation temporelle des stations saturées.
 
     Une couleur est affectée pour chacun des deux états.
@@ -186,7 +187,7 @@ def animate_features(surcharge_station_h:pd.DataFrame, geometry:str, colors:list
                 "style": {
                     "color": row[1]["color"],
                     "weight": 0,
-                    "radius": row[1]["radius"],
+                    "radius": min(sizes['radius']) if size_sature and row[1]["color"] != colors[0] else row[1]["radius"],
                     "fillOpacity": 0 if row[1]["color"] == "white" else 1
                 },     
             },
