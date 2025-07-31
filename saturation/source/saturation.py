@@ -113,9 +113,9 @@ def to_sampled_state_grp_h(state_grp: pd.DataFrame, group_name: str, echantillon
     sampled_h['nb_pdc'] = sampled_h['nb_pdc'].astype('int')
     
     #sampled_h['sature_h'] = sampled_h['sature'] > duree_etat_min
-    sampled_h['sature_h'] = (sampled_h['sature'] + sampled_h['hs']) > duree_etat_min
+    sampled_h['sature_h'] = (sampled_h['sature'] + sampled_h['hs']) >= duree_etat_min
     #sampled_h['surcharge_h'] = ~sampled_h['sature_h'] & ((sampled_h['surcharge'] + sampled_h['sature']) > duree_etat_min)
-    sampled_h['surcharge_h'] = ~sampled_h['sature_h'] & ((sampled_h['surcharge'] + sampled_h['sature'] + sampled_h['hs']) > duree_etat_min)
+    sampled_h['surcharge_h'] = ~sampled_h['sature_h'] & ((sampled_h['surcharge'] + sampled_h['sature'] + sampled_h['hs']) >= duree_etat_min)
     
     return sampled_h[['nb_pdc', 'hs', 'inactif', 'sature', 'surcharge', 'actif', 'sature_h', 'surcharge_h']]
 
