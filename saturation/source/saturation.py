@@ -100,7 +100,6 @@ def to_sampled_state_grp_h(state_grp: pd.DataFrame, group_name: str, echantillon
     Le temps passé dans chaque état est restitué en minutes.
     Deux états horaires booléens 'sature_h' et 'surcharge_h' sont calculé à partir d'un seuil de temps passé dans l'état."""
     nb_ech_hour = echantillons / 24
-    # print(echantillons, nb_ech_hour)
     
     sampled = state_grp.reset_index()
     sampled['periode_h'] = sampled['periode'].dt.hour
@@ -112,12 +111,14 @@ def to_sampled_state_grp_h(state_grp: pd.DataFrame, group_name: str, echantillon
         sampled_h[etat] = sampled_h[etat] * 60
     sampled_h['nb_pdc'] = sampled_h['nb_pdc'].astype('int')
     
-    #sampled_h['sature_h'] = sampled_h['sature'] > duree_etat_min
     sampled_h['sature_h'] = (sampled_h['sature'] + sampled_h['hs']) >= duree_etat_min
-    #sampled_h['surcharge_h'] = ~sampled_h['sature_h'] & ((sampled_h['surcharge'] + sampled_h['sature']) > duree_etat_min)
     sampled_h['surcharge_h'] = ~sampled_h['sature_h'] & ((sampled_h['surcharge'] + sampled_h['sature'] + sampled_h['hs']) >= duree_etat_min)
+
+    sampled_h = sampled_h.reset_index()
+    sampled_h['periode_iso'] = (sampled_h["periode"].astype('datetime64[s]') + pd.Timedelta("1 hour") * sampled_h["periode_h"] ).astype('str')
+    sampled_h['periode_paris'] = pd.to_datetime(sampled_h['periode_iso']).dt.tz_localize("UTC").dt.tz_convert("Europe/Paris").astype('str')
     
-    return sampled_h[['nb_pdc', 'hs', 'inactif', 'sature', 'surcharge', 'actif', 'sature_h', 'surcharge_h']]
+    return sampled_h[[group_name, 'periode', 'periode_h', 'nb_pdc', 'hs', 'inactif', 'sature', 'surcharge', 'actif', 'sature_h', 'surcharge_h', 'periode_iso', 'periode_paris']]
 
 def filter_animate(state_station_h:pd.DataFrame, surcharge: pd.DataFrame, stations_parcs: pd.DataFrame, group_pdc:str, geometry:str, period_min:int) -> pd.DataFrame:
     """Définit les features à créer pour l'animation
@@ -173,7 +174,6 @@ def animate_features(surcharge_station_h:pd.DataFrame, geometry:str, colors:list
     surcharge_station_h['color'] = surcharge_station_h[['sature_h', 'surcharge_h']].apply(set_animate_color, axis=1)
     surcharge_station_h['radius'] = surcharge_station_h['nb_pdc'].apply(set_animate_radius)
 
-    #features = [] if not features else features
     features = [
         {
             "type": "Feature",
