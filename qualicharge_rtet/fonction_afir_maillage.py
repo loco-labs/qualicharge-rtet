@@ -12,6 +12,7 @@ NATURE = "nature"
 WEIGHT = "weight"
 CORE = "core"
 
+
 def troncons_non_mailles(
     g_tot: gnx.GeoGraph,
     gr_ext: gnx.GeoGraph,
@@ -37,7 +38,7 @@ def troncons_non_mailles(
             and gr_ext.nodes[x][NATURE] in stat_attribute
         ),
     )
-    
+
     is_dgr = isinstance(g_tot, gnx.geodigraph.GeoDiGraph)
     gr_rev = g_tot.reverse() if is_dgr else None
     for edge in gr.edges:
@@ -48,7 +49,7 @@ def troncons_non_mailles(
             radius=distance_max,
             n_attribute=n_attribute,
             n_active=dispo,
-            gr_rev=gr_rev
+            gr_rev=gr_rev,
         )
         if not dist_inter_st or dist_inter_st > seuil:
             troncons_non_mailles.append(edge)
@@ -86,6 +87,7 @@ def troncons_peu_mailles(
                 - nd_sat
             )
     return g_tot.edge_subgraph(ed_extend)
+
 
 def aretes_adjacentes(
     node_index: int,
