@@ -2,12 +2,11 @@
 """
 Ce module contient les fonctions d'interface utilisées dans l'analyse du réseau RTET des infrastructure IRVE.
 """
-import json
 import pandas as pd
 import numpy as np
 import geopandas as gpd
 import networkx as nx
-import geo_nx as gnx
+import geo_nx as gnx  # type: ignore
 
 from shapely import Point
 from qualicharge_rtet.fonction_afir import get_rtet_attr_station, get_parc_id_station

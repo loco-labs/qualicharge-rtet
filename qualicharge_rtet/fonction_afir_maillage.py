@@ -4,7 +4,7 @@ Ce module contient les fonctions utilisées dans l'analyse du réseau des infras
 """
 import geopandas as gpd
 import networkx as nx
-import geo_nx as gnx
+import geo_nx as gnx  # type: ignore
 
 GEOM = "geometry"
 NODE_ID = "node_id"
