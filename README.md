@@ -7,7 +7,7 @@ Ce repository présente plusieurs fonctions :
 - Génération d'un graphe du réseau RTE-T (directionnel et non directionnel)
 - Affectation des stations aux aires de service, échangeurs et rond-points du réseau
 - Analyse des distance minimales entre stations et parcs du réseau RTE-T (règlementation AFIR)
-- Analyse de la saturation des stations 
+- Analyse de la saturation des stations
 
 ## Génération du réseau RTE-T
 
@@ -21,7 +21,7 @@ Il est stocké sous la forme de deux fichiers geojson (noeuds et tronçons)
 
 ## Réseau AFIR
 
-Le réseau AFIR est le réseau RTET auquel on ajoute les stations IRVE situées a proximité du réseau (données issues de Qualicharge). 
+Le réseau AFIR est le réseau RTET auquel on ajoute les stations IRVE situées a proximité du réseau (données issues de Qualicharge).
 
 Pour chaque station, on ajoute:
 

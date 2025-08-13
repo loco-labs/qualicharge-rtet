@@ -4,7 +4,7 @@ Ce module contient la classe Afir .
 """
 import copy
 import networkx as nx
-import geo_nx as gnx
+import geo_nx as gnx  # type: ignore
 from qualicharge_rtet.fonction_afir import association_stations
 from qualicharge_rtet.fonction_afir_maillage import (
     troncons_non_mailles,
@@ -28,7 +28,14 @@ class Afir:
     """
 
     def __init__(
-        self, rtet=None, stations=None, central=True, pcum=400, pmax=150, dist=60, log=False
+        self,
+        rtet=None,
+        stations=None,
+        central=True,
+        pcum=400,
+        pmax=150,
+        dist=60,
+        log=False,
     ):
         """The initialization of an Afir scenario includes :
         - GeoGraph is identical to a Graph initialization.
@@ -71,7 +78,7 @@ class Afir:
             self._stations = stations[
                 (stations["p_max"] > self._pmax) & (stations["p_cum"] > self._pcum)
             ].reset_index()
-            self._reseau = association_stations(self._rtet, self._stations,log=log)
+            self._reseau = association_stations(self._rtet, self._stations, log=log)
 
     def set_reseau(self, reseau):
         self._reseau = reseau
@@ -208,24 +215,27 @@ class Afir:
                 and self._reseau.nodes[x][NATURE] == "station_irve"
             ),
         )
+
     def indicateur_afir(self, etendu=False, dispo="dispo"):
         l_rtet = self.size_rtet
         l_non_afir = self.gr_non_maille(etendu=etendu, dispo=dispo).size(weight=WEIGHT)
-        return {'ratio afir': (1 - l_non_afir / l_rtet),
-                'distance rtet': l_rtet,
-                'distance restante': l_non_afir}
+        return {
+            "ratio afir": (1 - l_non_afir / l_rtet),
+            "distance rtet": l_rtet,
+            "distance restante": l_non_afir,
+        }
 
     def gr_non_maille(self, etendu=False, dispo="dispo"):
-        '''
-        - un tronçon est non maillé s'il existe un point de ce tronçon situé 
+        """
+        - un tronçon est non maillé s'il existe un point de ce tronçon situé
         à une distance de la plus proche station supérieure à un seuil,
-        - un tronçon est peu maillé s'il est sur la même branche (ensemble de 
+        - un tronçon est peu maillé s'il est sur la même branche (ensemble de
         tronçons entre deux stations disponibles ou bifurcations) qu'un tronçon maillé.
 
         Parameters
         ----------
         etendu : booleen, optional
-            tronçpon peu maillé si True, sinon tronçon non maillés. 
+            tronçpon peu maillé si True, sinon tronçon non maillés.
             The default is False.
         dispo : string, optional
             Attribut booléen. S'il est faux, la station est indisponible.
@@ -235,7 +245,7 @@ class Afir:
         -------
         GeoGraph
             Graphe des troncons non ou peu maillés .
-        '''
+        """
         dist_actives = "dist_actives"
         non_maille = troncons_non_mailles(
             self.reseau,
