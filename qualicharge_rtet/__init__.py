@@ -43,4 +43,5 @@ from qualicharge_rtet.interfaces_afir_qualicharge import (
     creation_pandas_stations,
     export_stations_parcs,
     filter_stations_parcs,
+    lecture_statiques,
 )
