@@ -14,6 +14,7 @@ Les fonctions d'évaluation de la saturation sont :
 import pandas as pd
 import shapely
 import folium
+from folium.plugins import TimestampedGeoJson
 
 
 def to_sampled_statuses(
@@ -109,6 +110,7 @@ def to_sampled_state_pdc(
     L'état 'occupe' des sessions est prioritaire à l'état des statuts.
     L'état 'f_libre' (non occupe) d'une session se traduit par l'état 'hors_service'
     si l'état du statut est 'hors_service' sinon par l'état 'libre'."""
+    # ! les noms des états sont choisi pour que le tri alphabétique respecte l'ordre de priorité
     merged = pd.merge(
         sessions, statuses, how="outer", on=["id_pdc_itinerance", "periode"]
     ).fillna("aaa")
@@ -420,7 +422,7 @@ def animate(refmap: folium.Map | dict, features: list[dict], **param):
         "duration": "PT0H",
     } | param
     refmap = folium.Map(**refmap) if isinstance(refmap, dict) else refmap
-    folium.plugins.TimestampedGeoJson(
+    TimestampedGeoJson(
         {"type": "FeatureCollection", "features": features}, **param
     ).add_to(refmap)
     return refmap

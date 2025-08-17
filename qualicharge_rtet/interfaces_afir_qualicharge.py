@@ -20,8 +20,34 @@ NODE_ID = "node_id"
 NATURE = "nature"
 CORE = "core"
 ID_STATION_ITINERANCE = "id_station_itinerance"
+ID_PDC_ITINERANCE = "id_pdc_itinerance"
+
+def lecture_statiques(
+    pdc_files: list[str],
+    export_pdc: bool=True):
+    """extraction des pdcs ou stations des données statiques de Qualicharge"""
+    #liste_pdcs = [pd.read_json(file) for file in pdc_files]
+    dtype = {'code_insee_commune':'str', 'dpt_code': 'str'}
+    liste_pdcs = [pd.read_csv(file, sep=",", dtype=dtype) for file in pdc_files]
+    pdc = pd.concat(liste_pdcs, ignore_index=True).drop_duplicates(ID_PDC_ITINERANCE)
 
 
+    #csl = pd.read_csv(data, sep=",") if isinstance(data, str) else data
+    geom = gpd.points_from_xy(pdc.longitude, pdc.latitude)
+    pdc_gpd = gpd.GeoDataFrame(pdc, geometry=geom, crs=4326).to_crs(2154)
+    if export_pdc:
+        return pdc_gpd
+    champs_station = [ID_STATION_ITINERANCE, "puissance_nominale", GEOM, "nom_amenageur", "nom_operateur"]
+    stations = pdc_gpd[champs_station].groupby(ID_STATION_ITINERANCE).agg(
+        p_max=("puissance_nominale", "max"),
+        p_cum=("puissance_nominale", "sum"),
+        geometry=(GEOM, "first"),
+        amenageur=("nom_amenageur", "first"),
+        operateur=("nom_operateur", "first"),
+    )
+    return gpd.GeoDataFrame(stations, crs=2154)
+    
+    
 def creation_pandas_stations(
     data: str | pd.DataFrame,
     nature: str = "station_irve",
@@ -68,9 +94,10 @@ def creation_pandas_stations(
         stations[ID_STATION_ITINERANCE] = stations["id_station"]
         stations = gpd.GeoDataFrame(stations, crs=4326).to_crs(2154)
     elif source == "qualicharge":
-        csl = pd.read_csv(data, sep=",") if isinstance(data, str) else data
-        geom = gpd.points_from_xy(csl.longitude, csl.latitude)
-        stations = gpd.GeoDataFrame(csl, geometry=geom, crs=4326).to_crs(2154)
+        stations = lecture_statiques([data], export_pdc=False) if isinstance(data, str) else data
+        #csl = pd.read_csv(data, sep=",") if isinstance(data, str) else data
+        #geom = gpd.points_from_xy(csl.longitude, csl.latitude)
+        #stations = gpd.GeoDataFrame(csl, geometry=geom, crs=4326).to_crs(2154)
     stations[NODE_ID] = range(first_id, len(stations) + first_id)
     stations[NATURE] = nature
     if only_mandatory:
