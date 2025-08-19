@@ -3,8 +3,7 @@
 Ce module contient les fonctions utilisées dans l'analyse du réseau des infrastructures IRVE.
 """
 import geopandas as gpd
-import networkx as nx
-import geo_nx as gnx
+import geo_nx as gnx  # type: ignore
 
 GEOM = "geometry"
 NODE_ID = "node_id"
@@ -88,7 +87,7 @@ def insertion_projection(
                 print("ko", station)
                 continue
             # on ajoute un noeud et on crée le lien
-            #id_node = max(max(gr.nodes) + 1, max(gr_ext.nodes) + 1)
+            # id_node = max(max(gr.nodes) + 1, max(gr_ext.nodes) + 1)
             id_node = max(gr.nodes) + 1
             dis = gr.insert_node(
                 geo_st, id_node, id_edge, att_node=att_insert_node, adjust=False
@@ -102,32 +101,36 @@ def insertion_projection(
 
 
 def association_stations(
-    gr: gnx.GeoGraph, stations_afir: gpd.GeoDataFrame, log: bool = False, only_mandatory: bool=False, id_station: str = "id_station"
+    gr: gnx.GeoGraph,
+    stations_afir: gpd.GeoDataFrame,
+    log: bool = False,
+    only_mandatory: bool = False,
+    id_station: str = "id_station",
 ) -> None | gnx.GeoGraph:
     """intègre les stations au graphe routier"""
     if gr is None or stations_afir is None:
         return None
-    high_proxi_t = 100
+    # high_proxi_t = 100
     high_proxi_n = 300
     low_proxi = 2000
 
     noeuds = gr.to_geopandas_nodelist()
     noeuds_station = noeuds.loc[noeuds[NATURE] == "aire de service"]
     troncons = gr.to_geopandas_edgelist()
-    troncons_hors_autoroute = troncons.loc[troncons[NATURE] == "troncon hors autoroute"]
+    # troncons_hors_autoroute = troncons.loc[troncons[NATURE] == "troncon hors autoroute"]
 
     st_low_proxi, st_out = proximite(stations_afir, troncons, low_proxi)
     st_high_proxi_n, st_proxi_t = proximite(st_low_proxi, noeuds_station, high_proxi_n)
-    #st_high_proxi_t, st_low_proxi = proximite(
+    # st_high_proxi_t, st_low_proxi = proximite(
     #    st_proxi_t, troncons_hors_autoroute, high_proxi_t
-    #)
-    if log: 
+    # )
+    if log:
         print(
             "Nb stations (st, pre_st, ext, out, total) : ",
             len(st_high_proxi_n),
             len(st_proxi_t),
-            #len(st_high_proxi_t),
-            #len(st_low_proxi),
+            # len(st_high_proxi_t),
+            # len(st_low_proxi),
             len(st_out),
             len(stations_afir),
         )
@@ -145,17 +148,22 @@ def association_stations(
     filter = (noeuds[NATURE] == "echangeur") | (noeuds[NATURE] == "rond-point")
     gs_externe, st_ko = gnx.project_graph(
         # st_low_proxi, noeuds.loc[filter], low_proxi, node_attr, edge_attr
-        st_proxi_t, noeuds.loc[filter], low_proxi, node_attr, edge_attr
+        st_proxi_t,
+        noeuds.loc[filter],
+        low_proxi,
+        node_attr,
+        edge_attr,
     )
 
-    '''# IRVE très proches d'un tronçon
+    """# IRVE très proches d'un tronçon
     edge_attr = {NATURE: "liaison aire de recharge"}
     att_node_insert = {NATURE: "aire de recharge"}
     gs_pre_station, st_ko = insertion_projection(
         st_high_proxi_t, node_attr, edge_attr, gr, high_proxi_t, att_node_insert
-    )'''
-    #return gnx.compose_all([gr, gs_externe, gs_pre_station, gs_station])
+    )"""
+    # return gnx.compose_all([gr, gs_externe, gs_pre_station, gs_station])
     return gnx.compose_all([gr, gs_externe, gs_station])
+
 
 def propagation_attributs_core(gr: gnx.GeoGraph, nature: str) -> None:
     """propage l'attribut 'core' des tronçons sur les noeuds de type 'nature'"""
@@ -169,7 +177,8 @@ def propagation_attributs_core(gr: gnx.GeoGraph, nature: str) -> None:
             gr.nodes[node][CORE] = core
     return
 
-def propagation_attributs_edges(gr: gnx.GeoGraph)-> None:
+
+def propagation_attributs_edges(gr: gnx.GeoGraph) -> None:
     """crée les attributs 'core' et 'noeud autoroute' des noeuds à partir des tronçons"""
     for node in list(gr.nodes):
         core = False
@@ -178,24 +187,30 @@ def propagation_attributs_edges(gr: gnx.GeoGraph)-> None:
                 core = True
                 break
         gr.nodes[node][CORE] = core
-        if gr.nodes[node][NATURE] == 'noeud rtet':
+        if gr.nodes[node][NATURE] == "noeud rtet":
             autoroute = True
             for neighbors in gr.neighbors(node):
-                if gr.edges[neighbors, node][NATURE] != 'troncon autoroute':
+                if gr.edges[neighbors, node][NATURE] != "troncon autoroute":
                     autoroute = False
                     break
             if autoroute:
-                gr.nodes[node][NATURE] = 'noeud autoroute'
+                gr.nodes[node][NATURE] = "noeud autoroute"
     for edge in list(gr.edges):
-        if gr.edges[edge][NATURE] == 'liaison aire':
-            core = gr.nodes[edge[0]].get(CORE, False) or gr.nodes[edge[1]].get(CORE, False)
-            gr.edges[edge][CORE] = gr.nodes[edge[0]][CORE] = gr.nodes[edge[1]][CORE] = core
+        if gr.edges[edge][NATURE] == "liaison aire":
+            core = gr.nodes[edge[0]].get(CORE, False) or gr.nodes[edge[1]].get(
+                CORE, False
+            )
+            gr.edges[edge][CORE] = gr.nodes[edge[0]][CORE] = gr.nodes[edge[1]][CORE] = (
+                core
+            )
     return
+
 
 def get_rtet_attr_station(node, gr_station: gnx.GeoGraph, attr: str) -> bool:
     """restitue la valeur d'un attribut du RTET"""
     return gr_station.nodes[list(gr_station.neighbors(node))[0]][attr]
 
-def get_parc_id_station(node, gr_station: gnx.GeoGraph=None) -> bool:
+
+def get_parc_id_station(node, gr_station: gnx.GeoGraph = None) -> bool:
     """restitue l'Id du parc associé à la station"""
-    return 'parc ' + str(list(gr_station.neighbors(node))[0])
+    return "parc " + str(list(gr_station.neighbors(node))[0])
