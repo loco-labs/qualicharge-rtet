@@ -12,10 +12,13 @@ Les fonctions d'évaluation de la saturation sont :
 """
 
 import pandas as pd
-import shapely
-import folium
-from folium.plugins import TimestampedGeoJson
+import datetime
+#import shapely
+#import folium
+#from folium.plugins import TimestampedGeoJson
 
+ID_POC: str = "id_pdc_itinerance"
+ID_STATION: str = "id_station_itinerance"
 
 def to_sampled_statuses(
     data: pd.DataFrame,
@@ -262,168 +265,51 @@ def to_sampled_state_grp_h(
         ]
     ]
 
-
-def filter_animate(
-    state_station_h: pd.DataFrame,
-    surcharge: pd.DataFrame,
-    stations_parcs: pd.DataFrame,
-    group_pdc: str,
-    geometry: str,
-    period_min: int,
+def sampled_state_poc(
+    day: datetime.date,
+    samples_per_day: int,
+    sessions: pd.DataFrame,
+    statuses: pd.DataFrame,
+    statics: pd.DataFrame,
 ) -> pd.DataFrame:
-    """Définit les features à créer pour l'animation
+    """Extract complete POC with sessions and statuses."""
+    timestamp = pd.Timestamp(day.isoformat() + "T00:00:00+00:00")
+    pocs_with_sessions = sessions[ID_POC].unique()
+    pocs_with_statuses = statuses[ID_POC].unique()
+    pocs_ids = set(pocs_with_sessions).intersection(set(pocs_with_statuses))
 
-    On ne prend que les heure supérieure ou égale à periode_min (UTC)"""
-    surcharge_f = surcharge[surcharge["periode_h"] >= period_min]
-    state_station_h_f = state_station_h[state_station_h["periode_h"] >= period_min]
-    stations_surcharge = surcharge_f[group_pdc].unique()
+    attributes_sessions = [ID_POC, "start", "end"]
+    attributes_statuses = [ID_POC, "horodatage", "etat_pdc"]
+    # statuses = statuses[statuses[ID_POC].isin(pocs_ids)][attributes_sessions]
+    statuses = statuses[attributes_statuses]
+    # sessions = sessions[sessions[ID_POC].isin(pocs_ids)][attributes_statuses]
+    sessions = sessions[attributes_sessions]
+    sessions["start"] = sessions["start"].astype("datetime64[s, UTC]")
+    sessions["end"] = sessions["end"].astype("datetime64[s, UTC]")
 
-    surcharge_station_h = state_station_h_f[
-        state_station_h_f[group_pdc].isin(stations_surcharge)
-    ]
-    surcharge_station_h = pd.merge(
-        surcharge_station_h,
-        stations_parcs[[group_pdc, "operateur", "parc_nature", geometry]],
-        how="left",
-        on=group_pdc,
-    )
-    return surcharge_station_h
+    pocs_stations = statics[statics[ID_POC].isin(pocs_with_sessions)]
+    pocs = pocs_stations[ID_POC].unique()
+    stations = pocs_stations[ID_STATION].unique()
 
-
-def add_filter_animate(
-    sample_state_parc_h,
-    surcharge_parc,
-    stations_parcs,
-    group_pdc,
-    id_station,
-    geometry,
-    period_min,
-    multi_station=1,
-):
-    """Ajout des parcs lorsqu'ils sont saturés et lorqu'ils regroupent le nombre de stations défini par 'multi_station'"""
-    surcharge_parc_f = surcharge_parc[
-        (surcharge_parc["periode_h"] >= period_min) & surcharge_parc["sature_h"]
-    ]
-    state_parc_h_f = sample_state_parc_h[
-        (sample_state_parc_h["periode_h"] >= period_min)
-        & sample_state_parc_h["sature_h"]
-    ]
-    parcs_surcharge = surcharge_parc_f[group_pdc].unique()
-    parc_nb_stations = (
-        stations_parcs[[group_pdc, id_station]]
-        .groupby([group_pdc])
-        .count()
-        .rename(columns={id_station: "nb_station"})
-        .reset_index()
-    )
-    parcs_multi_station = parc_nb_stations[
-        parc_nb_stations["nb_station"] >= multi_station
-    ][group_pdc].unique()
-    parc_sature_max = state_parc_h_f[
-        (state_parc_h_f[group_pdc].isin(parcs_surcharge))
-        & (state_parc_h_f[group_pdc].isin(parcs_multi_station))
-    ]
-    parc_sature_max = pd.merge(
-        parc_sature_max,
-        stations_parcs[[group_pdc, "parc_nature", geometry]],
-        how="left",
-        on=group_pdc,
-    )
-    return parc_sature_max
-
-
-def animate_features(
-    surcharge_station_h: pd.DataFrame,
-    geometry: str,
-    colors: list,
-    sizes: dict,
-    size_sature: bool = False,
-) -> list[dict]:
-    """Génère les features utilisées pour l'animation temporelle des stations saturées.
-
-    Une couleur est affectée pour chacun des deux états.
-    La taille des points est choisie en fonction du nombre de pdc.
-    L'animation démarre après l'heure définie par period_min."""
-
-    def set_animate_color(row: pd.Series) -> str:
-        """Génère une couleur à partir de l'état saturé (color 1) ou surchargé (color 2)"""
-        match [bool(row["sature_h"]), bool(row["surcharge_h"])]:
-            case [True, _]:
-                return colors[0]
-            case [_, True]:
-                return colors[1]
-            case _:
-                return "white"
-
-    def set_animate_radius(nb_pdc: int) -> int:
-        """Choisit la taille à restituer en fonction du nombre de points de charge"""
-        if nb_pdc < min(sizes["nb_pdc"]):
-            return min(sizes["radius"])
-        if nb_pdc > max(sizes["nb_pdc"]):
-            return max(sizes["radius"])
-        return sizes["radius"][1]
-
-    surcharge_station_h["coordinates"] = surcharge_station_h[geometry].apply(
-        lambda x: shapely.get_coordinates(x).tolist()[0]
-    )
-    periode_paris = (
-        pd.to_datetime(surcharge_station_h["periode_iso"])
-        .dt.tz_localize("UTC")
-        .dt.tz_convert("Europe/Paris")
-    )
-    surcharge_station_h["periode_iso_paris"] = (
-        periode_paris.dt.date.astype("str") + " " + periode_paris.dt.time.astype("str")
-    )
-
-    surcharge_station_h["color"] = surcharge_station_h[
-        ["sature_h", "surcharge_h"]
-    ].apply(set_animate_color, axis=1)
-    surcharge_station_h["radius"] = surcharge_station_h["nb_pdc"].apply(
-        set_animate_radius
-    )
-
-    features = [
+    init = pd.DataFrame(
         {
-            "type": "Feature",
-            "geometry": {
-                "type": "Point",
-                "coordinates": row[1]["coordinates"],
-            },
-            "properties": {
-                "time": row[1]["periode_iso_paris"],
-                "icon": "circle",
-                "style": {
-                    "color": row[1]["color"],
-                    "stroke": False,
-                    "weight": 0,
-                    "radius": (
-                        min(sizes["radius"])
-                        if size_sature and row[1]["color"] != colors[0]
-                        else row[1]["radius"]
-                    ),
-                    "fillOpacity": 0 if row[1]["color"] == "white" else 1,
-                },
-            },
+            "horodatage": [timestamp + pd.Timedelta(days=-1)] * len(pocs_with_statuses),
+            "etat_pdc": ["en_service"] * len(pocs_with_statuses),
+            "id_pdc_itinerance": pocs_with_statuses,
         }
-        for row in surcharge_station_h.iterrows()
-    ]
-    return features
+    )
+    sampled_statuses = to_sampled_statuses(statuses, init, timestamp, samples_per_day)
+    print("status : ", len(sampled_statuses)) 
 
-
-def animate(refmap: folium.Map | dict, features: list[dict], **param):
-    """Ajoute une couche d'animation temporelle sur une carte."""
-    param = {
-        "period": "PT1H",
-        "auto_play": False,
-        "loop": False,
-        "max_speed": 1,
-        "loop_button": True,
-        "date_options": "YYYY/MM/DD-HH",
-        "time_slider_drag_update": True,
-        "duration": "PT0H",
-    } | param
-    refmap = folium.Map(**refmap) if isinstance(refmap, dict) else refmap
-    TimestampedGeoJson(
-        {"type": "FeatureCollection", "features": features}, **param
-    ).add_to(refmap)
-    return refmap
+    init = pd.DataFrame(
+        {
+            "start": [timestamp + pd.Timedelta(days=-1)] * len(pocs_with_sessions),
+            "end": [timestamp + pd.Timedelta(hours=-1)] * len(pocs_with_sessions),
+            "id_pdc_itinerance": pocs_with_sessions,
+        }
+    )
+    sampled_sessions = to_sampled_sessions(sessions, init, timestamp, samples_per_day)
+    print("sessions : ", len(sampled_sessions))
+    sampled_state_poc = to_sampled_state_pdc(sampled_sessions, sampled_statuses)
+    print("state : ", len(sampled_state_poc))
+    return sampled_state_poc
