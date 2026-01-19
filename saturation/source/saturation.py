@@ -394,6 +394,7 @@ def animate_features(
                 "icon": "circle",
                 "style": {
                     "color": row[1]["color"],
+                    "stroke": False,
                     "weight": 0,
                     "radius": (
                         min(sizes["radius"])
