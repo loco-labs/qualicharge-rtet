@@ -3,6 +3,7 @@
 Ce module contient les fonctions utilisées dans l'analyse du réseau des infrastructures IRVE.
 """
 import geopandas as gpd
+import pandas as pd
 import geo_nx as gnx  # type: ignore
 
 GEOM = "geometry"
@@ -115,7 +116,8 @@ def association_stations(
     low_proxi = 2000
 
     noeuds = gr.to_geopandas_nodelist()
-    noeuds_station = noeuds.loc[noeuds[NATURE] == "aire de service"]
+    #noeuds_station = noeuds.loc[noeuds[NATURE] == "aire de service"]
+    noeuds_station = pd.concat([noeuds.loc[noeuds[NATURE] == "aire de service"], noeuds.loc[noeuds[NATURE] == "aire de repos"]])
     troncons = gr.to_geopandas_edgelist()
     # troncons_hors_autoroute = troncons.loc[troncons[NATURE] == "troncon hors autoroute"]
 
