@@ -11,6 +11,7 @@ Les fonctions d'évaluation de la saturation sont :
 - ajout d'une couche d'animation sur une carte (animate)
 """
 
+import numpy as np
 import pandas as pd
 import datetime
 #import shapely
@@ -83,7 +84,9 @@ def to_sampled_sessions(
     )
     sessions["occupation_pdc"] = "occupe"
 
-    crossed = pd.merge(sessions, periode, how="cross")
+    # crossed = pd.merge(sessions, periode, how="cross")
+    unic = ["start", "end", "periode", "id_pdc_itinerance"]
+    crossed = pd.merge(sessions, periode, how="cross").drop_duplicates(subset=unic)
     sampled = crossed[
         (
             (crossed["periode"] >= crossed["start"])
@@ -99,10 +102,8 @@ def to_sampled_sessions(
     sampled = pd.merge(
         non_occupe, sampled, how="left", on=["id_pdc_itinerance", "periode"]
     ).fillna("f_libre")
-
-    return sampled.sort_values(by=["id_pdc_itinerance", "periode"]).reset_index(
-        drop=True
-    )
+    order = ["id_pdc_itinerance", "periode"]
+    return sampled.sort_values(by=order).reset_index(drop=True)
 
 
 def to_sampled_state_pdc(
@@ -190,7 +191,19 @@ def to_sampled_state_grp(
         + grouped["surcharge"] * 4
         + grouped["sature"] * 5
     )
-
+    def hyst(x, th_lo, th_hi, initial = False):
+        hi = x >= th_hi
+        lo_or_hi = (x < th_lo) | hi
+        ind = np.nonzero(lo_or_hi)[0]
+        if not ind.size: # prevent index error if ind is empty
+            return np.zeros_like(x, dtype=bool) | initial
+        cnt = np.cumsum(lo_or_hi) # from 0 to len(x)
+        return np.where(cnt, hi[ind[cnt-1]], initial)
+        
+    pourcent = (grouped["hors_service"] + grouped["occupe"]) / grouped["nb_pdc"]
+    tmp = pd.cut(pourcent, [-np.inf, 0.8, 0.99, np.inf], labels=[0, 0.5, 1])
+    grouped["pleine_occ"] = tmp.where(tmp != 0.5, np.where(hyst(tmp.values, 0.5, 1), 1, 0)).astype('bool')
+    
     return grouped[
         [
             group_name,
@@ -204,6 +217,7 @@ def to_sampled_state_grp(
             "sature",
             "surcharge",
             "actif",
+            "pleine_occ",
             "state",
         ]
     ]
@@ -225,7 +239,7 @@ def to_sampled_state_grp_h(
 
     sampled_h = sampled.groupby([group_name, "periode", "periode_h"]).agg("sum")
     sampled_h = sampled_h / nb_ech_hour
-    for etat in ["hs", "inactif", "sature", "surcharge", "actif"]:
+    for etat in ["hs", "inactif", "sature", "surcharge", "actif", "pleine_occ"]:
         sampled_h[etat] = sampled_h[etat] * 60
     sampled_h["nb_pdc"] = sampled_h["nb_pdc"].astype("int")
 
@@ -258,6 +272,7 @@ def to_sampled_state_grp_h(
             "sature",
             "surcharge",
             "actif",
+            "pleine_occ",
             "sature_h",
             "surcharge_h",
             "periode_iso",
