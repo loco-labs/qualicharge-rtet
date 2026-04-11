@@ -1,0 +1,1322 @@
+nom,roadname,gestionnaire,parc_id,sens_aire,nature,core,double,amenageur,operateur,p_cum,p_max,id_station_itinerance,station_id
+Saubion Est,,,1368,est,aire de repos,True,,,,,,,
+Saubion Ouest,,,1369,ouest,aire de repos,True,,,,,,,
+A63 - LABENNE EST,,ASF,2154,est,aire de service,True,,Ionity,Ionity,1543.0,350.0,FRIOYP9587245,11579
+A63 - LABENNE EST,,ASF,2154,est,aire de service,True,,Ionity,Ionity,1543.0,350.0,FRIOYP9587246,11580
+A63 - LABENNE OUEST,,ASF,1920,ouest,aire de service,True,,,,,,,
+Onesse et Laharie Ouest,,,1414,ouest,aire de repos,True,,,,,,,
+Onesse et Laharie Est,,,1415,est,aire de repos,True,,,,,,,
+Labouheyre Est,,,1429,est,aire de repos,True,,,,,,,
+Labouheyre Ouest,,,1430,ouest,aire de repos,True,,,,,,,
+Porte des Landes Ouest,,,1921,ouest,aire de service,True,,Zunder,Zunder,6554.2,400.0,FRZUNP6746237616245941985,18945
+Porte des Landes Est,,,2145,est,aire de service,True,,Zunder,Zunder,6554.2,400.0,FRZUNP5909246146811129817,18943
+Lugos Est,,,1441,est,aire de repos,True,,,,,,,
+Océan Ouest,,,1922,ouest,aire de service,True,,Zunder,Zunder,6554.2,400.0,FRZUNP2001223164604952988,18935
+Océan Est,,,2153,est,aire de service,True,,Shell Recharge,Shell Recharge,94.0,50.0,FRSHEP4730503,16579
+Océan Est,,,2153,est,aire de service,True,,Zunder,Zunder,6550.8,400.0,FRZUNP4015250050291921289,18939
+Magescq Est,,,1384,est,aire de repos,True,,,,,,,
+Magescq Ouest,,,1385,ouest,aire de repos,True,,,,,,,
+A64 - HASTINGUES,,ASF,1923,,aire de service,False,,Ionity,Ionity,3852.0,350.0,FRIOYP9587523,11683
+A64 - HASTINGUES,,ASF,1923,,aire de service,False,,Ionity,Ionity,3852.0,350.0,FRIOYP9587524,11684
+Magret,,,1355,,aire de repos,False,,,,,,,
+Haut de Départ,,,1356,,aire de repos,False,,,,,,,
+A64 - LACQ AUDEJOS SUD,,ASF,1926,sud,aire de service,False,,Ionity,Ionity,1543.0,350.0,FRIOYP9587263,11588
+A64 - LACQ AUDEJOS NORD,,ASF,1925,nord,aire de service,False,,Ionity,Ionity,1543.0,350.0,FRIOYP9587215,11571
+A63 - BIDART EST,,ASF,1924,est,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,450.0,175.0,FRHPCPNF059743TOTEM,10993
+A63 - BIDART EST,,ASF,1924,est,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,450.0,175.0,FRHPCPNF059903TOTEM,11003
+Urrugne,,,1340,,aire de repos,True,,,,,,,
+Aire du Béarn Vert et Or,,,1352,,aire de repos,False,,,,,,,
+Serres Morlaas Nord,,,1336,nord,aire de repos,False,,,,,,,
+Serres Morlaas Sud,,,1337,sud,aire de repos,False,,,,,,,
+A64 - LES PYRENEES,,ASF,1927,,aire de service,False,,TotalEnergies Marketing France,TotalEnergies Marketing France,1150.0,175.0,FRHPCPNF080070TOTEM,11104
+Pyrénées Nord,,,1231,nord,aire de service,False,,,,,,,
+Pyrénées Sud,,,1232,sud,aire de service,False,,,,,,,
+Bordes Nord,,,1321,nord,aire de repos,False,,,,,,,
+Bordes Sud,,,1322,sud,aire de repos,False,,,,,,,
+Bandouliers,,,1307,,aire de repos,False,,,,,,,
+Lac Saint Martin,,,1308,,aire de repos,False,,,,,,,
+A64 - COMMINGES,,ASF,1928,,aire de service,False,,,,,,,
+Pic du Midi,,,1309,,aire de repos,False,,,,,,,
+Pic du Midi Nord,,,1310,nord,aire de repos,False,,,,,,,
+Belvédère d'Auriac,,,1324,,aire de repos,True,,,,,,,
+Belvédère de la Cite,,,1323,,aire de repos,True,,,,,,,
+A61 - CARCASSONNE ARZENS NORD,,ASF,2231,nord,aire de service,True,,Electra,Electra,5044.0,300.0,FRELCP12953938,9395
+A61 - CARCASSONNE ARZENS SUD,,ASF,2112,sud,aire de service,True,,Electra,Electra,5044.0,300.0,FRELCP12953935,9392
+Bram,,,1325,,aire de repos,True,,,,,,,
+Montreal,,,1326,,aire de repos,True,,,,,,,
+Castelnaudary,,,1333,,aire de repos,True,,,,,,,
+Mireval,,,1334,,aire de repos,True,,,,,,,
+A61 - PORT LAURAGAIS NORD,,ASF,2236,nord,aire de service,True,,ENGIE Vianeo,ENGIE Vianeo,4362.0,300.0,FRVIAP104114,18152
+A61 - PORT LAURAGAIS SUD,,ASF,1929,sud,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,1500.0,175.0,FRHPCPNF078569TOTEM,11082
+Ayguesvives,,,1347,,aire de repos,True,,,,,,,
+Baziege,,,1348,,aire de repos,True,,,,,,,
+A61 - TOULOUSE SUD NORD,,ASF,1930,nord,aire de service,True,,Allego,Allego,650.0,300.0,FRALLPGO800030,5285
+A61 - TOULOUSE SUD NORD,,ASF,1930,nord,aire de service,True,,Allego,Allego,650.0,300.0,FRALLPGO800031,5286
+A61 - TOULOUSE SUD NORD,,ASF,1930,nord,aire de service,True,,Allego,Allego,600.0,300.0,FRALLPGO800032,5287
+A61 - TOULOUSE SUD NORD,,ASF,1930,nord,aire de service,True,,Allego,Allego,600.0,300.0,FRALLPGO800033,5288
+A61 - TOULOUSE SUD NORD,,ASF,1930,nord,aire de service,True,,Allego,Allego,600.0,300.0,FRALLPGO800034,5289
+A61 - TOULOUSE SUD NORD,,ASF,1930,nord,aire de service,True,,Allego,Allego,44.0,22.0,FRALLPGO800501,5557
+A61 - TOULOUSE SUD SUD,,ASF,2234,sud,aire de service,True,,CityFMET,SPIE CityNetworks,3868.0,300.0,FREVAP31161A,10239
+Renneville,,,1341,,aire de repos,True,,,,,,,
+Villefranche,,,1342,,aire de repos,True,,,,,,,
+Mazères,,,1328,,aire de repos,False,,,,,,,
+Rosefond,,,1329,,aire de repos,False,,,,,,,
+Aire de Capens Volvestre,,,1931,,aire de service,False,,Ionity,Ionity,1543.0,350.0,FRIOYP9587517,11678
+,,,2425,,aire de service,False,,Ionity,Ionity,1543.0,350.0,FRIOYP9587469,11663
+A62 - GARONNE,,ASF,1932,,aire de service,True,,Electra,Electra,3844.0,300.0,FRELCP12953937,9394
+A62 - GARONNE,,ASF,1932,,aire de service,True,,Electra,Electra,3844.0,300.0,FRELCP12953941,9398
+Saint Porquier,,,1406,,aire de repos,True,,,,,,,
+Escatalens,,,1405,,aire de repos,True,,,,,,,
+Lacourt Saint Pierre,,,1400,,aire de repos,True,,,,,,,
+La forêt de Montech,,,1398,,aire de repos,True,,,,,,,
+A20 - NAUZE VERT,,ASF,1934,,aire de service,False,,ENGIE Vianeo,ENGIE Vianeo,4738.5,300.0,FRVIAP103109,18131
+Campsas,,,1392,,aire de repos,True,,,,,,,
+Naudy,,,1393,,aire de repos,True,,,,,,,
+A62 - FRONTONNAIS NORD,,ASF,1933,nord,aire de service,True,,ENGIE Vianeo,ENGIE Vianeo,5886.0,300.0,FRVIAP104101,18139
+A62 - FRONTONNAIS SUD,,ASF,2235,sud,aire de service,True,,ENGIE Vianeo,ENGIE Vianeo,4524.0,300.0,FRVIAP104102,18140
+,,,2277,,aire de service,False,,TotalEnergies Marketing France,TotalEnergies Marketing France,3100.0,300.0,FRHPCPNF080232,11127
+,,,2276,,aire de service,False,,,,,,,
+,,,2426,,aire de service,False,,TotalEnergies Marketing France,TotalEnergies Marketing France,4800.0,300.0,FRHPCPNF079895,11090
+Les Issarts,,,1389,,aire de repos,False,,,,,,,
+Sanbatan,,,1388,,aire de repos,False,,,,,,,
+Combe du Tréboulou Est,,,1434,est,aire de repos,False,,,,,,,
+Combe du Tréboulou Ouest,,,1435,ouest,aire de repos,False,,,,,,,
+A20 - BOIS DE DOURRE,,ASF,1935,,aire de service,False,,TotalEnergies Marketing France,TotalEnergies Marketing France,1150.0,175.0,FRHPCPNF078243TOTEM,11070
+Queyran Nord,,,1432,nord,aire de repos,True,,,,,,,
+Queyran Sud,,,1433,sud,aire de repos,True,,,,,,,
+A62 - AGEN PORTE D'AQUITAINE,,ASF,1250,,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,4300.0,300.0,FRHPCPNF088576TOTEM,11177
+Porte d'Aquitaine Sud,,,1249,sud,aire de service,True,,,,,,,
+Porte d'Aquitaine Nord,,,1938,nord,aire de service,True,,,,,,,
+Buzet-sur-Baïse Nord,,,1427,nord,aire de repos,True,,,,,,,
+Buzet-sur-Baïse Sud,,,1428,sud,aire de repos,True,,,,,,,
+Bruch Nord,,,1424,nord,aire de repos,True,,,,,,,
+Bruch Sud,,,1425,sud,aire de repos,True,,,,,,,
+Estillac,,,1423,,aire de repos,True,,,,,,,
+Layrac Nord,,,1420,nord,aire de repos,True,,,,,,,
+Layrac Sud,,,1421,sud,aire de repos,True,,,,,,,
+Moirax,,,1422,,aire de repos,True,,,,,,,
+Dunes Nord,,,1412,nord,aire de repos,True,,,,,,,
+Dunes Sud,,,1413,sud,aire de repos,True,,,,,,,
+Aire de l'Adour Ouest,,,1237,ouest,aire de service,False,,,,,,,
+Aire de l'Adour Est,,,1939,est,aire de service,False,,TotalEnergies Marketing France,TotalEnergies Marketing France,450.0,175.0,FRHPCPNF078611,11086
+Aire du Marsan,,,1399,,aire de repos,False,,,,,,,
+Aire de la Porte d'Armagnac,,,1408,,aire de repos,False,,,,,,,
+Aire du coeur d'Aquitaine Ouest,,,1253,ouest,aire de service,False,,,,,,,
+Aire du coeur d'Aquitaine Est,,,1940,est,aire de service,False,,Ionity,Ionity,1543.0,350.0,FRIOYP9587350,11622
+Mas d'Agenais Sud,,,1254,sud,aire de service,True,,,,,,,
+Mas d'Agenais Nord,,,1937,nord,aire de service,True,,,,,,,
+A62 - MAS D'AGENAIS,,ASF,1255,,aire de service,True,,Ionity,Ionity,2943.0,350.0,FRIOYP9587330,11613
+Cocumont Nord,,,1439,nord,aire de repos,True,,,,,,,
+Cocumont Sud,,,1440,sud,aire de repos,True,,,,,,,
+Bazadais Nord,,,1442,nord,aire de repos,True,,,,,,,
+Bazadais Sud,,,1443,sud,aire de repos,True,,,,,,,
+Aire de Bazas,,,1437,,aire de repos,False,,,,,,,
+A62 - TERRES DES GRAVES SUD,,ASF,2142,sud,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,1150.0,175.0,FRHPCPNF007451TOTEMSA,10897
+A62 - TERRES DES GRAVES NORD,,ASF,1941,nord,aire de service,True,,Shell Recharge,Shell Recharge,1494.0,300.0,FRSHEP5222200,16583
+A89 - LES PALOMBIERES,,ASF,1945,,aire de service,False,,TotalEnergies Marketing France,TotalEnergies Marketing France,5100.0,300.0,FRHPCPNF080372,11167
+Vignes Nord,,,1454,nord,aire de repos,False,,,,,,,
+Vignes Sud,,,1455,sud,aire de repos,False,,,,,,,
+,,,2282,,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,700.0,175.0,FRHPCPNF078551,11079
+,,,2393,,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,450.0,175.0,FRHPCPNF042677,10929
+A10 - L'ESTALOT,,ASF,1942,,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,700.0,175.0,FRHPCPNF078546,11078
+A10 - MEILLAC,,ASF,2143,,aire de service,True,,Atlante,Atlante France,3338.0,300.0,FRATLPFR00307,6590
+Cezac,,,1456,,aire de repos,True,,Electra,Electra,3522.0,400.0,FRELCP12954199,9566
+Saint Christoly,,,1458,,aire de repos,True,,,,,,,
+A10 - SAUGON EST,,ASF,1259,est,aire de service,True,,,,,,,
+Saugon Est,,,1943,est,aire de service,True,,CityFMET,SPIE CityNetworks,2932.0,300.0,FREVAP33502A,10240
+Saugon Ouest,,,2144,ouest,aire de service,True,,Ionity,Ionity,1543.0,350.0,FRIOYP9587288,11595
+A10 - SAUGON OUEST,,ASF,1260,ouest,aire de service,True,,,,,,,
+Boisredon,,,1469,,aire de repos,True,,Electra,Electra,2322.0,400.0,FRELCP12954376,9623
+Saint Caprais,,,1468,,aire de repos,True,,Electra,Electra,2922.0,400.0,FRELCP12954378,9624
+A10 - SAINT-LEGER OUEST,,ASF,2147,ouest,aire de service,True,,Atlante,Atlante France,6160.0,300.0,FRATLPFR00309,6592
+A10 - SAINT-LEGER OUEST,,ASF,2147,ouest,aire de service,True,,Ionity,Ionity,1543.0,350.0,FRIOYP9587169,11563
+A10 - SAINT-LEGER EST,,ASF,1944,est,aire de service,True,,,,,,,
+Manoire,,ASF,1946,,aire de service,False,,Fastned France,Fastned France,2400.0,300.0,FRFASP11568703,10587
+A20 - PECH MONTAT,,ASF,1947,,aire de service,False,,Ionity,Ionity,3086.0,350.0,FRIOYP9587219,11573
+A20 - JARDIN DES CAUSSES DU LOT,,ASF,1256,,aire de service,False,,,,,,,
+Jardin des Causses du Lot Ouest,,,1257,ouest,aire de service,False,,,,,,,
+Jardin des Causses du Lot Est,,,1936,est,aire de service,False,,Fastned France,Fastned France,2400.0,300.0,FRFASP11568729,10600
+A89 - LA CORREZE,,ASF,1949,,aire de service,False,,ENGIE Vianeo,ENGIE Vianeo,4391.0,300.0,FRVIAP104108,18146
+La Loutre,,,1490,,aire de repos,False,,,,,,,
+,,,2284,,aire de service,False,,TotalEnergies Marketing France,TotalEnergies Marketing France,1150.0,175.0,FRHPCPNF070003,11029
+A89 - PAYS DE BRIVE,,ASF,1948,,aire de service,False,,Ionity,Ionity,3086.0,350.0,FRIOYP9587168,11562
+A89 - PAYS DE BRIVE,,ASF,1948,,aire de service,False,,Ionity,Ionity,3152.0,350.0,FRIOYP9587200,11566
+,,,2285,,aire de service,False,,,,,,,
+,,,2388,,aire de service,False,,,,,,,
+,,,2376,,aire de service,False,,TotalEnergies Marketing France,TotalEnergies Marketing France,1000.0,150.0,FRHPCPNF078593,11084
+,,,2286,,aire de service,False,,,,,,,
+,,,2289,,aire de service,False,,,,,,,
+,,,2288,,aire de service,False,,TotalEnergies Marketing France,TotalEnergies Marketing France,575.0,175.0,FRHPCPNF078238,11069
+,,,2287,,aire de service,False,,Ionity,Ionity,1543.0,350.0,FRIOYP9587363,11630
+,,,2395,,aire de service,False,,Ionity,Ionity,1543.0,350.0,FRIOYP9587384,11634
+Cent Septiers,,,1581,,aire de repos,True,,,,,,,
+A10 - POITIERS CHINCE,,COFIROUTE,2146,,aire de service,True,,Ionity,Ionity,1543.0,350.0,FRIOYP9587337,11617
+A10 - POITIERS JAUNAY CLAN,,COFIROUTE,1950,,aire de service,True,,Ionity,Ionity,1543.0,350.0,FRIOYP9587319,11606
+Les Quatre vents,,,1580,,aire de repos,True,,,,,,,
+Coulombiers Nord,,,1575,nord,aire de repos,True,,,,,,,
+Coulombiers Sud,,,1576,sud,aire de repos,True,,,,,,,
+A10 - FENIOUX OUEST,,ASF,2151,ouest,aire de service,True,,Shell Recharge,Shell Recharge,1644.0,300.0,FRSHEP5268701,16591
+A10 - FENIOUX EST,,ASF,1952,est,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,3300.0,300.0,FRHPCPNF080362TOTEMTIERSSA,11162
+La Benâte,,,1534,,aire de repos,True,,Electra,Electra,2522.0,400.0,FRELCP12954258,9595
+Doeuil-sur-le-Mignon Est,,,1545,est,aire de repos,True,,,,,,,
+Doeuil-sur-le-Mignon Ouest,,,1546,ouest,aire de repos,True,,,,,,,
+Lozay,,,1537,,aire de repos,True,,,,,,,
+A10 - POITOU CHARENTES NORD,,ASF,2149,nord,aire de service,True,,Ionity,Ionity,2343.0,400.0,FRIOYP9587257,11586
+Poitou Charentes Nord,,,1265,nord,aire de service,True,,Tesla,Tesla,3000.0,250.0,FRTSLP11417,17260
+A10 - POITOU CHARENTES SUD,,ASF,1266,sud,aire de service,True,,,,,,,
+Poitou Charentes Sud,,,1953,sud,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,1150.0,175.0,FRHPCPNF078016TOTEM,11042
+Sainte Néomaye Nord,,,1564,nord,aire de repos,True,,,,,,,
+Sainte Néomaye Sud,,,1565,sud,aire de repos,True,,,,,,,
+Gript Nord,,,1554,nord,aire de repos,True,,,,,,,
+Gript Sud,,,1555,sud,aire de repos,True,,,,,,,
+Sainte Eanne Nord,,,1568,nord,aire de repos,True,,,,,,,
+Sainte Eanne Sud,,,1569,sud,aire de repos,True,,,,,,,
+A10 - ROUILLE PAMPROUX NORD,,ASF,1951,nord,aire de service,True,,Allego,Allego,650.0,300.0,FRALLPGO800040,5290
+A10 - ROUILLE PAMPROUX NORD,,ASF,1951,nord,aire de service,True,,Allego,Allego,650.0,300.0,FRALLPGO800041,5291
+A10 - ROUILLE PAMPROUX NORD,,ASF,1951,nord,aire de service,True,,Allego,Allego,600.0,300.0,FRALLPGO800042,5292
+A10 - ROUILLE PAMPROUX NORD,,ASF,1951,nord,aire de service,True,,Allego,Allego,600.0,300.0,FRALLPGO800043,5293
+A10 - ROUILLE PAMPROUX NORD,,ASF,1951,nord,aire de service,True,,Allego,Allego,600.0,300.0,FRALLPGO800044,5294
+A10 - ROUILLE PAMPROUX NORD,,ASF,1951,nord,aire de service,True,,Allego,Allego,44.0,22.0,FRALLPGO800505,5561
+A10 - ROUILLE PAMPROUX SUD,,ASF,2148,sud,aire de service,True,,Ionity,Ionity,4486.0,350.0,FRIOYP9587171,11564
+A83 - LA CHATEAUDRIE,,ASF,2150,,aire de service,False,,ENGIE Vianeo,ENGIE Vianeo,3164.0,300.0,FRVIAP104110,18148
+A83 - LA CANEPETIERE,,ASF,1954,,aire de service,False,,ENGIE Vianeo,ENGIE Vianeo,3164.0,300.0,FRVIAP104109,18147
+Auzay Ouest,,,1572,ouest,aire de repos,False,,,,,,,
+Auzay Est,,,1571,est,aire de repos,False,,,,,,,
+,,,2294,,aire de service,False,,TotalEnergies Marketing France,TotalEnergies Marketing France,2400.0,300.0,FRHPCPNF021485TOTEM,10913
+A83 - VENDEE,,ASF,1955,,aire de service,False,,Ionity,Ionity,2243.0,350.0,FRIOYP9587159,11561
+A83 - VENDEE,,ASF,1955,,aire de service,False,,Tesla,Tesla,2250.0,250.0,FRTSLP7320,17515
+La Pierre de Crazannes,,,1520,,aire de repos,False,,,,,,,
+Port d'Envaux Ouest,,,1508,ouest,aire de repos,True,,,,,,,
+Port d'envaux Est,,,1509,est,aire de repos,True,,,,,,,
+Oiseaux,,,1524,,aire de repos,False,,,,,,,
+Chermignac Est,,,1502,est,aire de repos,True,,,,,,,
+Chermignac Ouest,,,1503,ouest,aire de repos,True,,,,,,,
+Saint-Palais Est,,,1488,est,aire de repos,True,,Electra,Electra,3522.0,400.0,FRELCP12954200,9567
+Saint-Palais Ouest,,,1489,ouest,aire de repos,True,,Electra,Electra,2322.0,400.0,FRELCP12954201,9568
+Saint-Ciers Est,,,1480,est,aire de repos,True,,,,,,,
+Saint-Ciers Ouest,,,1481,ouest,aire de repos,True,,,,,,,
+,,,2279,,aire de service,False,,TotalEnergies Marketing France,TotalEnergies Marketing France,225.0,175.0,FRHPCPNF059964,11007
+,,,2391,,aire de service,False,,TotalEnergies Marketing France,TotalEnergies Marketing France,400.0,150.0,FRHPCPNF059965TOTEM,11008
+,,,2281,,aire de service,False,,,,,,,
+,,,2394,,aire de service,False,,,,,,,
+,,,2280,,aire de service,True,,,,,,,
+,,,2390,,aire de service,True,,Plenitude On The Road,Plenitude On The Road,1302.0,300.0,FRPLNP11910787,14851
+,,,2278,,aire de service,True,,Shell Recharge,Shell Recharge,2547.0,300.0,FRSHEP12323924,16567
+,,,2278,,aire de service,True,,Shell Recharge,Shell Recharge,2547.0,300.0,FRSHEP5233163,16589
+,,,2392,,aire de service,True,,,,,,,
+,,,2297,,aire de service,True,,,,,,,
+,,,2396,,aire de service,True,,,,,,,
+,,,2299,,aire de service,False,,TotalEnergies Marketing France,TotalEnergies Marketing France,900.0,300.0,FRHPCPNF088078,11175
+,,,2420,,aire de service,False,,TotalEnergies Marketing France,TotalEnergies Marketing France,450.0,175.0,FRHPCPNF042595,10927
+A83 - LES BROUZILS,,ASF,2216,,aire de service,False,,Allego,Allego,650.0,300.0,FRALLPGO800010,5273
+A83 - LES BROUZILS,,ASF,2216,,aire de service,False,,Allego,Allego,650.0,300.0,FRALLPGO800011,5274
+A83 - LES BROUZILS,,ASF,2216,,aire de service,False,,Allego,Allego,600.0,300.0,FRALLPGO800012,5275
+A83 - LES BROUZILS,,ASF,2216,,aire de service,False,,Allego,Allego,600.0,300.0,FRALLPGO800013,5276
+A83 - LES BROUZILS,,ASF,2216,,aire de service,False,,Allego,Allego,600.0,300.0,FRALLPGO800014,5277
+A83 - LES BROUZILS,,ASF,2216,,aire de service,False,,Allego,Allego,600.0,300.0,FRALLPGO800281,5448
+A83 - LES BROUZILS,,ASF,2216,,aire de service,False,,Allego,Allego,44.0,22.0,FRALLPGO800503,5559
+A83 - LES BROUZILS,,ASF,2216,,aire de service,False,,Allego,Allego,44.0,22.0,FRALLPGO800989,5667
+A83 - CHAVAGNES,,ASF,1957,,aire de service,False,,Allego,Allego,650.0,300.0,FRALLPGO800020,5279
+A83 - CHAVAGNES,,ASF,1957,,aire de service,False,,Allego,Allego,650.0,300.0,FRALLPGO800021,5280
+A83 - CHAVAGNES,,ASF,1957,,aire de service,False,,Allego,Allego,600.0,300.0,FRALLPGO800022,5281
+A83 - CHAVAGNES,,ASF,1957,,aire de service,False,,Allego,Allego,600.0,300.0,FRALLPGO800023,5282
+A83 - CHAVAGNES,,ASF,1957,,aire de service,False,,Allego,Allego,600.0,300.0,FRALLPGO800024,5283
+A83 - CHAVAGNES,,ASF,1957,,aire de service,False,,Allego,Allego,44.0,22.0,FRALLPGO800500,5556
+Grissay,,,1586,,aire de repos,False,,,,,,,
+Sainte Florence,,,1587,,aire de repos,False,,,,,,,
+A87 - LES HERBIERS,,ASF,1956,,aire de service,False,,Ionity,Ionity,5886.0,350.0,FRIOYP9587353,11623
+A87 - TREMENTINES,,ASF,1981,,aire de service,False,,TotalEnergies Marketing France,TotalEnergies Marketing France,3900.0,300.0,FRHPCPNF080361TIERSSA,11161
+A87 - TREMENTINES,,ASF,1981,,aire de service,False,,Plenitude On The Road,Plenitude On The Road,3404.0,400.0,FRPLNP10525924,14837
+Remouillé Est,,,1597,est,aire de repos,False,,,,,,,
+Remouillé Ouest,,,1598,ouest,aire de repos,False,,,,,,,
+,,,2298,,aire de service,False,,,,,,,
+Launay,,,1640,,aire de repos,True,,,,,,,
+Le Cellier,,,1641,,aire de repos,True,,,,,,,
+Le Réveillon,,,1650,,aire de repos,True,,,,,,,
+Les Montilets,,,1651,,aire de repos,True,,,,,,,
+A11 - VARADES - PAYS D'ANCENIS,,COFIROUTE,1272,,aire de service,True,,,,,,,
+A11 - VARADES - PAYS DE LA LOIRE,,COFIROUTE,1958,,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,1150.0,175.0,FRHPCPNF069703TOTEM,11027
+,,,2421,,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,450.0,175.0,FRHPCPNF080173TOTEM,11116
+,,,2304,,aire de service,False,,TotalEnergies Marketing France,TotalEnergies Marketing France,400.0,150.0,FRHPCPNF079761,11089
+,,,2419,,aire de service,False,,,,,,,
+,,,2303,,aire de service,False,,,,,,,
+,,,2305,,aire de service,True,,,,,,,
+,,,2308,,aire de service,False,,Shell Recharge,Shell Recharge,2094.0,300.0,FRSHEP5605635,16594
+,,,2308,,aire de service,False,,Shell Recharge,Shell Recharge,50.0,50.0,FRSHEPIQX2W49PF74,16598
+,,,2398,,aire de service,False,,TotalEnergies Marketing France,TotalEnergies Marketing France,900.0,300.0,FRHPCPNF078576,11083
+,,,2309,,aire de service,False,,TotalEnergies Marketing France,TotalEnergies Marketing France,400.0,150.0,FRHPCPNF078226,11065
+,,,2311,,aire de service,False,,,,,,,
+,,,2400,,aire de service,False,,TotalEnergies Marketing France,TotalEnergies Marketing France,450.0,175.0,FRHPCPNF059994TOTEM,11012
+,,,2400,,aire de service,False,,TotalEnergies Marketing France,TotalEnergies Marketing France,450.0,175.0,FRHPCPNF069303TOTEM,11026
+La Paplonnière,,,1728,,aire de repos,False,,,,,,,
+La Sorinière,,,1729,,aire de repos,False,,,,,,,
+Château de Ricoudet,,,1736,,aire de repos,False,,,,,,,
+,,,2313,,aire de service,False,,TotalEnergies Marketing France,TotalEnergies Marketing France,1150.0,175.0,FRHPCPNF078244,11071
+,,,2295,,aire de service,True,,,,,,,
+,,,2315,,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,2400.0,300.0,FRHPCPNF042596,10928
+,,,2316,,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,2400.0,300.0,FRHPCPNF042589,10926
+,,,2401,,aire de service,True,,,,,,,
+,,,2317,,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,400.0,150.0,FRHPCPNF038545TOTEMSA,10917
+,,,2318,,aire de service,False,,Atlante,Atlante France,1222.0,150.0,FRATLPZ330FR22ETAP000001,6696
+,,,2318,,aire de service,False,,TotalEnergies Marketing France,TotalEnergies Marketing France,400.0,150.0,FRHPCPNF078190,11059
+,,,2319,,aire de service,False,,,,,,,
+,,,2320,,aire de service,False,,Ionity,Ionity,2243.0,350.0,FRIOYP9587394,11637
+Giberville nord,,,1960,nord,aire de service,False,,Ionity,Ionity,2243.0,350.0,FRIOYP9587313,11602
+Giberville sud,,,2222,sud,aire de service,False,,Ionity,Ionity,2243.0,350.0,FRIOYP9587323,11609
+Haras Ouest,,,1285,ouest,aire de service,False,,,,,,,
+Haras Est,,,1971,est,aire de service,False,,Shell Recharge,Shell Recharge,1947.0,300.0,FRSHEP5222199,16582
+Risle et Charentonne,,,1836,,aire de repos,False,,,,,,,
+Rougemontiers,,,1863,,aire de repos,True,,,,,,,
+Eturqueraye,,,1864,,aire de repos,True,,,,,,,
+Le Moulin,,,1865,,aire de repos,False,,,,,,,
+Josapha,,,1866,,aire de repos,False,,,,,,,
+Beuzeville nord,,,1959,nord,aire de service,False,,TotalEnergies Marketing France,TotalEnergies Marketing France,50.0,50.0,FRHPCPNF078544,11077
+Beuzeville nord,,,1959,nord,aire de service,False,,ENGIE Vianeo,ENGIE Vianeo,2184.0,300.0,FRVIAP102101,18104
+Beuzeville sud,,,2225,sud,aire de service,False,,ENGIE Vianeo,ENGIE Vianeo,2422.0,300.0,FRVIAP102102,18105
+Annebault,,,1849,,aire de repos,False,,,,,,,
+Beaumont-en-Auge,,,1850,,aire de repos,False,,,,,,,
+Ecretteville-lès-Baons Nord,,,1876,nord,aire de repos,False,,,,,,,
+Ecretteville-lès-Baons Sud,,,1877,sud,aire de repos,False,,,,,,,
+Bolleville Nord,,,1293,nord,aire de service,False,,,,,,,
+Bolleville Sud,,,1962,sud,aire de service,False,,Ionity,Ionity,843.0,350.0,FRIOYP9587529,11685
+Bolleville Sud,,,1962,sud,aire de service,False,,Ionity,Ionity,843.0,350.0,FRIOYP9587532,11688
+Falaises de Widehem Est,,,1914,est,aire de repos,False,,TotalEnergies Marketing France,TotalEnergies Marketing France,50.0,50.0,FRHPCPNF080347TOTEMTIERS,11148
+Falaises de Widehem Ouest,,,1915,ouest,aire de repos,False,,,,,,,
+,,,2322,,aire de service,False,,,,,,,
+,,,2321,,aire de service,False,,,,,,,
+Zutkerque,,,1918,,aire de repos,False,,,,,,,
+Nortkerque,,,1919,,aire de repos,False,,,,,,,
+,,,2344,,aire de service,True,,,,,,,
+Grand Riez,,,1916,,aire de repos,False,,,,,,,
+Villefleur,,,1917,,aire de repos,False,,,,,,,
+Saint-Hilaires-Cottes Ouest,,,2024,ouest,aire de service,False,,,,,,,
+Rely Est,,,2203,est,aire de service,False,,Fastned France,Fastned France,1200.0,300.0,FRFASP11568724,10598
+Rely Est,,,2203,est,aire de service,False,,Ionity,Ionity,1543.0,350.0,FRIOYP9587445,11654
+Bois de la Commanderie,,,1910,,aire de repos,False,,,,,,,
+Fond de la Commanderie,,,1911,,aire de repos,False,,,,,,,
+La Hétroye,,,1900,,aire de repos,False,,,,,,,
+Le Haut-Clocher,,,1901,,aire de repos,False,,,,,,,
+La Baie de Somme Est,,,1297,est,aire de service,False,,,,,,,
+La Baie de Somme Ouest,,,1961,ouest,aire de service,False,,Ionity,Ionity,2243.0,350.0,FRIOYP9587367,11632
+La Baie de Somme Ouest,,,1961,ouest,aire de service,False,,Tesla,Tesla,3750.0,150.0,FRTSLP3318,17444
+,,,2323,,aire de service,False,,,,,,,
+,,,2409,,aire de service,False,,,,,,,
+Vignacourt Est,,,1895,est,aire de repos,False,,,,,,,
+Vignacourt Ouest,,,1896,ouest,aire de repos,False,,,,,,,
+La Vallée de la Selle Ouest,,,1884,ouest,aire de repos,False,,,,,,,
+La Vallée de la Selle Est,,,1886,est,aire de repos,False,,,,,,,
+Hardivillers Est,,,1292,est,aire de service,False,,,,,,,
+Hardivillers Ouest,,,2022,ouest,aire de service,False,,TotalEnergies Marketing France,TotalEnergies Marketing France,1050.0,150.0,FRHPCPNF078218TOTEM,11064
+Le Chêne Peuquet,,,1870,,aire de repos,False,,,,,,,
+Le Grand Bois,,,1869,,aire de repos,False,,,,,,,
+Moulin de Pierre,,,1887,,aire de repos,False,,,,,,,
+Mare au Bois,,,1885,,aire de repos,False,,,,,,,
+Croixrault Nord,,,1295,nord,aire de service,False,,,,,,,
+Croixrault Sud,,,2023,sud,aire de service,False,,ENGIE Vianeo,ENGIE Vianeo,2422.0,300.0,FRVIAP102106,18109
+,,,2324,,aire de service,False,,TotalEnergies Marketing France,TotalEnergies Marketing France,4050.0,300.0,FRHPCPNF078180,11055
+,,,2422,,aire de service,False,,TotalEnergies Marketing France,TotalEnergies Marketing France,4650.0,300.0,FRHPCPNF080385,11172
+Saint Martin aux Arbres Nord,,,1878,nord,aire de repos,False,,,,,,,
+Saint Martin aux Arbres Sud,,,1879,sud,aire de repos,False,,,,,,,
+Vallée d'Ecalles,,,1871,,aire de repos,False,,,,,,,
+,,,2325,,aire de service,False,,Bump,Bump,960.0,240.0,FRBMPP636913P,6888
+Vironvay sud,,,1964,sud,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,2650.0,300.0,FRHPCPNF080356TIERSTOTEM,11156
+Vironvay nord,,,2223,nord,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,2500.0,300.0,FRHPCPNF080357TIERSTOTEMSA,11157
+Bord nord,,,1851,nord,aire de repos,True,,,,,,,
+Bord sud,,,1852,sud,aire de repos,True,,,,,,,
+Grand Couronne,,,1290,,aire de service,False,,,,,,,
+Bosgouet nord,,,1963,nord,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,1150.0,175.0,FRHPCPNF080261,11132
+Bosgouet sud,,,2224,sud,aire de service,True,,Fastned France,Fastned France,2400.0,300.0,FRFASP11568743,10609
+Domaine d'Harcourt,,,1847,,aire de repos,False,,Shell Recharge,Shell Recharge,1422.0,300.0,FRSHEP5233162,16588
+Beauchêne Sud,,,1829,sud,aire de repos,True,,,,,,,
+Beauchêne nord,,,1830,nord,aire de repos,True,,,,,,,
+Douains Sud,,,1818,sud,aire de repos,True,,,,,,,
+Douains nord,,,1819,nord,aire de repos,True,,,,,,,
+La Villeneuve-en-Chevrie nord,,,1809,nord,aire de repos,True,,,,,,,
+La Villeneuve-en-Chevrie sud,,,1810,sud,aire de repos,True,,,,,,,
+Rosny-sur-Seine Sud,,,1965,sud,aire de service,True,,Fastned France,Fastned France,2400.0,300.0,FRFASP11568710,10591
+Rosny-sur-Seine Nord,,,2209,nord,aire de service,True,,Ionity,Ionity,1543.0,350.0,FRIOYP9587204,11569
+Morainvilliers sud,,,2014,sud,aire de service,True,,ENGIE Vianeo,ENGIE Vianeo,3622.0,300.0,FRVIAP102115,18118
+Morainvilliers nord,,,2214,nord,aire de service,True,,ENGIE Vianeo,ENGIE Vianeo,3384.5,300.0,FRVIAP102114,18117
+Epône Nord,,,1806,nord,aire de repos,True,,,,,,,
+Epône Sud,,,1807,sud,aire de repos,True,,,,,,,
+Lormaison Est,,,1848,est,aire de repos,False,,ENGIE Vianeo,ENGIE Vianeo,384.5,300.0,FRVIAP102111,18114
+Lormaison Ouest,,,1846,ouest,aire de repos,False,,ENGIE Vianeo,ENGIE Vianeo,384.5,300.0,FRVIAP102112,18115
+Auteuil,,,1861,,aire de repos,False,,,,,,,
+Le Grand Courtil,,,1862,,aire de repos,False,,,,,,,
+Attainville Nord,,,1287,nord,aire de service,True,,,,,,,
+Attainville Sud,,,1288,sud,aire de service,True,,,,,,,
+,,,2335,,aire de service,True,,,,,,,
+A10 - LIMOURS BRIIS S/S FORGES,,COFIROUTE,2212,,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,5350.0,300.0,FRHPCPNF059788TOTEM,10998
+A10 - LIMOURS JANVRY,,COFIROUTE,2010,,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,3900.0,300.0,FRHPCPNF080155TOTEM,11113
+Saint Arnoult vers Paris,,,1785,,aire de repos,True,,,,,,,
+Saint Arnoult vers Province,,,1786,,aire de repos,True,,bp Pulse,bp Pulse,6432.0,600.0,FRBPEP3EA040,6957
+Chaudonnes,,,1783,,aire de repos,False,,,,,,,
+Gourville,,,1784,,aire de repos,False,,,,,,,
+Boutroux,,,1772,,aire de repos,True,,Allego,Allego,650.0,300.0,FRALLPGO800450,5522
+Boutroux,,,1772,,aire de repos,True,,Allego,Allego,600.0,300.0,FRALLPGO800451,5523
+Boutroux,,,1772,,aire de repos,True,,Allego,Allego,600.0,300.0,FRALLPGO800452,5524
+Boutroux,,,1772,,aire de repos,True,,Allego,Allego,600.0,300.0,FRALLPGO800453,5525
+Boutroux,,,1772,,aire de repos,True,,Allego,Allego,600.0,300.0,FRALLPGO800454,5526
+Boutroux,,,1772,,aire de repos,True,,Allego,Allego,44.0,22.0,FRALLPGO800499,5555
+Les Marnières,,,1773,,aire de repos,True,,,,,,,
+Aire Mauregard,,,1730,,aire de repos,False,,,,,,,
+Aire Teillay,,,1731,,aire de repos,False,,,,,,,
+A10 - ORLEANS GIDY,,COFIROUTE,1968,,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,1150.0,175.0,FRHPCPNF080172TOTEM,11115
+A10 - ORLEANS SARAN,,COFIROUTE,2181,,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,1150.0,175.0,FRHPCPNF059671TOTEM,10984
+Bois de Bailly,,,1691,,aire de repos,False,,,,,,,
+Bois du Télégraphe,,,1692,,aire de repos,False,,,,,,,
+Aire de Bellevue,,,1700,,aire de repos,True,,,,,,,
+A10 - MEUNG SUR LOIRE,,COFIROUTE,2172,,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,4500.0,300.0,FRHPCPNF080365TIERSTOTEM,11165
+A10 - BEAUGENCY MESSAS,,COFIROUTE,1989,,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,5100.0,300.0,FRHPCPNF080364TOTEMTIERS,11164
+Aire de Chauvry,,,1696,,aire de repos,True,,,,,,,
+Héron Cendré,,,1734,,aire de repos,True,,,,,,,
+La Dauneuse,,,1735,,aire de repos,True,,Allego,Allego,650.0,300.0,FRALLPGO800455,5527
+La Dauneuse,,,1735,,aire de repos,True,,Allego,Allego,400.0,200.0,FRALLPGO800456,5528
+La Dauneuse,,,1735,,aire de repos,True,,Allego,Allego,600.0,300.0,FRALLPGO800457,5529
+La Dauneuse,,,1735,,aire de repos,True,,Allego,Allego,600.0,300.0,FRALLPGO800458,5530
+La Dauneuse,,,1735,,aire de repos,True,,Allego,Allego,650.0,300.0,FRALLPGO800459,5531
+La Dauneuse,,,1735,,aire de repos,True,,Allego,Allego,400.0,200.0,FRALLPGO800460,5532
+La Dauneuse,,,1735,,aire de repos,True,,Allego,Allego,600.0,300.0,FRALLPGO800461,5533
+La Dauneuse,,,1735,,aire de repos,True,,Allego,Allego,600.0,300.0,FRALLPGO800462,5534
+La Dauneuse,,,1735,,aire de repos,True,,Allego,Allego,44.0,22.0,FRALLPGO800496,5552
+La Dauneuse,,,1735,,aire de repos,True,,Allego,Allego,44.0,22.0,FRALLPGO800722,5612
+A10 - PLAINES DE BEAUCE,,COFIROUTE,1967,,aire de service,True,,Ionity,Ionity,2100.0,350.0,FRIOYP9587443,11653
+A10 - PLAINES DE BEAUCE,,COFIROUTE,1967,,aire de service,True,,Shell Recharge,Shell Recharge,94.0,50.0,FRSHEP4696231,16577
+A10 - VAL NEUVY,,COFIROUTE,2180,,aire de service,True,,Ionity,Ionity,2100.0,350.0,FRIOYP9587465,11662
+A10 - VAL NEUVY,,COFIROUTE,2180,,aire de service,True,,Shell Recharge,Shell Recharge,94.0,50.0,FRSHEP5099716,16581
+Dix-Sept-Setiers,,,1764,,aire de repos,False,,,,,,,
+La Poële Percée,,,1765,,aire de repos,False,,bp Pulse,bp Pulse,6032.0,600.0,FRBPEP3EA037,6954
+A11 - BROU DAMPIERRE,,COFIROUTE,2173,,aire de service,False,,ENGIE Vianeo,ENGIE Vianeo,2250.5,300.0,FRVIAP103110,18132
+A11 - MANOIRS DU PERCHE,,COFIROUTE,1969,,aire de service,False,,ENGIE Vianeo,ENGIE Vianeo,2306.5,300.0,FRVIAP104111,18149
+La Charonnerie,,,1761,,aire de repos,False,,,,,,,
+La Leu,,,1762,,aire de repos,False,,,,,,,
+Charmes,,,1751,,aire de repos,False,,,,,,,
+La Petite Jardinière,,,1752,,aire de repos,False,,,,,,,
+Ver-lès-Chartres le Souchet,,,1770,,aire de repos,False,,bp pulse,bp pulse,7632.0,600.0,FRBPEP3EA041,6958
+Ver-lès-Chartres les Moineaux,,,1771,,aire de repos,False,,,,,,,
+A11 - CHARTRES GASVILLE,,COFIROUTE,1282,,aire de service,False,,,,,,,
+Chartres-Bois-Paris Nord,,,1966,nord,aire de service,False,,Ionity,Ionity,1543.0,350.0,FRIOYP9587521,11681
+Chartres-Gasville Sud,,,2171,sud,aire de service,False,,Ionity,Ionity,2243.0,350.0,FRIOYP9587115,11559
+A11 - CHARTRES BOIS PARIS,,COFIROUTE,1281,,aire de service,False,,,,,,,
+,,,2327,,aire de service,False,,,,,,,
+,,,2402,,aire de service,False,,,,,,,
+Dentelle d'Alençon Est,,,1280,est,aire de service,False,,,,,,,
+Dentelle d'Alençon Ouest,,,1972,ouest,aire de service,False,,TotalEnergies Marketing France,TotalEnergies Marketing France,450.0,175.0,FRHPCPNF078556TOTEM,11080
+Sées Est,,,1789,est,aire de repos,False,,,,,,,
+Sources de l'Orne,,,1793,,aire de repos,False,,,,,,,
+Sources de l'Orne,,,1792,,aire de repos,False,,,,,,,
+Pays d'Argentan Ouest,,,1283,ouest,aire de service,False,,,,,,,
+Pays d'Argentan Est,,,1973,est,aire de service,False,,Zunder,Zunder,2488.0,300.0,FRZUNP2771348324096144223,18937
+A81 - LA MAYENNE,,COFIROUTE,1277,,aire de service,False,,Ionity,Ionity,4343.0,350.0,FRIOYP9587310,11600
+Laval Le Coudray Sud,,,1974,sud,aire de service,False,,,,,,,
+Loriolet,,,1724,,aire de repos,False,,,,,,,
+Villeray,,,1725,,aire de repos,False,,,,,,,
+A11 - PARCE SUR SARTHE EST,,ASF,2221,est,aire de service,False,,Ionity,Ionity,1543.0,350.0,FRIOYP9587362,11629
+A11 - PARCE SUR SARTHE OUEST,,ASF,1979,ouest,aire de service,False,,Ionity,Ionity,1543.0,350.0,FRIOYP9587361,11628
+A81 - LA VALLEE DE L'ERVE,,COFIROUTE,1975,,aire de service,False,,TotalEnergies Marketing France,TotalEnergies Marketing France,1300.0,300.0,FRHPCPNF080355TIERSTOTEM,11155
+A81 - ST DENIS D'ORQUES,,COFIROUTE,1976,,aire de service,False,,ENGIE Vianeo,ENGIE Vianeo,2250.5,300.0,FRVIAP103113,18135
+Pirmil Est,,,1701,est,aire de repos,False,,Allego,Allego,350.0,150.0,FRALLPGO800420,5506
+Pirmil Est,,,1701,est,aire de repos,False,,Allego,Allego,600.0,300.0,FRALLPGO800421,5507
+Pirmil Est,,,1701,est,aire de repos,False,,Allego,Allego,600.0,300.0,FRALLPGO800422,5508
+Pirmil Est,,,1701,est,aire de repos,False,,Allego,Allego,600.0,300.0,FRALLPGO800423,5509
+Pirmil Est,,,1701,est,aire de repos,False,,Allego,Allego,400.0,200.0,FRALLPGO800424,5510
+Pirmil Est,,,1701,est,aire de repos,False,,Allego,Allego,44.0,22.0,FRALLPGO800718,5610
+Pirmil Ouest,,,1702,ouest,aire de repos,False,,Allego,Allego,650.0,300.0,FRALLPGO800415,5501
+Pirmil Ouest,,,1702,ouest,aire de repos,False,,Allego,Allego,400.0,200.0,FRALLPGO800416,5502
+Pirmil Ouest,,,1702,ouest,aire de repos,False,,Allego,Allego,600.0,300.0,FRALLPGO800417,5503
+Pirmil Ouest,,,1702,ouest,aire de repos,False,,Allego,Allego,600.0,300.0,FRALLPGO800418,5504
+Pirmil Ouest,,,1702,ouest,aire de repos,False,,Allego,Allego,600.0,300.0,FRALLPGO800419,5505
+Pirmil Ouest,,,1702,ouest,aire de repos,False,,Allego,Allego,44.0,22.0,FRALLPGO800706,5608
+La Coire,,,1712,,aire de repos,False,,,,,,,
+Les Gripperies,,,1713,,aire de repos,False,,,,,,,
+Les Croiselles,,,1698,,aire de repos,False,,,,,,,
+Les Perrières,,,1699,,aire de repos,False,,,,,,,
+Pruillé Est,,,1711,est,aire de repos,False,,,,,,,
+Pruillé Ouest,,,1714,ouest,aire de repos,False,,,,,,,
+La Chevallerie,,,1718,,aire de repos,False,,,,,,,
+La Landrière,,,1719,,aire de repos,False,,,,,,,
+Joël Boisgard,,,1755,,aire de repos,False,,,,,,,
+La Suzannerie,,,1756,,aire de repos,False,,,,,,,
+A11 - SARTHE SARGE LE MANS NORD,,COFIROUTE,1276,nord,aire de service,False,,,,,,,
+A11 - SARTHE SARGE LE MANS SUD,,COFIROUTE,1275,sud,aire de service,False,,TotalEnergies Marketing France,TotalEnergies Marketing France,1150.0,175.0,FRHPCPNF059902TOTEM,11002
+La Sarthe-Sargé-Le Mans Nord,,,1977,nord,aire de service,False,,TotalEnergies Marketing France,TotalEnergies Marketing France,3250.0,300.0,FRHPCPNF080138TOTEM,11110
+Sarthe-Sargé-Le Mans Sud,,,2217,sud,aire de service,False,,,,,,,
+Haras de Maulepaire,,,1720,,aire de repos,False,,,,,,,
+La Martinière,,,1721,,aire de repos,False,,,,,,,
+La Charpenterie,,,1726,,aire de repos,False,,,,,,,
+La Parnouette,,,1727,,aire de repos,False,,,,,,,
+A11 - VILLAINES LA GONAIS,,COFIROUTE,2218,,aire de service,False,,Ionity,Ionity,3293.0,350.0,FRIOYP9587506,11675
+Villaines-la-Gonais Sud,,,1278,sud,aire de service,False,,,,,,,
+A11 - LA FERTE BERNARD,,COFIROUTE,1970,,aire de service,False,,Ionity,Ionity,1893.0,350.0,FRIOYP9587344,11620
+Montmirail,,,1747,,aire de repos,False,,,,,,,
+Théligny,,,1748,,aire de repos,False,,,,,,,
+A28 - SARTHE TOURAINE,,COFIROUTE,1987,,aire de service,False,,Zunder,Zunder,494.0,200.0,FRZUNP195235985905172769,18934
+Chantemerle,,,1664,,aire de repos,False,,,,,,,
+La Renardière,,,1665,,aire de repos,False,,,,,,,
+A10 - TOURS LONGUE VUE,,COFIROUTE,1986,,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,1150.0,175.0,FRHPCPNF059694TOTEM,10987
+A10 - TOURS VAL DE LOIRE,,COFIROUTE,2179,,aire de service,True,,Ionity,Ionity,2100.0,350.0,FRIOYP9587478,11668
+Aire de Moulin rouge,,,1632,,aire de repos,True,,,,,,,
+Aire de Village Brulé,,,1633,,aire de repos,True,,,,,,,
+A85 - LES JARDINS DE VILLANDRY,,COFIROUTE,1985,,aire de service,True,,CityFMET,SPIE CityNetworks,5858.0,300.0,FREVAP37099A,10246
+Chouzé sur Loire,,,1627,,aire de repos,True,,,,,,,
+Saint-Nicolas-de-Bourgueil,,,1628,,aire de repos,True,,,,,,,
+Chapelle Saint Laud Est,,,1675,est,aire de repos,False,,,,,,,
+Chapelle Saint Laud Ouest,,,1676,ouest,aire de repos,False,,,,,,,
+A11 - PORTES D'ANGERS SUD,,COFIROUTE,1980,sud,aire de service,True,,Ionity,Ionity,2100.0,350.0,FRIOYP9587355,11624
+A11 - PORTES D'ANGERS SUD,,COFIROUTE,1980,sud,aire de service,True,,Tesla,Tesla,5000.0,250.0,FRTSLP16456,17268
+A11 - PORTES D'ANGERS NORD,,COFIROUTE,2219,nord,aire de service,True,,,,,,,
+Bauné Est,,,1660,est,aire de repos,True,,,,,,,
+Bauné Ouest,,,1661,ouest,aire de repos,True,,,,,,,
+A85 - LONGUE LA COUAILLE,,COFIROUTE,2220,,aire de service,True,,Ionity,Ionity,1543.0,350.0,FRIOYP9587448,11656
+A85 - LONGUE LES COSSONNIERES,,COFIROUTE,1978,,aire de service,True,,Ionity,Ionity,1543.0,350.0,FRIOYP9587422,11650
+Maillé,,,1599,,aire de repos,True,,,,,,,
+Nouâtre,,,1600,,aire de repos,True,,,,,,,
+Sainte Maure de la Tourraine Ouest,,,1270,ouest,aire de service,True,,,,,,,
+A10 - SAINTE MAURE DE TOURAINE,,COFIROUTE,2182,,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,1150.0,175.0,FRHPCPNF059736TOTEM,10992
+A10 - FONTAINE COLETTE,,COFIROUTE,1984,,aire de service,True,,Ionity,Ionity,2243.0,350.0,FRIOYP9587558,11696
+A10 - CHATELLERAULT ANTRAN,,COFIROUTE,2141,,aire de service,True,,ENGIE Vianeo,ENGIE Vianeo,2250.5,300.0,FRVIAP103111,18133
+A10 - CHATELLERAULT USSEAU,,COFIROUTE,1982,,aire de service,True,,,,,,,
+Chagnats,,,1588,,aire de repos,True,,,,,,,
+Les Meuniers,,,1589,,aire de repos,True,,bp Pulse,bp Pulse,6464.0,600.0,FRBPEP3EA035,6952
+A85 - VAL DE CHER,,COFIROUTE,1983,,aire de service,True,,Zunder,Zunder,10364.0,400.0,FRZUNP7329346578064027187,18947
+Bois de Faix,,,1636,,aire de repos,True,,,,,,,
+La Canarderie,,,1637,,aire de repos,True,,,,,,,
+Courte Epée,,,1662,,aire de repos,True,,,,,,,
+Picardière,,,1663,,aire de repos,True,,bp Pulse,bp Pulse,5432.0,600.0,FRBPEP3EA036,6953
+Picardière,,,1663,,aire de repos,True,,bp Pulse,bp Pulse,5432.0,600.0,FRBPEP3EA039,6956
+Bruères,,,1673,,aire de repos,True,,,,,,,
+Chatière,,,1674,,aire de repos,True,,,,,,,
+A10 - BLOIS MENARS,,COFIROUTE,2177,,aire de service,True,,Ionity,Ionity,3043.0,400.0,FRIOYP9587457,11657
+A10 - BLOIS VILLERBON,,COFIROUTE,1988,,aire de service,True,,Ionity,Ionity,2243.0,350.0,FRIOYP9587435,11652
+Brusolle,,,1689,,aire de repos,True,,,,,,,
+Fougères,,,1690,,aire de repos,True,,,,,,,
+A85 - ROMORANTIN,,COFIROUTE,1990,,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,1150.0,175.0,FRHPCPNF080056TOTEM,11101
+Jarrier,,,1634,,aire de repos,True,,,,,,,
+La Grange Rouge,,,1635,,aire de repos,True,,,,,,,
+La Saulot,,,1652,,aire de repos,False,,,,,,,
+Les Maremberts,,,1655,,aire de repos,False,,bp Pulse,bp Pulse,5432.0,600.0,FRBPEP3EA038,6955
+A71 - LA FERTE ST AUBIN,,COFIROUTE,1993,,aire de service,False,,ENGIE Vianeo,ENGIE Vianeo,2250.5,300.0,FRVIAP103112,18134
+A71 - CHAUMONT SUR THARONNE,,COFIROUTE,2175,,aire de service,False,,Plenitude On The Road,Plenitude On The Road,5322.0,300.0,FRPLNP10182942,14820
+L'Etang du Maras,,,1668,,aire de repos,False,,,,,,,
+La Briganderie,,,1667,,aire de repos,False,,bp Pulse,bp Pulse,3632.0,600.0,FRBPEP3EA033,6950
+A71 - SALBRIS LA LOGE,,COFIROUTE,2174,,aire de service,False,,,,,,,
+A71 - SALBRIS THEILLAY,,COFIROUTE,1992,,aire de service,False,,,,,,,
+Bois des Dames,,,1601,,aire de repos,True,,,,,,,
+A71 - BOURGES MARMAGNE,,COFIROUTE,1991,,aire de service,True,,Zunder,Zunder,10188.0,400.0,FRZUNP1615743645321921749,18933
+A71 - BOURGES STE THORETTE,,COFIROUTE,2176,,aire de service,True,,Ionity,Ionity,1643.0,350.0,FRIOYP9587562,11697
+La Chaussée de César,,,1614,,aire de repos,True,,Allego,Allego,650.0,300.0,FRALLPGO800463,5535
+La Chaussée de César,,,1614,,aire de repos,True,,Allego,Allego,400.0,200.0,FRALLPGO800464,5536
+La Chaussée de César,,,1614,,aire de repos,True,,Allego,Allego,600.0,300.0,FRALLPGO800465,5537
+La Chaussée de César,,,1614,,aire de repos,True,,Allego,Allego,600.0,300.0,FRALLPGO800466,5538
+La Chaussée de César,,,1614,,aire de repos,True,,Allego,Allego,600.0,300.0,FRALLPGO800467,5539
+La Chaussée de César,,,1614,,aire de repos,True,,Allego,Allego,650.0,300.0,FRALLPGO800468,5540
+La Chaussée de César,,,1614,,aire de repos,True,,Allego,Allego,400.0,200.0,FRALLPGO800469,5541
+La Chaussée de César,,,1614,,aire de repos,True,,Allego,Allego,600.0,300.0,FRALLPGO800470,5542
+La Chaussée de César,,,1614,,aire de repos,True,,Allego,Allego,600.0,300.0,FRALLPGO800471,5543
+La Chaussée de César,,,1614,,aire de repos,True,,Allego,Allego,600.0,300.0,FRALLPGO800472,5544
+La Chaussée de César,,,1614,,aire de repos,True,,Allego,Allego,44.0,22.0,FRALLPGO800497,5553
+La Chaussée de César,,,1614,,aire de repos,True,,Allego,Allego,44.0,22.0,FRALLPGO800498,5554
+Les Croquettes,,,1615,,aire de repos,True,,,,,,,
+,,,2329,,aire de service,False,,,,,,,
+Gite aux Loups,,,1594,,aire de repos,True,,,,,,,
+Centre de la France-Bruère / Bruère Allichamp Est,,,2099,est,aire de service,True,,Ionity,Ionity,1543.0,350.0,FRIOYP9587393,11636
+Centre de la France-Bruère / Bruère Allichamp Est,,,2099,est,aire de service,True,,Ionity,Ionity,1543.0,350.0,FRIOYP9587395,11638
+Centre de la France-Farges / Farges Allichamp Ouest,,,2178,ouest,aire de service,True,,,,,,,
+,,,2375,,aire de service,False,,,,,,,
+,,,2330,,aire de service,False,,,,,,,
+Pougues-les-Eaux,,,1611,,aire de repos,False,,,,,,,
+La Marche,,,1619,,aire de repos,False,,,,,,,
+Pouilly-sur-Loire,,,1626,,aire de repos,False,,,,,,,
+Le Gyngko,,,1680,,aire de repos,False,,,,,,,
+Le Tulipier,,,1681,,aire de repos,False,,,,,,,
+Le Caule,,,1658,,aire de repos,False,,,,,,,
+Le Sequoïa,,,1659,,aire de repos,False,,,,,,,
+Pouilly-sur-Loire,,,1631,,aire de repos,False,,,,,,,
+Les Vignobles Est,,,1271,est,aire de service,False,,,,,,,
+Les Vignobles Ouest,,,1994,ouest,aire de service,False,,TotalEnergies Marketing France,TotalEnergies Marketing France,1150.0,175.0,FRHPCPNF078333,11073
+Venoy Grosse Pierre Est,,,1998,est,aire de service,True,,ENGIE Vianeo,ENGIE Vianeo,4872.0,300.0,FRVIAP101114,18101
+Venoy Grosse Pierre Est,,,1998,est,aire de service,True,,ENGIE Vianeo,ENGIE Vianeo,1600.0,400.0,FRVIAP111103,18155
+Venoy Soleil Levant Ouest,,,2169,ouest,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,1150.0,175.0,FRHPCPNF058911TOTEM,10943
+Venoy Soleil Levant Ouest,,,2169,ouest,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,600.0,50.0,FRHPCPTEMP001,11179
+La Grosse Tour,,,1688,,aire de repos,True,,,,,,,
+Le Buisson Rond,,,1687,,aire de repos,True,,,,,,,
+Chevreuil,,,1684,,aire de repos,True,,,,,,,
+La Couée,,,1679,,aire de repos,True,,,,,,,
+Hervaux,,,1671,,aire de repos,True,,,,,,,
+Montmorency,,,1672,,aire de repos,True,,,,,,,
+Chaignot,,,1622,,aire de repos,True,,,,,,,
+La Repotte,,,1623,,aire de repos,True,,,,,,,
+La Garenne,,,1618,,aire de repos,True,,,,,,,
+Bois des Corbeaux,,,1606,,aire de repos,True,,,,,,,
+Creux Moreau,,,1995,,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,2100.0,300.0,FRHPCPNF080339TIERSTOTEM,11140
+La Forêt,,,2166,,aire de service,True,,ENGIE Vianeo,ENGIE Vianeo,2472.0,300.0,FRVIAP101110,18097
+La Forêt,,,2166,,aire de service,True,,ENGIE Vianeo,ENGIE Vianeo,1000.0,400.0,FRVIAP111105,18157
+La Loyère,,,1590,,aire de repos,True,,,,,,,
+Le Curney,,,1591,,aire de repos,True,,,,,,,
+Beaune Merceuil Est,,,2055,est,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,50.0,50.0,FRHPCPNF080041,11094
+Beaune Merceuil Est,,,2055,est,aire de service,True,,ENGIE Vianeo,ENGIE Vianeo,4872.0,300.0,FRVIAP101102,18089
+Beaune Merceuil Est,,,2055,est,aire de service,True,,ENGIE Vianeo,ENGIE Vianeo,1000.0,400.0,FRVIAP111104,18156
+Beaune Tailly Ouest,,,2159,ouest,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,1150.0,175.0,FRHPCPNF059042TOTEM,10952
+Jura Ouest,,,1269,ouest,aire de service,False,,,,,,,
+Jura Est,,,2056,est,aire de service,False,,Ionity,Ionity,3843.0,400.0,FRIOYP9587554,11694
+Jura Est,,,2056,est,aire de service,False,,Tesla,Tesla,3000.0,250.0,FRTSLP21027,17324
+Les Noues,,,1607,,aire de repos,True,,,,,,,
+St Jean de Losne,,,1608,,aire de repos,True,,,,,,,
+La Vouivre,,,1595,,aire de repos,False,,,,,,,
+Louis Pasteur,,,1596,,aire de repos,False,,,,,,,
+Bois des Potets,,,1612,,aire de repos,True,,,,,,,
+Sampans,,,1613,,aire de repos,True,,,,,,,
+Pont Val de Saône Ouest,,,2052,ouest,aire de service,False,,Fastned France,Fastned France,2800.0,400.0,FRFASP11568652,10580
+Pont Chêne d'Argent Est,,,2163,est,aire de service,False,,Fastned France,Fastned France,2800.0,400.0,FRFASP11568654,10581
+Beire le Fort,,,1624,,aire de repos,False,,,,,,,
+Bois Défendu,,,1625,,aire de repos,False,,,,,,,
+Gevrey Chambertin Ouest,,,2053,ouest,aire de service,True,,Fastned France,Fastned France,2400.0,300.0,FRFASP11568649,10578
+Gevrey Chambertin Est,,,2164,est,aire de service,True,,Ionity,Ionity,3543.0,400.0,FRIOYP9587228,11575
+Boncourt le Bois,,,1617,,aire de repos,True,,,,,,,
+Flagey Echezeaux,,,1616,,aire de repos,True,,,,,,,
+Glanon Sud,,,2054,sud,aire de service,True,,Ionity,Ionity,1543.0,350.0,FRIOYP9587391,11635
+Bois Guillerot Nord,,,2165,nord,aire de service,True,,Ionity,Ionity,1543.0,350.0,FRIOYP9587531,11687
+Argilly,,,1602,,aire de repos,True,,,,,,,
+Villy  le  Moutier,,,1603,,aire de repos,True,,,,,,,
+Serrigny,,,1610,,aire de repos,True,,,,,,,
+Corgoloin,,,1609,,aire de repos,True,,,,,,,
+Savigny,,,1604,,aire de repos,True,,,,,,,
+Rossignol,,,1605,,aire de repos,True,,,,,,,
+Dijon-Spoy Ouest,,,2051,ouest,aire de service,True,,CityFMET,SPIE CityNetworks,2783.0,300.0,FREVAP21111A,10224
+Dijon-Spoy Ouest,,,2051,ouest,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,143.0,50.0,FRHPCPNF080042,11095
+Dijon - Brognon Est,,,2161,est,aire de service,True,,CityFMET,SPIE CityNetworks,2021.0,300.0,FREVAP21111B,10225
+La Tille,,,1638,,aire de repos,True,,,,,,,
+Pré d'azur,,,1639,,aire de repos,True,,,,,,,
+Sainte Gertrude,,,1669,,aire de repos,True,,,,,,,
+Villa des Thuillières,,,1670,,aire de repos,True,,,,,,,
+Combe Suzon,,,1682,,aire de repos,True,,,,,,,
+Fontenelle,,,1683,,aire de repos,True,,,,,,,
+Les Lochères,,,1996,,aire de service,True,,Ionity,Ionity,2243.0,350.0,FRIOYP9587301,11598
+Chien Blanc,,,2162,,aire de service,True,,CityFMET,SPIE CityNetworks,1846.0,300.0,FREVAP21298A,10226
+La Come,,,1653,,aire de repos,True,,,,,,,
+Ruffey,,,1654,,aire de repos,True,,,,,,,
+Fermenot,,,1644,,aire de repos,True,,,,,,,
+Marcigny,,,1645,,aire de repos,True,,,,,,,
+Genetoy,,,1657,,aire de repos,True,,,,,,,
+Epoisses,,,1656,,aire de repos,True,,,,,,,
+La Chaponne Est,,,1997,est,aire de service,True,,,,,,,
+Maison Dieu Ouest,,,2167,ouest,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,2103.0,300.0,FRHPCPNF080340TIERSTOTEM,11141
+Maison Dieu Ouest,,,2167,ouest,aire de service,True,,Ionity,Ionity,5843.0,600.0,FRIOYP9587264,11589
+Saint Pouange,,,1754,,aire de repos,False,,,,,,,
+La Coloterie,,,1753,,aire de repos,False,,,,,,,
+Crocs de la Terre,,,1766,,aire de repos,False,,,,,,,
+Villechétif,,,1767,,aire de repos,False,,,,,,,
+Troyes - Fresnoy Nord,,,2000,nord,aire de service,False,,TotalEnergies Marketing France,TotalEnergies Marketing France,1050.0,175.0,FRHPCPNF078386TOTEM,11074
+Troyes le Plessis Sud,,,2184,sud,aire de service,False,,TotalEnergies Marketing France,TotalEnergies Marketing France,1050.0,175.0,FRHPCPNF042236TOTEM,10921
+Champignol,,,1738,,aire de repos,False,,,,,,,
+Mondeville,,,1739,,aire de repos,False,,,,,,,
+Châteauvillain - Orges Sud,,,2046,sud,aire de service,False,,,,,,,
+Château Villain - Val Marnay Nord,,,2185,nord,aire de service,False,,Tesla,Tesla,900.0,150.0,FRTSLP2986,17363
+Château Villain - Val Marnay Nord,,,2185,nord,aire de service,False,,Tesla,Tesla,900.0,150.0,FRTSLP2987,17364
+Château Villain - Val Marnay Nord,,,2185,nord,aire de service,False,,ENGIE Vianeo,ENGIE Vianeo,4572.0,300.0,FRVIAP101103,18090
+Château Villain - Val Marnay Nord,,,2185,nord,aire de service,False,,ENGIE Vianeo,ENGIE Vianeo,4572.0,300.0,FRVIAP101104,18091
+Bois Moyen,,,1707,,aire de repos,False,,,,,,,
+Champ à la Croix,,,1708,,aire de repos,False,,,,,,,
+Parking sécurisé PL Park+,,,1273,,aire de service,True,,,,,,,
+Langres - Perrogney Est,,,2050,est,aire de service,True,,Ionity,Ionity,5543.0,400.0,FRIOYP9587515,11677
+Langres-Noidant Ouest,,,2187,ouest,aire de service,True,,Ionity,Ionity,7043.0,400.0,FRIOYP9587447,11655
+Val de Meuse Ouest,,,2047,ouest,aire de service,True,,ENGIE Vianeo,ENGIE Vianeo,2472.0,300.0,FRVIAP101112,18099
+Montigny le Roi Est,,,2186,est,aire de service,True,,ENGIE Vianeo,ENGIE Vianeo,3072.0,300.0,FRVIAP101113,18100
+Côte Robert,,,1705,,aire de repos,True,,,,,,,
+Val de Gris,,,1706,,aire de repos,True,,,,,,,
+Charmont-sous-Barbuise,,,1774,,aire de repos,False,,,,,,,
+Sommesous Ouest,,,1284,ouest,aire de service,False,,,,,,,
+Sommesous Est,,,2001,est,aire de service,False,,Shell Recharge,Shell Recharge,5744.0,300.0,FRSHEP5869993,16595
+Sommesous Est,,,2001,est,aire de service,False,,ENGIE Vianeo,ENGIE Vianeo,1000.0,400.0,FRVIAP102119,18122
+Champ-Carreau,,,1790,,aire de repos,False,,,,,,,
+Champ-l'Epée,,,1791,,aire de repos,False,,,,,,,
+Fontvannes,,,1759,,aire de repos,False,,,,,,,
+Tomelles,,,1760,,aire de repos,False,,,,,,,
+Le Thureau,,,1693,,aire de repos,True,,,,,,,
+Les Bois Impériaux,,,1694,,aire de repos,True,,,,,,,
+La Biche,,,1695,,aire de repos,True,,,,,,,
+Les Patures,,,1697,,aire de repos,True,,,,,,,
+La Loupière,,,1703,,aire de repos,True,,,,,,,
+La Racheuse,,,1704,,aire de repos,True,,,,,,,
+Villeneuve Vauluisant Sud,,,1999,sud,aire de service,False,,ENGIE Vianeo,ENGIE Vianeo,3672.0,300.0,FRVIAP101115,18102
+Villeneuve l'Archevèque Nord,,,2168,nord,aire de service,False,,ENGIE Vianeo,ENGIE Vianeo,3672.0,300.0,FRVIAP101116,18103
+Montaphilant,,,1758,,aire de repos,False,,,,,,,
+Montard,,,1757,,aire de repos,False,,,,,,,
+Floée,,,1749,,aire de repos,True,,,,,,,
+Sonville,,,1750,,aire de repos,True,,,,,,,
+Egreville,,,1743,,aire de repos,True,,,,,,,
+Le Liard,,,1744,,aire de repos,True,,,,,,,
+La Roche,,,1732,,aire de repos,True,,,,,,,
+Parc Thierry,,,1733,,aire de repos,True,,,,,,,
+Villeroy Sud,,,1279,sud,aire de service,False,,,,,,,
+Villeroy Nord,,,2004,nord,aire de service,False,,ENGIE Vianeo,ENGIE Vianeo,2250.5,300.0,FRVIAP103103,18125
+Les Chataigniers,,,1715,,aire de repos,True,,,,,,,
+La Réserve Ouest,,,2005,ouest,aire de service,True,,Ionity,Ionity,3043.0,400.0,FRIOYP9600249,11725
+La Couline Est,,,2170,est,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,2250.0,300.0,FRHPCPNF058931TOTEM,10945
+Chantecoq,,,1716,,aire de repos,False,,,,,,,
+Philippe Rossi,,,1717,,aire de repos,False,,,,,,,
+Cepoy,,,1722,,aire de repos,False,,,,,,,
+La Vallée du Loing,,,1723,,aire de repos,False,,,,,,,
+Le Cèdre,,,1709,,aire de repos,False,,,,,,,
+Le Liquidambar,,,1710,,aire de repos,False,,,,,,,
+Le Jardin des Arbres Est,,,1274,est,aire de service,False,,,,,,,
+Le Jardin des Arbres Ouest,,,2006,ouest,aire de service,False,,Ionity,Ionity,1543.0,350.0,FRIOYP9587359,11627
+A19 - LOIRET,,COFIROUTE,2009,,aire de service,False,,ENGIE Vianeo,ENGIE Vianeo,3144.0,300.0,FRVIAP104103,18141
+Le Sophora,,,1737,,aire de repos,False,,,,,,,
+Le Hêtre Pourpre,,,1740,,aire de repos,False,,,,,,,
+Val-de-Loing Ouest,,,1745,ouest,aire de repos,False,,,,,,,
+Val de Loing Est,,,1746,est,aire de repos,False,,,,,,,
+Darvault Est,,,2007,est,aire de service,True,,Ionity,Ionity,2243.0,350.0,FRIOYP9587522,11682
+Nemours Ouest,,,2206,ouest,aire de service,True,,Ionity,Ionity,1543.0,350.0,FRIOYP9587348,11621
+Villiers,,,1763,,aire de repos,True,,,,,,,
+Achères la Forêt Ouest,,,2008,ouest,aire de service,True,,ENGIE Vianeo,ENGIE Vianeo,3672.0,300.0,FRVIAP101101,18088
+Achères la Forêt Ouest,,,2008,ouest,aire de service,True,,ENGIE Vianeo,ENGIE Vianeo,1000.0,400.0,FRVIAP111102,18154
+Achères Est,,,2208,est,aire de service,True,,Fastned France,Fastned France,1200.0,300.0,FRFASP11568681,10586
+Fleury Ouest,,,1776,ouest,aire de repos,True,,,,,,,
+Fleury Est,,,1780,est,aire de repos,True,,,,,,,
+Arbonne,,,1775,,aire de repos,True,,,,,,,
+Les Lisses Est,,,2013,est,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,1150.0,175.0,FRHPCPNF058968TOTEM,10947
+Villabé - Les Lisses Ouest,,,2213,ouest,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,1150.0,175.0,FRHPCPNF006369TOTEM,10888
+Villabé - Les Lisses Ouest,,,2213,ouest,aire de service,True,,ENGIE Vianeo,ENGIE Vianeo,2620.0,300.0,FRVIAP122239,18209
+Les Eprunes,,,1787,,aire de repos,False,,,,,,,
+Les Eprunes,,,1788,,aire de repos,False,,,,,,,
+Les Récompenses Sud,,,2003,sud,aire de service,False,,Fastned France,Fastned France,1200.0,300.0,FRFASP11568667,10585
+La Grande Paroisse Nord,,,2207,nord,aire de service,False,,Fastned France,Fastned France,1200.0,300.0,FRFASP11568665,10584
+Des Rasets,,,1768,,aire de repos,False,,,,,,,
+Gravon,,,1769,,aire de repos,False,,,,,,,
+Bussy-Saint-Georges Nord,,,2002,nord,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,4250.0,400.0,FRHPCPNF059775TOTEMSA,10995
+Ferrières Sud,,,2215,sud,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,2650.0,300.0,FRHPCPNF062704TOTEM,11019
+,,,2337,,aire de service,True,,,,,,,
+,,,2418,,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,2000.0,150.0,FRHPCPNF080234,11128
+La Mare la Roche,,,2211,,aire de service,False,,ENGIE Vianeo,ENGIE Vianeo,2472.0,300.0,FRVIAP101107,18094
+La Mare la Roche,,,2211,,aire de service,False,,ENGIE Vianeo,ENGIE Vianeo,1760.0,480.0,FRVIAP111101,18153
+Parking sécurisé PL Park+,,,2012,,aire de service,False,,,,,,,
+,,,2334,,aire de service,True,,,,,,,
+,,,2417,,aire de service,True,,,,,,,
+,,,2343,,aire de service,True,,,,,,,
+,,,2413,,aire de service,True,,,,,,,
+Survilliers Est,,,1827,est,aire de repos,True,,,,,,,
+Survilliers Ouest,,,1828,ouest,aire de repos,True,,,,,,,
+Chennevières,,,1813,,aire de repos,True,,,,,,,
+Villeron,,,1817,,aire de repos,True,,,,,,,
+Vémars Ouest,,,2015,ouest,aire de service,True,,Fastned France,Fastned France,4800.0,300.0,FRFASP11568718,10596
+Vémars Ouest,,,2015,ouest,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,50.0,50.0,FRHPCPNF058915,10944
+Vémars Est,,,2210,est,aire de service,True,,Fastned France,Fastned France,4800.0,300.0,FRFASP11568719,10597
+Roberval Est,,,1853,est,aire de repos,True,,,,,,,
+Roberval Ouest,,,1854,ouest,aire de repos,True,,,,,,,
+Chevrières,,,1857,,aire de repos,True,,,,,,,
+Longueil-Sainte-Marie,,,1858,,aire de repos,True,,,,,,,
+Prévilliers,,,1803,,aire de repos,True,,,,,,,
+Vaucourtois,,,1804,,aire de repos,True,,,,,,,
+Changis-sur-Marne,,,2016,,aire de service,True,,Fastned France,Fastned France,2400.0,300.0,FRFASP11568737,10604
+Ussy-sur-Marne,,,2017,,aire de service,True,,Fastned France,Fastned France,2400.0,300.0,FRFASP11568738,10605
+La Fontenelle,,,1816,,aire de repos,True,,,,,,,
+La Talmouse,,,1820,,aire de repos,True,,,,,,,
+Tardenois Nord,,,2034,nord,aire de service,True,,,,,,,
+Tardenois Sud,,,2205,sud,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,700.0,300.0,FRHPCPNF080353TIERSTOTEM,11153
+Tardenois Sud,,,2205,sud,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,700.0,300.0,FRHPCPNF080354TIERSTOTEM,11154
+Lhéry,,,1845,,aire de repos,True,,,,,,,
+Romigny,,,1842,,aire de repos,True,,,,,,,
+Gueux Nord,,,2033,nord,aire de service,True,,Ionity,Ionity,1543.0,350.0,FRIOYP9587533,11689
+Vrigny Sud,,,2196,sud,aire de service,True,,Ionity,Ionity,1543.0,350.0,FRIOYP9587471,11665
+Cauroy,,,1859,,aire de repos,False,,,,,,,
+Loivre,,,1860,,aire de repos,False,,,,,,,
+Le Broyon,,,1880,,aire de repos,False,,,,,,,
+Saint-Brice,,,1881,,aire de repos,False,,,,,,,
+Mont-de-Nizy,,,2204,,aire de service,False,,ENGIE Vianeo,ENGIE Vianeo,2184.0,300.0,FRVIAP102113,18116
+Champ-Roland,,,2032,,aire de service,False,,ENGIE Vianeo,ENGIE Vianeo,2184.5,300.0,FRVIAP102105,18108
+Les Pèlerins,,,1872,,aire de repos,False,,,,,,,
+La Croisette,,,1873,,aire de repos,False,,,,,,,
+Urvillers Ouest,,,1294,ouest,aire de service,False,,,,,,,
+Urvillers Est,,,2019,est,aire de service,False,,TotalEnergies Marketing France,TotalEnergies Marketing France,400.0,150.0,FRHPCPNF042331TOTEM,10923
+Urvillers Est,,,2019,est,aire de service,False,,Tesla,Tesla,2400.0,150.0,FRTSLP3045,17421
+Le Haute Bruyère,,,1892,,aire de repos,False,,,,,,,
+L'Omignon,,,1891,,aire de repos,False,,,,,,,
+Assevillers Est,,,2020,est,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,2650.0,300.0,FRHPCPNF080346TIERSTOTEMSA,11147
+Assevillers Ouest,,,2199,ouest,aire de service,True,,ENGIE Vianeo,ENGIE Vianeo,6810.5,400.0,FRVIAP103115,18137
+Athies,,,1890,,aire de repos,False,,,,,,,
+Tilloloy Est,,,1874,est,aire de repos,True,,,,,,,
+Tilloloy Ouest,,,1875,ouest,aire de repos,True,,,,,,,
+Ressons Est,,,2018,est,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,3100.0,300.0,FRHPCPNF058967TOTEM,10946
+Ressons Ouest,,,2198,ouest,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,50.0,50.0,FRHPCPNF080294,11135
+Ressons Ouest,,,2198,ouest,aire de service,True,,ENGIE Vianeo,ENGIE Vianeo,4584.5,300.0,FRVIAP102118,18121
+Bois d'Arsy,,,1867,,aire de repos,True,,,,,,,
+Remy,,,1868,,aire de repos,True,,,,,,,
+Goyencourt Est,,,1882,est,aire de repos,True,,,,,,,
+Goyencourt Ouest,,,1883,ouest,aire de repos,True,,,,,,,
+Fonches,,,1888,,aire de repos,True,,,,,,,
+Hattencourt,,,1889,,aire de repos,True,,,,,,,
+Villers-Bretonneux sud,,,1296,sud,aire de service,False,,Fastned France,Fastned France,2400.0,300.0,FRFASP11568741,10608
+Villers-Bretonneux Nord,,,2021,nord,aire de service,False,,,,,,,
+Maurepas,,,1894,,aire de repos,True,,,,,,,
+Feuillères,,,1893,,aire de repos,True,,,,,,,
+Roquigny,,,1897,,aire de repos,True,,,,,,,
+Barastre,,,1898,,aire de repos,True,,,,,,,
+Havrincourt Ouest,,,2030,ouest,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,700.0,300.0,FRHPCPNF080349TIERSTOTEM,11150
+Graincourt Est,,,2201,est,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,700.0,300.0,FRHPCPNF080350TIERSTOTEM,11151
+Le Plateau,,,1903,,aire de repos,False,,,,,,,
+La Vacquerie,,,1902,,aire de repos,False,,,,,,,
+Beaulencourt,,,1899,,aire de repos,True,,,,,,,
+Saint-Léger,,,2029,,aire de service,True,,Fastned France,Fastned France,2400.0,300.0,FRFASP11568730,10601
+Croisilles,,,1904,,aire de repos,True,,,,,,,
+Wancourt Ouest,,,1905,ouest,aire de repos,True,,Fastned France,Fastned France,2400.0,300.0,FRFASP11568733,10602
+Wancourt Est,,,2028,est,aire de service,True,,,,,,,
+La Cressonnière,,,1908,,aire de repos,False,,,,,,,
+Les Trois Crêtes,,,1909,,aire de repos,False,,,,,,,
+,,,2349,,aire de service,True,,,,,,,
+Le Bois d'Huez,,,1906,,aire de repos,False,,,,,,,
+Les Bonnettes,,,1907,,aire de repos,False,,,,,,,
+Rumaucourt Ouest,,,2200,ouest,aire de service,False,,Shell Recharge,Shell Recharge,50.0,50.0,FRSHEP3FL34DV0RV6,16571
+Rumaucourt Ouest,,,2200,ouest,aire de service,False,,Shell Recharge,Shell Recharge,1347.0,300.0,FRSHEP5233160,16586
+Baralle Est,,,2026,est,aire de service,False,,Ionity,Ionity,1543.0,350.0,FRIOYP9587398,11639
+,,,2348,,aire de service,True,,,,,,,
+Souchez Ouest,,,2027,ouest,aire de service,False,,TotalEnergies Marketing France,TotalEnergies Marketing France,200.0,150.0,FRHPCPNF080047,11099
+Souchez Ouest,,,2027,ouest,aire de service,False,,Plenitude On The Road,Plenitude On The Road,220.0,110.0,FRPLNP12569331,14859
+Souchez Ouest,,,2027,ouest,aire de service,False,,Plenitude On The Road,Plenitude On The Road,220.0,110.0,FRPLNP23D3KF08SU1N,14860
+Angres Est,,,2202,est,aire de service,False,,TotalEnergies Marketing France,TotalEnergies Marketing France,700.0,300.0,FRHPCPNF080345TIERSTOTEMSA,11146
+La Grande Bucaille,,,1912,,aire de repos,False,,,,,,,
+Le Réveillon,,,1913,,aire de repos,False,,,,,,,
+,,,2345,,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,700.0,300.0,FRHPCPNF080352TIERSTOTEM,11152
+,,,2411,,aire de service,True,,Ionity,Ionity,2243.0,350.0,FRIOYP9587241,11577
+,,,2346,,aire de service,True,,ENGIE Vianeo,ENGIE Vianeo,2784.5,300.0,FRVIAP102116,18119
+,,,2408,,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,50.0,50.0,FRHPCPNF059003,10950
+,,,2408,,aire de service,True,,ENGIE Vianeo,ENGIE Vianeo,2784.5,300.0,FRVIAP102117,18120
+,,,2350,,aire de service,True,,ENGIE Vianeo,ENGIE Vianeo,4584.5,300.0,FRVIAP102108,18111
+,,,2410,,aire de service,True,,ENGIE Vianeo,ENGIE Vianeo,4584.5,300.0,FRVIAP102107,18110
+Ardennes Woinic Nord,,,1291,nord,aire de service,False,,,,,,,
+Ardennes Woinic Sud,,,2031,sud,aire de service,False,,IZIVIA EXPRESS,IZIVIA,50.0,50.0,FRE04POAZS196,7403
+Ardennes Woinic Sud,,,2031,sud,aire de service,False,,TotalEnergies Marketing France,TotalEnergies Marketing France,1150.0,175.0,FRHPCPNF078601,11085
+L'Espérance,,,1838,,aire de repos,True,,,,,,,
+La Vesle,,,1839,,aire de repos,True,,,,,,,
+Les Grands Traquiers,,,1808,,aire de repos,False,,,,,,,
+Reims Champagne Sud,,,2035,sud,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,4203.0,300.0,FRHPCPNF080373,11168
+Reims Champagne Sud,,,2035,sud,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,4803.0,300.0,FRHPCPNF080374,11169
+Reims Champagne Nord,,,2197,nord,aire de service,True,,,,,,,
+La Bardolle,,,1802,,aire de repos,False,,,,,,,
+La Garenne,,,1805,,aire de repos,False,,,,,,,
+La Noblette,,,1811,,aire de repos,True,,,,,,,
+Mont de Charme,,,1812,,aire de repos,True,,,,,,,
+Valmy-Le Moulin Sud,,,2036,sud,aire de service,True,,Fastned France,Fastned France,1200.0,300.0,FRFASP11568713,10592
+Valmy Orbeval Nord,,,2188,nord,aire de service,True,,Fastned France,Fastned France,1200.0,300.0,FRFASP11568714,10593
+Jubécourt,,,1823,,aire de repos,True,,,,,,,
+Rarécourt,,,1824,,aire de repos,True,,,,,,,
+La Fontaine d'Olive Nord,,,1821,nord,aire de repos,True,,,,,,,
+La Fontaine d'Olive Sud,,,1822,sud,aire de repos,True,,,,,,,
+Verdun Saint-Nicolas Sud,,,2037,sud,aire de service,True,,Ionity,Ionity,2243.0,350.0,FRIOYP9587459,11658
+Verdun Saint-Nicolas Nord,,,2192,nord,aire de service,True,,Ionity,Ionity,2243.0,350.0,FRIOYP9587406,11643
+La Rouge Haie,,,1825,,aire de repos,True,,,,,,,
+Les Genièvres,,,1826,,aire de repos,True,,,,,,,
+Bois de la Ronce,,,1837,,aire de repos,True,,,,,,,
+L'Epinotte,,,1835,,aire de repos,True,,,,,,,
+Bois Saint-Martin,,,1843,,aire de repos,True,,,,,,,
+Le Bois de Labry,,,1844,,aire de repos,True,,,,,,,
+La Castine,,,1855,,aire de repos,False,,,,,,,
+Bois des Tillots,,,1856,,aire de repos,False,,,,,,,
+Metz Saint-Privat Nord,,,1289,nord,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,2800.0,300.0,FRHPCPNF080063TIERSTOTEM,11102
+Metz Saint-Privat Sud,,,2038,sud,aire de service,True,,,,,,,
+,,,2356,,aire de service,False,,Fastned France,Fastned France,4800.0,300.0,FRFASP11568739,10606
+,,,2356,,aire de service,False,,Plenitude On The Road,Plenitude On The Road,4702.0,1200.0,FRPLNP11946038,14854
+La Crouée,,,1841,,aire de repos,True,,,,,,,
+Charly-Oradour,,,1840,,aire de repos,True,,,,,,,
+,,,2355,,aire de service,False,,ENGIE Vianeo,ENGIE Vianeo,2488.0,300.0,FRVIAP103116,18138
+Landonvillers Nord,,,1833,nord,aire de repos,True,,,,,,,
+Landonvillers Sud,,,1834,sud,aire de repos,True,,,,,,,
+,,,2363,,aire de service,True,,Fastned France,Fastned France,2400.0,300.0,FRFASP11568740,10607
+,,,2406,,aire de service,True,,Fastned France,Fastned France,2400.0,300.0,FRFASP11568726,10599
+Katzenkopf,,,1798,,aire de repos,True,,,,,,,
+Schalbach,,,1799,,aire de repos,True,,,,,,,
+Berg,,,1800,,aire de repos,True,,,,,,,
+Eywiller,,,1801,,aire de repos,True,,,,,,,
+Grundviller,,,1814,,aire de repos,True,,,,,,,
+Petit Hambach,,,1815,,aire de repos,True,,,,,,,
+Keskastel Ouest,,,2040,ouest,aire de service,True,,Fastned France,Fastned France,1200.0,300.0,FRFASP11568735,10603
+Keskastel Est,,,2191,est,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,225.0,175.0,FRHPCPNF078531TOTEM,11076
+Longeville Nord,,,2039,nord,aire de service,True,,,,,,,
+Longeville Sud,,,2193,sud,aire de service,True,,ENGIE Vianeo,ENGIE Vianeo,2184.5,300.0,FRVIAP102109,18112
+Longeville Sud,,,2193,sud,aire de service,True,,ENGIE Vianeo,ENGIE Vianeo,2184.5,300.0,FRVIAP102110,18113
+Narbéfontaine,,,1832,,aire de repos,True,,,,,,,
+Brouck,,,1831,,aire de repos,True,,,,,,,
+,,,2359,,aire de service,False,,,,,,,
+,,,2360,,aire de service,False,,Ionity,Ionity,4643.0,400.0,FRIOYP9587317,11605
+,,,2405,,aire de service,False,,,,,,,
+,,,2358,,aire de service,True,,Shell Recharge,Shell Recharge,319.0,175.0,FRSHEP3795200,16570
+,,,2404,,aire de service,True,,,,,,,
+Brumath Ouest,,,2041,ouest,aire de service,True,,ENGIE Vianeo,ENGIE Vianeo,2784.5,300.0,FRVIAP102104,18107
+Brumath Est,,,2190,est,aire de service,True,,ENGIE Vianeo,ENGIE Vianeo,2784.5,300.0,FRVIAP102103,18106
+Lienbach,,,1797,,aire de repos,True,,,,,,,
+Gottesheim,,,1794,,aire de repos,True,,,,,,,
+A355 - BRUCHE,,ARCOS,2043,,aire de service,False,,Allego,Allego,500.0,250.0,FRALLPGO800001,5267
+A355 - BRUCHE,,ARCOS,2043,,aire de service,False,,Allego,Allego,500.0,250.0,FRALLPGO800002,5268
+A355 - BRUCHE,,ARCOS,2043,,aire de service,False,,Allego,Allego,600.0,300.0,FRALLPGO800003,5269
+A355 - BRUCHE,,ARCOS,2043,,aire de service,False,,Allego,Allego,143.0,50.0,FRALLPGO800004,5270
+A355 - BRUCHE,,ARCOS,2043,,aire de service,False,,Allego,Allego,143.0,50.0,FRALLPGO800005,5271
+A355 - BRUCHE,,ARCOS,2043,,aire de service,False,,Allego,Allego,300.0,150.0,FRALLPGO800187,5407
+A355 - BRUCHE,,ARCOS,2043,,aire de service,False,,Allego,Allego,100.0,50.0,FRALLPGO800334,5481
+A355 - BRUCHE,,ARCOS,2043,,aire de service,False,,Allego,Allego,44.0,22.0,FRALLPGO800336,5482
+Saverne Eckartswiller Nord,,,2042,nord,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,1600.0,300.0,FRHPCPNF080358TIERSTOTEM,11158
+Saverne Monswiller Sud,,,2189,sud,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,1600.0,300.0,FRHPCPNF080193TOTEMSA,11123
+Danne,,,1795,,aire de repos,True,,,,,,,
+Quatre-Vents,,,1796,,aire de repos,True,,,,,,,
+Toul Dommartin Ouest,,,2045,ouest,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,4593.0,300.0,FRHPCPNF080344TIERSTOTEMSA,11145
+Toul Chaudeney Est,,,2195,est,aire de service,True,,,,,,,
+Faverosse,,,1781,,aire de repos,True,,,,,,,
+Malvaux,,,1782,,aire de repos,True,,,,,,,
+Grand chene,,,1777,,aire de repos,True,,,,,,,
+Val au Renard,,,1778,,aire de repos,True,,,,,,,
+Sandaucourt la Trelle Est,,,2048,est,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,1150.0,175.0,FRHPCPNF080197TOTEMSA,11124
+Sandaucourt les Rappes Ouest,,,2194,ouest,aire de service,True,,CityFMET,SPIE CityNetworks,1481.0,300.0,FREVAP88440A,10252
+Bois de Chaumont,,,1741,,aire de repos,True,,,,,,,
+Grand Repenti,,,1742,,aire de repos,True,,,,,,,
+Porte d'alsace 2 Sud,,,2059,sud,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,2100.0,300.0,FRHPCPNF080342TIERSTOTEM,11143
+Porte d'Alsace 1 Nord,,,2183,nord,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,700.0,175.0,FRHPCPNF059600TOTEM,10976
+Angeot,,,1685,,aire de repos,True,,,,,,,
+Haut-Bois,,,1686,,aire de repos,True,,,,,,,
+Grands - Prés,,,1677,,aire de repos,True,,,,,,,
+La Forêt,,,1678,,aire de repos,True,,,,,,,
+Dambenois,,,1666,,aire de repos,True,,,,,,,
+Ecot Nord,,,2058,nord,aire de service,True,,,,,,,
+Ecot Sud,,,2156,sud,aire de service,True,,Fastned France,Fastned France,2400.0,300.0,FRFASP11568651,10579
+Boulet,,,1646,,aire de repos,True,,,,,,,
+Combe-Fougère,,,1647,,aire de repos,True,,,,,,,
+Charme,,,1648,,aire de repos,True,,,,,,,
+Galiot,,,1649,,aire de repos,True,,,,,,,
+Bois de Frachere,,,1629,,aire de repos,True,,,,,,,
+Pelousey,,,1630,,aire de repos,True,,,,,,,
+Champoux Nord,,,2049,nord,aire de service,True,,CityFMET,SPIE CityNetworks,2081.0,300.0,FREVAP25368A,10236
+Marchaux Sud,,,2155,sud,aire de service,True,,CityFMET,SPIE CityNetworks,1781.0,300.0,FREVAP25368B,10237
+Chevaney,,,1642,,aire de repos,True,,,,,,,
+Grands Brocards,,,1643,,aire de repos,True,,,,,,,
+Bois de Servole,,,1621,,aire de repos,True,,,,,,,
+Hyombre,,,1620,,aire de repos,True,,,,,,,
+Audelange Nord,,,2057,nord,aire de service,True,,ENGIE Vianeo,ENGIE Vianeo,2472.0,300.0,FRVIAP101106,18093
+Romange Sud,,,2160,sud,aire de service,True,,ENGIE Vianeo,ENGIE Vianeo,2472.0,300.0,FRVIAP101105,18092
+Chat Perché,,,1592,,aire de repos,False,,,,,,,
+La Jument Verte,,,1593,,aire de repos,False,,,,,,,
+Saint Pierre de Belleville,,,1486,,aire de repos,True,,,,,,,
+Saint Léger,,,1482,,aire de repos,True,,,,,,,
+Saint Avre,,,1472,,aire de repos,True,,,,,,,
+Sainte Marie de Cuines,,,1473,,aire de repos,True,,,,,,,
+Saint Julien Montdenis,,,1261,,aire de service,True,,Fastned France,Fastned France,1200.0,300.0,FRFASP11568776,10611
+Rieu Sec,,,2061,,aire de service,True,,,,,,,
+Saint Michel de Maurienne,,,2062,,aire de service,True,,Plenitude On The Road,Plenitude On The Road,1014.0,150.0,FRPLNP4118449,14861
+Polienas,,,1466,,aire de repos,False,,,,,,,
+Le Châtelard,,,1474,,aire de repos,False,,,,,,,
+Réaumont,,,1475,,aire de repos,False,,,,,,,
+l'Ile Rose Est,,,2067,est,aire de service,False,,TotalEnergies Marketing France,TotalEnergies Marketing France,786.0,175.0,FRHPCPNF007502TOTEM,10898
+Voreppe Ouest,,,2250,ouest,aire de service,False,,Ionity,Ionity,3043.0,350.0,FRIOYP9587326,11611
+Saint Nazaire les Eymes,,,2251,,aire de service,False,,Fastned France,Fastned France,2400.0,300.0,FRFASP11568708,10589
+,,,2370,,aire de service,False,,TotalEnergies Marketing France,TotalEnergies Marketing France,4500.0,300.0,FRHPCPNF078091,11050
+Bois Claret,,,2068,,aire de service,False,,ENGIE Vianeo,ENGIE Vianeo,2250.5,300.0,FRVIAP103104,18126
+Chonas,,,1470,,aire de repos,False,,,,,,,
+La Terrasse,,,1471,,aire de repos,False,,,,,,,
+Chapareillan,,,1483,,aire de repos,False,,,,,,,
+Les Marches,,,1484,,aire de repos,False,,,,,,,
+Val Gelon Sud,,,2063,sud,aire de service,True,,Ionity,Ionity,2243.0,350.0,FRIOYP9587405,11642
+Val Gelon Sud,,,2063,sud,aire de service,True,,Ionity,Ionity,2343.0,400.0,FRIOYP9587464,11661
+l'Arclusaz Nord,,,2249,nord,aire de service,True,,,,,,,
+l'Abis Nord,,,2064,nord,aire de service,True,,Tesla,Tesla,7000.0,250.0,FRTSLP11606,17262
+Le Granier Sud,,,2252,sud,aire de service,True,,Tesla,Tesla,7250.0,250.0,FRTSLP11605,17261
+,,,2369,,aire de service,True,,bp Pulse,bp Pulse,6000.0,500.0,FRBPEP3EA046,6961
+,,,2369,,aire de service,True,,IZIVIA EXPRESS,IZIVIA,700.0,200.0,FRE04POAZS225,7415
+,,,2369,,aire de service,True,,IZIVIA EXPRESS,IZIVIA,600.0,150.0,FRE04POAZS226,7416
+,,,2369,,aire de service,True,,SPBR1,EASYCHARGE,44.0,22.0,FREBNPBMEDT,8260
+,,,2369,,aire de service,True,,Tesla,Tesla,1000.0,125.0,FRTSLP1734,17285
+,,,2368,,aire de service,False,,Sowatt Solutions,Sowatt Solutions,2996.24,360.0,FRSWSP89235756,16962
+,,,2368,,aire de service,False,,Sowatt Solutions,Sowatt Solutions,72.08,50.0,FRSWSP89235803,16963
+,,,2368,,aire de service,False,,Sowatt Solutions,Sowatt Solutions,471.68,224.8,FRSWSP89470013,16998
+,,,2368,,aire de service,False,,Sowatt Solutions,Sowatt Solutions,44.16,22.08,FRSWSP89615325,17004
+,,,2368,,aire de service,False,,Sowatt Solutions,Sowatt Solutions,142.07999999999998,60.0,FRSWSP90158545,17026
+,,,2368,,aire de service,False,,Sowatt Solutions,Sowatt Solutions,66.24,22.08,FRSWSP90830887,17055
+l'Omble,,,1499,,aire de repos,True,,,,,,,
+Lavaret,,,1496,,aire de repos,True,,,,,,,
+Romagnieu Sud,,,2066,sud,aire de service,True,,,,,,,
+Le Guiers Nord,,,2253,nord,aire de service,True,,Fastned France,Fastned France,2400.0,300.0,FRFASP50811,10637
+Le Guiers Nord,,,2253,nord,aire de service,True,,ENGIE Vianeo,ENGIE Vianeo,2250.5,300.0,FRVIAP103105,18127
+Le Lac,,,1551,,aire de repos,False,,,,,,,
+Neyrolles,,,1552,,aire de repos,False,,,,,,,
+La Michaille,,,1547,,aire de repos,False,,,,,,,
+La Semine,,,1548,,aire de repos,False,,,,,,,
+La Michaille,,,1549,,aire de repos,False,,,,,,,
+La Semine,,,1550,,aire de repos,False,,,,,,,
+Valleiry Sud,,,2086,sud,aire de service,False,,Ionity,Ionity,1543.0,350.0,FRIOYP9587366,11631
+Valleiry Nord,,,2267,nord,aire de service,False,,TotalEnergies Marketing France,TotalEnergies Marketing France,800.0,175.0,FRHPCPNF080288,11134
+Téléphérique du Salève,,,1553,,aire de repos,False,,,,,,,
+Eteaux,,,1540,,aire de repos,False,,,,,,,
+Evires,,,1541,,aire de repos,False,,,,,,,
+Groisy Ouest,,,2087,ouest,aire de service,False,,Fastned France,Fastned France,1200.0,300.0,FRFASP11568716,10594
+Crêts Blancs Est,,,2265,est,aire de service,False,,Fastned France,Fastned France,1200.0,300.0,FRFASP11568717,10595
+La Ravoire,,,1535,,aire de repos,False,,,,,,,
+Ponts de la Caille,,,1536,,aire de repos,False,,,,,,,
+Fontanelles Est,,,2085,est,aire de service,False,,TotalEnergies Marketing France,TotalEnergies Marketing France,450.0,175.0,FRHPCPNF080200TOTEM,11126
+La Ripaille Ouest,,,2266,ouest,aire de service,False,,Ionity,Ionity,2243.0,350.0,FRIOYP9587530,11686
+Albens,,,1506,,aire de repos,False,,,,,,,
+Saint Girod,,,1507,,aire de repos,False,,,,,,,
+Mouxy Ouest,,,2065,ouest,aire de service,False,,TotalEnergies Marketing France,TotalEnergies Marketing France,450.0,175.0,FRHPCPNF080072TOTEM,11106
+Drumettaz Est,,,2254,est,aire de service,False,,Ionity,Ionity,1543.0,350.0,FRIOYP9587272,11590
+,,,2365,,aire de service,False,,TotalEnergies Marketing France,TotalEnergies Marketing France,1200.0,300.0,FRHPCPNF004133,10887
+,,,2364,,aire de service,False,,SPBR1,EASYCHARGE,143.0,50.0,FREBNPBRTCX,8556
+Passy Mt Blanc,,,1529,,aire de repos,False,,,,,,,
+Bonneville Nord,,,1264,nord,aire de service,False,,,,,,,
+Bonneville Sud,,,2060,sud,aire de service,False,,Ionity,Ionity,2243.0,350.0,FRIOYP9587541,11691
+La Valliere,,,1584,,aire de repos,False,,,,,,,
+Savigny,,,1585,,aire de repos,False,,,,,,,
+Poulet de Bresse Ouest,,,1268,ouest,aire de service,False,,TotalEnergies Marketing France,TotalEnergies Marketing France,2700.0,300.0,FRHPCPNF080343TIERSTOTEMSA,11144
+Poulet de Bresse Ouest,,,1268,ouest,aire de service,False,,Tesla,Tesla,3000.0,150.0,FRTSLP3319,17451
+Poulet de Bresse Est,,,2089,est,aire de service,False,,,,,,,
+Saint Ambreuil Ouest,,,2091,ouest,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,2100.0,300.0,FRHPCPNF080341TIERSTOTEM,11142
+La Ferté Est,,,2157,est,aire de service,True,,Fastned France,Fastned France,2400.0,300.0,FRFASP11568663,10583
+Boyer,,,1582,,aire de repos,True,,,,,,,
+Jugy,,,1583,,aire de repos,True,,,,,,,
+Uchizy,,,1574,,aire de repos,True,,,,,,,
+Farges,,,1577,,aire de repos,True,,,,,,,
+Mâcon Saint Albain Ouest,,,2090,ouest,aire de service,True,,Ionity,Ionity,3443.0,350.0,FRIOYP9587419,11649
+Macon la Salle Est,,,2158,est,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,2550.0,175.0,FRHPCPNF059190TOTEM,10957
+Crèches,,,1558,,aire de repos,True,,,,,,,
+Les Sablons,,,1559,,aire de repos,True,,,,,,,
+Les Planons,,,1560,,aire de repos,False,,,,,,,
+Musée de la Bresse,,,1561,,aire de repos,False,,,,,,,
+Bourg Jasseron Nord,,,2084,nord,aire de service,False,,,,,,,
+Bourg Teyssonge Sud,,,2263,sud,aire de service,False,,CityFMET,SPIE CityNetworks,2081.0,300.0,FREVAP01195A,10217
+Bourg Teyssonge Sud,,,2263,sud,aire de service,False,,TotalEnergies Marketing France,TotalEnergies Marketing France,600.0,150.0,FRHPCPNF076523TOTEM,11038
+Beny,,,1562,,aire de repos,False,,,,,,,
+Marmont,,,1563,,aire de repos,False,,,,,,,
+Ceignes Cerdon Nord,,,2088,nord,aire de service,False,,TotalEnergies Marketing France,TotalEnergies Marketing France,1150.0,175.0,FRHPCPNF078387TOTEM,11075
+Ceignes Haut Bugey Sud,,,2264,sud,aire de service,False,,Ionity,Ionity,1543.0,350.0,FRIOYP9587412,11644
+Neuville,,,1542,,aire de repos,False,,,,,,,
+Certines,,,1543,,aire de repos,False,,,,,,,
+Tossiat,,,1544,,aire de repos,False,,,,,,,
+Chazey sur Ain,,,1527,,aire de repos,False,,,,,,,
+Les Brotteaux,,,1528,,aire de repos,False,,,,,,,
+Beynost Nord,,,1510,nord,aire de repos,False,,E-TOTEM INFRADIV,E-Totem,544.0,150.0,FRETIP01043A,9938
+Beynost Nord,,,1510,nord,aire de repos,False,,IZIVIA FAST,IZIVIA,300.0,150.0,FRIZFPFAST185,11867
+Beynost Sud,,,1511,sud,aire de repos,False,,,,,,,
+Lyon Montluel Sud,,,2082,sud,aire de service,False,,Ionity,Ionity,1543.0,350.0,FRIOYP9587426,11651
+Lyon Montluel Sud,,,2082,sud,aire de service,False,,TOURMALINE REAL ESTATE,WAAT Umbrella-Copro,94.0,47.0,FRWA2P631967,18440
+Lyon Dagneux Nord,,,2271,nord,aire de service,False,,TotalEnergies Marketing France,TotalEnergies Marketing France,50.0,50.0,FRHPCPNF078118,11051
+Lyon Dagneux Nord,,,2271,nord,aire de service,False,,ENGIE Vianeo,ENGIE Vianeo,4872.0,300.0,FRVIAP101111,18098
+Saint Priest Sud,,,2077,sud,aire de service,True,,Tesla,Tesla,1800.0,150.0,FRTSLP1750,17298
+Manissieux Nord,,,2268,nord,aire de service,True,,Tesla,Tesla,1800.0,150.0,FRTSLP1749,17297
+Dardilly Est,,,1262,est,aire de service,True,,Bump,Bump,308.4,22.0,FRBMPP647897P,6892
+Dardilly Est,,,1262,est,aire de service,True,,ENGIE Vianeo,ENGIE Vianeo,4000.0,400.0,FRVIAP152003,18367
+Paisy Ouest,,,2081,ouest,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,1200.0,300.0,FRHPCPNF080046TOTEM,11098
+Mionnay Est,,,2083,est,aire de service,True,,Ionity,Ionity,2243.0,350.0,FRIOYP9587331,11614
+Mionnay Ouest,,,2270,ouest,aire de service,True,,Ionity,Ionity,2243.0,350.0,FRIOYP9587336,11616
+Taponas,,,2092,,aire de service,True,,Ionity,Ionity,3443.0,350.0,FRIOYP9587214,11570
+Dracé,,,2262,,aire de service,True,,Fastned France,Fastned France,2400.0,300.0,FRFASP11568662,10582
+Boitray,,,1538,,aire de repos,True,,,,,,,
+Patural,,,1539,,aire de repos,True,,,,,,,
+Limas Ouest,,,1532,ouest,aire de repos,True,,,,,,,
+Limas Est,,,1533,est,aire de repos,True,,Power Dot France,Power Dot France,952.0,200.0,FRPD1PIBSVSS,14167
+Les Chères Ouest,,,2093,ouest,aire de service,True,,ENGIE Vianeo,ENGIE Vianeo,2250.5,300.0,FRVIAP103102,18124
+Les Chères Est,,,2269,est,aire de service,True,,ENGIE Vianeo,ENGIE Vianeo,2250.5,300.0,FRVIAP103101,18123
+Bully Nord,,,1522,nord,aire de repos,True,,,,,,,
+Bully Sud,,,1523,sud,aire de repos,True,,,,,,,
+A89 - LA LOIRE,,ASF,2094,,aire de service,True,,Ionity,Ionity,2343.0,400.0,FRIOYP9587119,11560
+A72 - LA PLAINE DU FOREZ OUEST,,ASF,2104,ouest,aire de service,False,,Shell Recharge,Shell Recharge,1544.0,300.0,FRSHEP5404065,16593
+A72 - LA PLAINE DU FOREZ EST,,ASF,2255,est,aire de service,False,,Fastned France,Fastned France,2400.0,300.0,FRFASP11568709,10590
+Ardilliers,,,1518,,aire de repos,True,,,,,,,
+Bruyeres,,,1519,,aire de repos,True,,,,,,,
+,,,2373,,aire de service,False,,,,,,,
+,,,2372,,aire de service,False,,,,,,,
+Pierrefitte-sur-Loire,,,1573,,aire de repos,False,,,,,,,
+,,,2374,,aire de service,False,,SPBR1,EASYCHARGE,144.0,50.0,FREBNPBXMAS,8894
+Bourbonnais Sud,,,1267,sud,aire de service,False,,,,,,,
+Bourbonnais Nord,,,2097,nord,aire de service,False,,Ionity,Ionity,2243.0,350.0,FRIOYP9587369,11633
+Bourbonnais Nord,,,2097,nord,aire de service,False,,Tesla,Tesla,3000.0,250.0,FRTSLP17909,17319
+Grand Meaulnes,,,1578,,aire de repos,True,,,,,,,
+Vallon,,,1579,,aire de repos,True,,,,,,,
+Allier Saulzet Est,,,2098,est,aire de service,True,,ENGIE Vianeo,ENGIE Vianeo,3672.0,300.0,FRVIAP101108,18095
+Allier Doyet Ouest,,,2261,ouest,aire de service,True,,ENGIE Vianeo,ENGIE Vianeo,3672.0,300.0,FRVIAP101109,18096
+Amarons,,,1566,,aire de repos,False,,,,,,,
+Bedun,,,1567,,aire de repos,False,,,,,,,
+Cressanges,,,1570,,aire de repos,False,,,,,,,
+Chantelle en Bourbonnais,,,1556,,aire de repos,True,,,,,,,
+La Bouble,,,1557,,aire de repos,True,,,,,,,
+Volcans d'Auvergne / Les Volcans Est,,,1263,est,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,1150.0,175.0,FRHPCPNF070641TOTEMSA,11032
+Volcans d'Auvergne / Les Volcans Ouest,,,2101,ouest,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,4500.0,300.0,FRHPCPNF080175TOTEM,11117
+A89 - MANZAT,,ASF,2100,,aire de service,False,,Electra,Electra,3844.0,300.0,FRELCP12953932,9391
+Heume l'Eglise,,,1504,,aire de repos,False,,,,,,,
+Prondines,,,1505,,aire de repos,False,,,,,,,
+Montpertuis,,,1530,,aire de repos,True,,,,,,,
+Pessat Villeneuve,,,1531,,aire de repos,True,,,,,,,
+Clermont Est,,,1517,est,aire de repos,True,,,,,,,
+Clermont Ouest,,,1516,ouest,aire de repos,True,,E-TOTEM INFRADIV,E-Totem,566.0,150.0,FRETIP63164A,10117
+A89 - LIMAGNE,,ASF,2096,,aire de service,True,,,,,,,
+,,,2428,,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,1150.0,175.0,FRHPCPNF059748,10994
+Les Pins,,,1525,,aire de repos,True,,,,,,,
+Aire du Lac,,,1526,,aire de repos,True,,,,,,,
+Branchillon,,,1514,,aire de repos,True,,,,,,,
+Les Pacages,,,1515,,aire de repos,True,,,,,,,
+Martres d'Artière Nord,,,1512,nord,aire de repos,True,,,,,,,
+Martres d'Artière Sud,,,1513,sud,aire de repos,True,,,,,,,
+A89 - HAUT FOREZ SUD,,ASF,2257,sud,aire de service,True,,Plenitude On The Road,Plenitude On The Road,5637.0,300.0,FRPLNP12228384,14856
+A89 - HAUT FOREZ NORD,,ASF,2095,nord,aire de service,True,,Plenitude On The Road,Plenitude On The Road,5586.0,400.0,FRPLNP10525904,14834
+A89 - HAUT FOREZ NORD,,ASF,2095,nord,aire de service,True,,Plenitude On The Road,Plenitude On The Road,1702.0,400.0,FRPLNP10525905,14835
+A89 - HAUT FOREZ NORD,,ASF,2095,nord,aire de service,True,,Shell Recharge,Shell Recharge,94.0,50.0,FRSHEP4696230,16576
+Suchères,,,1521,,aire de repos,True,,,,,,,
+,,,2379,,aire de service,False,,,,,,,
+,,,2377,,aire de service,False,,Ionity,Ionity,4343.0,350.0,FRIOYP9587714,11716
+,,,2378,,aire de service,False,,Ionity,Ionity,1543.0,350.0,FRIOYP9587462,11660
+A89 - CHAVANON,,ASF,2102,,aire de service,False,,Atlante,Atlante France,6732.0,300.0,FRATLPFR00308,6591
+,,,2380,,aire de service,False,,,,,,,
+,,,2423,,aire de service,False,,Ionity,Ionity,2243.0,350.0,FRIOYP9587325,11610
+,,,2423,,aire de service,False,,IZIVIA FAST,IZIVIA,600.0,150.0,FRIZFPFAST572,12251
+,,,2423,,aire de service,False,,Tesla,Tesla,9200.0,360.0,FRTSLP1720,17274
+Monistrol,,,1467,,aire de repos,False,,,,,,,
+Feugerolles,,,2256,,aire de service,False,,,,,,,
+Feugerolles,,,2103,,aire de service,False,,,,,,,
+Veauchette Nord,,,1493,nord,aire de repos,False,,,,,,,
+Chaninats,,,1500,,aire de repos,False,,,,,,,
+Chante Perdrix,,,1501,,aire de repos,False,,,,,,,
+La Chabure,,,2105,,aire de service,False,,,,,,,
+,,,2381,,aire de service,False,,SEMOB,E-Totem,143.0,50.0,FRESEPS42207AC,9849
+,,,2381,,aire de service,False,,TotalEnergies Marketing France,TotalEnergies Marketing France,1000.0,150.0,FRHPCPNF078181,11056
+,,,2382,,aire de service,False,,,,,,,
+Blacheronde,,,1465,,aire de repos,True,,,,,,,
+Combe Tourmente,,,1463,,aire de repos,True,,,,,,,
+Bornaron,,,1459,,aire de repos,True,,Electra,Electra,3322.0,400.0,FRELCP12954203,9570
+La Galaure,,,1460,,aire de repos,True,,,,,,,
+A7 - SAINT-RAMBERT D'ALBON OUEST,,ASF,2273,ouest,aire de service,True,,Ionity,Ionity,3043.0,400.0,FRIOYP9587258,11587
+A7 - SAINT-RAMBERT D'ALBON EST,,ASF,2074,est,aire de service,True,,Ionity,Ionity,2943.0,350.0,FRIOYP9587202,11567
+Auberives,,,1479,,aire de repos,True,,,,,,,
+Grande Borne,,,1476,,aire de repos,True,,,,,,,
+A7 - ROUSSILLON,,ASF,2075,,aire de service,True,,Shell Recharge,Shell Recharge,2944.0,300.0,FRSHEP5242817,16590
+Vienne Ouest,,,1485,ouest,aire de repos,True,,,,,,,
+Vienne Est,,,1487,est,aire de repos,True,,,,,,,
+A46S - COMMUNAY NORD,,ASF,2078,nord,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,1150.0,175.0,FRHPCPNF062085,11015
+A46S - COMMUNAY NORD,,ASF,2078,nord,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,450.0,175.0,FRHPCPNF078183TOTEM,11058
+A7N - SEREZIN,,ASF,2079,,aire de service,True,,,,,,,
+A7N - SOLAIZE,,ASF,2080,,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,903.0,300.0,FRHPCPNF006467TOTEM,10889
+l'Isle d'Abeau Sud,,,2076,sud,aire de service,True,,,,,,,
+l'Isle d'Abeau Nord,,,2274,nord,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,1150.0,175.0,FRHPCPNF059672TOTEM,10985
+l'Isle d'Abeau Nord,,,2274,nord,aire de service,True,,Ionity,Ionity,3443.0,350.0,FRIOYP9587413,11645
+Le Vernay,,,1497,,aire de repos,True,,,,,,,
+Coiranne,,,1498,,aire de repos,True,,,,,,,
+Marouettes,,,1494,,aire de repos,True,,,,,,,
+Sitelles,,,1495,,aire de repos,True,,,,,,,
+Chanses,,,1491,,aire de repos,False,,,,,,,
+Ponteray,,,1492,,aire de repos,False,,,,,,,
+Oyeu,,,1477,,aire de repos,False,,,,,,,
+Burcin,,,1478,,aire de repos,False,,,,,,,
+Chambaran,,,1461,,aire de repos,False,,,,,,,
+Saint Sauveur,,,1462,,aire de repos,False,,,,,,,
+l'Albenc,,,1464,,aire de repos,False,,,,,,,
+Royans-Vercors Ouest,,,2069,ouest,aire de service,False,,ENGIE Vianeo,ENGIE Vianeo,2250.5,300.0,FRVIAP103106,18128
+Porte de la Drôme Est,,,2258,est,aire de service,False,,ENGIE Vianeo,ENGIE Vianeo,2249.0,300.0,FRVIAP103107,18129
+Les Marthes Nord,,,1258,nord,aire de service,False,,SPBR1,EASYCHARGE,143.0,50.0,FREBNPBHMGM,8023
+Les Marthes Nord,,,1258,nord,aire de service,False,,TotalEnergies Marketing France,TotalEnergies Marketing France,900.0,300.0,FRHPCPNF077241TOTEM,11039
+Bayale Sud,,,2073,sud,aire de service,False,,,,,,,
+La Bouterne,,,1457,,aire de repos,True,,Electra,Electra,3722.0,400.0,FRELCP12954245,9588
+A7 - LATITUDE 45,,ASF,2072,,aire de service,True,,Electra,Electra,8644.0,300.0,FRELCP12953940,9397
+A7 - PONT DE L'ISERE,,ASF,2259,,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,1150.0,175.0,FRHPCPNF080071TOTEM,11105
+A7 - PORTES LES VALENCE EST,,ASF,2260,est,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,1750.0,175.0,FRHPCPNF058969TOTEMSA,10948
+A7 - PORTES LES VALENCE OUEST,,ASF,2071,ouest,aire de service,True,,Tesla,Tesla,4000.0,250.0,FRTSLP29498,17346
+Les Fruitiers,,,1453,,aire de repos,False,,,,,,,
+Bellevue,,,1450,,aire de repos,True,,,,,,,
+Bras De Zil,,,1448,,aire de repos,True,,,,,,,
+Livron,,,1449,,aire de repos,True,,Allego,Allego,600.0,300.0,FRALLPGO800069,5318
+Livron,,,1449,,aire de repos,True,,Allego,Allego,600.0,300.0,FRALLPGO800071,5319
+Livron,,,1449,,aire de repos,True,,Allego,Allego,600.0,300.0,FRALLPGO800072,5320
+Livron,,,1449,,aire de repos,True,,Allego,Allego,600.0,300.0,FRALLPGO800073,5321
+Livron,,,1449,,aire de repos,True,,Allego,Allego,650.0,300.0,FRALLPGO800405,5491
+Livron,,,1449,,aire de repos,True,,Allego,Allego,44.0,22.0,FRALLPGO800748,5622
+A7 - SAULCE,,ASF,2070,,aire de service,True,,Fastned France,Fastned France,5100.0,300.0,FRFASP11568837,10618
+Logis Neuf,,,1446,,aire de repos,True,,,,,,,
+La Coucourde,,,1447,,aire de repos,True,,Allego,Allego,800.0,400.0,FRALLPGO800400,5486
+La Coucourde,,,1447,,aire de repos,True,,Allego,Allego,800.0,400.0,FRALLPGO800401,5487
+La Coucourde,,,1447,,aire de repos,True,,Allego,Allego,800.0,400.0,FRALLPGO800402,5488
+La Coucourde,,,1447,,aire de repos,True,,Allego,Allego,800.0,400.0,FRALLPGO800403,5489
+La Coucourde,,,1447,,aire de repos,True,,Allego,Allego,650.0,300.0,FRALLPGO800404,5490
+La Coucourde,,,1447,,aire de repos,True,,Allego,Allego,44.0,22.0,FRALLPGO800744,5620
+Savasse,,,1445,,aire de repos,True,,,,,,,
+Roubion,,,1444,,aire de repos,True,,,,,,,
+A7 - MONTELIMAR EST,,ASF,2248,est,aire de service,True,,Ionity,Ionity,2243.0,350.0,FRIOYP9587339,11618
+A7 - MONTELIMAR EST,,ASF,2248,est,aire de service,True,,Ionity,Ionity,4643.0,400.0,FRIOYP9587697,11712
+A7 - MONTELIMAR OUEST,,ASF,2130,ouest,aire de service,True,,Ionity,Ionity,2243.0,350.0,FRIOYP9587320,11607
+A7 - MONTELIMAR OUEST,,ASF,2130,ouest,aire de service,True,,Ionity,Ionity,4643.0,400.0,FRIOYP9587686,11711
+Donzere,,,1438,,aire de repos,True,,,,,,,
+Pierrelatte,,,1436,,aire de repos,True,,,,,,,
+Tricastin,,,1431,,aire de repos,True,,Electra,Electra,3922.0,400.0,FRELCP12954397,9629
+Tricastin,,,1431,,aire de repos,True,,Power Dot France,Power Dot France,1322.0,200.0,FRPD1PMBLBLN,14528
+A7 - MORNAS LES ADRETS,,ASF,2129,,aire de service,True,,Ionity,Ionity,5743.0,350.0,FRIOYP9587223,11574
+A7 - MORNAS VILLAGE,,ASF,1248,,aire de service,True,,Ionity,Ionity,5809.0,350.0,FRIOYP9587296,11597
+Le Coudoulet,,,1418,,aire de repos,True,,,,,,,
+Orange le Gres,,,1419,,aire de repos,True,,Electra,Electra,2922.0,400.0,FRELCP12954414,9634
+Ventabren Nord,,,1359,nord,aire de repos,True,,,,,,,
+Ventabren Sud,,,1360,sud,aire de repos,True,,,,,,,
+Lançongare,,,1362,,aire de repos,True,,,,,,,
+A7 - LANCON DE PROVENCE OUEST,,ASF,1236,ouest,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,4500.0,300.0,FRHPCPNF059189TOTEM,10956
+A7 - LANCON DE PROVENCE EST,,ASF,1235,est,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,4500.0,300.0,FRHPCPNF007052TOTEM,10892
+Lancon Est,,,2125,est,aire de service,True,,,,,,,
+Lançon Ouest,,,2238,ouest,aire de service,True,,,,,,,
+Lamanon,,,1370,,aire de repos,True,,Allego,Allego,600.0,300.0,FRALLPGO800430,5515
+Lamanon,,,1370,,aire de repos,True,,Allego,Allego,650.0,300.0,FRALLPGO800431,5516
+Lamanon,,,1370,,aire de repos,True,,Allego,Allego,600.0,300.0,FRALLPGO800432,5517
+Lamanon,,,1370,,aire de repos,True,,Allego,Allego,600.0,300.0,FRALLPGO800433,5518
+Lamanon,,,1370,,aire de repos,True,,Allego,Allego,400.0,200.0,FRALLPGO800434,5519
+Lamanon,,,1370,,aire de repos,True,,Allego,Allego,600.0,300.0,FRALLPGO800435,5520
+Lamanon,,,1370,,aire de repos,True,,Allego,Allego,600.0,300.0,FRALLPGO800436,5521
+Lamanon,,,1370,,aire de repos,True,,Allego,Allego,44.0,22.0,FRALLPGO800721,5611
+Senas Est,,,1378,est,aire de repos,True,,,,,,,
+Senas Ouest,,,1379,ouest,aire de repos,True,,Allego,Allego,650.0,300.0,FRALLPGO800425,5511
+Senas Ouest,,,1379,ouest,aire de repos,True,,Allego,Allego,600.0,300.0,FRALLPGO800427,5512
+Senas Ouest,,,1379,ouest,aire de repos,True,,Allego,Allego,600.0,300.0,FRALLPGO800428,5513
+Senas Ouest,,,1379,ouest,aire de repos,True,,Allego,Allego,400.0,200.0,FRALLPGO800429,5514
+Senas Ouest,,,1379,ouest,aire de repos,True,,Allego,Allego,44.0,22.0,FRALLPGO800700,5603
+Merle Nord,,,1366,nord,aire de repos,True,,,,,,,
+Merle Sud,,,1367,sud,aire de repos,True,,,,,,,
+Saint Martin,,,1364,,aire de repos,True,,,,,,,
+Saint Martin,,,1365,,aire de repos,True,,,,,,,
+Cavaillon Est,,,1387,est,aire de repos,True,,,,,,,
+Cavaillon Ouest,,,1386,ouest,aire de repos,True,,,,,,,
+Cabannes,,,1390,,aire de repos,True,,,,,,,
+Noves,,,1391,,aire de repos,True,,,,,,,
+A7 - MORIERES,,ASF,1243,,aire de service,True,,Ionity,Ionity,2443.0,350.0,FRIOYP9587251,11583
+Fournalet,,,1407,,aire de repos,True,,,,,,,
+A7 - SORGUES,,ASF,2128,,aire de service,True,,Ionity,Ionity,5843.0,600.0,FRIOYP9587247,11581
+A9 - TAVEL SUD,,ASF,2106,sud,aire de service,True,,Ionity,Ionity,1543.0,350.0,FRIOYP9587500,11673
+A9 - TAVEL NORD,,ASF,2226,nord,aire de service,True,,Ionity,Ionity,1543.0,350.0,FRIOYP9587490,11669
+Roquemaure Nord,,,1409,nord,aire de repos,True,,,,,,,
+Roquemaure Sud,,,1410,sud,aire de repos,True,,,,,,,
+Estezargues Nord,,,1401,nord,aire de repos,True,,Electra,Electra,3222.0,400.0,FRELCP12954424,9638
+Estezargues Sud,,,1402,sud,aire de repos,True,,Electra,Electra,2422.0,400.0,FRELCP12954426,9639
+A9 - MARGUERITTES NORD,,ASF,2108,nord,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,1150.0,175.0,FRHPCPNF059193TOTEM,10958
+A9 - MARGUERITTES SUD,,ASF,2109,sud,aire de service,True,,Atlante,Atlante France,6010.0,300.0,FRATLPFR00310,6593
+A9 - MARGUERITTES SUD,,ASF,2109,sud,aire de service,True,,reGARD,Bouygues Energies & Services,44.16,22.08,FRS30P30156002,15258
+Ledenon Nord,,,1394,nord,aire de repos,True,,,,,,,
+Ledenon Sud,,,1395,sud,aire de repos,True,,,,,,,
+Arles,,,1373,,aire de repos,True,,,,,,,
+Arles,,,1375,,aire de repos,True,,,,,,,
+Les Cantarelles,,,2107,,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,600.0,150.0,FRHPCPNF059678,10986
+Caissargues,,,1380,,aire de repos,True,,,,,,,
+Nimes-Costieres,,,1381,,aire de repos,True,,,,,,,
+Milhaud Nord,,,1382,nord,aire de repos,True,,,,,,,
+Milhaud Sud,,,1383,sud,aire de repos,True,,,,,,,
+Vergeze Nord,,,1377,nord,aire de repos,True,,,,,,,
+Vergeze Sud,,,1376,sud,aire de repos,True,,,,,,,
+A9 - AMBRUSSUM SUD,,ASF,2110,sud,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,1050.0,150.0,FRHPCPNF059051TOTEM,10953
+A9 - AMBRUSSUM NORD,,ASF,2227,nord,aire de service,True,,Fastned France,Fastned France,2400.0,300.0,FRFASP11568705,10588
+Nabrigas,,,1372,,aire de repos,True,,Allego,Allego,650.0,300.0,FRALLPGO800408,5494
+Nabrigas,,,1372,,aire de repos,True,,Allego,Allego,600.0,300.0,FRALLPGO800409,5495
+Nabrigas,,,1372,,aire de repos,True,,Allego,Allego,600.0,300.0,FRALLPGO800410,5496
+Nabrigas,,,1372,,aire de repos,True,,Allego,Allego,600.0,300.0,FRALLPGO800411,5497
+Nabrigas,,,1372,,aire de repos,True,,Allego,Allego,400.0,200.0,FRALLPGO800412,5498
+Nabrigas,,,1372,,aire de repos,True,,Allego,Allego,600.0,300.0,FRALLPGO800413,5499
+Nabrigas,,,1372,,aire de repos,True,,Allego,Allego,600.0,300.0,FRALLPGO800414,5500
+Nabrigas,,,1372,,aire de repos,True,,Allego,Allego,44.0,22.0,FRALLPGO800707,5609
+,,,2383,,aire de service,False,,TotalEnergies Marketing France,TotalEnergies Marketing France,1150.0,175.0,FRHPCPNF070002TOTEM,11028
+,,,2383,,aire de service,False,,Tesla,Tesla,5000.0,250.0,FRTSLP30250,17406
+Aire du viaduc de Millau,,,1416,,aire de repos,False,,,,,,,
+,,,2384,,aire de service,False,,TotalEnergies Marketing France,TotalEnergies Marketing France,900.0,150.0,FRHPCPNF078230TOTEM,11068
+,,,2384,,aire de service,False,,Tesla,Tesla,2400.0,150.0,FRTSLP1744,17293
+A9 - MONTPELLIER FABREGUES NORD,,ASF,2118,nord,aire de service,True,,CityFMET,SPIE CityNetworks,4990.0,300.0,FREVAP34095A,10241
+A9 - MONTPELLIER FABREGUES NORD,,ASF,2118,nord,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,1325.0,175.0,FRHPCPNF080266TOTEM,11133
+A9 - MONTPELLIER FABREGUES SUD,,ASF,2228,sud,aire de service,True,,,,,,,
+Gigean Nord,,,1357,nord,aire de repos,True,,Electra,Electra,3122.0,400.0,FRELCP12954427,9640
+Gigean Sud,,,1358,sud,aire de repos,True,,,,,,,
+Loupian,,,1350,,aire de repos,True,,Electra,Electra,5322.0,400.0,FRELCP12954387,9626
+Meze,,,1349,,aire de repos,True,,,,,,,
+A9 - BEZIERS MONTBLANC SUD,,ASF,2117,sud,aire de service,True,,Shell Recharge,Shell Recharge,3038.0,300.0,FRSHEP5222202,16584
+A9 - BEZIERS MONTBLANC NORD,,ASF,2230,nord,aire de service,True,,Shell Recharge,Shell Recharge,3038.0,300.0,FRSHEP5315540,16592
+Florensac Nord,,,1343,nord,aire de repos,True,,,,,,,
+Florensac Sud,,,1344,sud,aire de repos,True,,,,,,,
+Fontcouverte,,,1319,,aire de repos,True,,,,,,,
+La Peyriere,,,1320,,aire de repos,True,,,,,,,
+A61 - LES CORBIERES SUD,,ASF,2232,sud,aire de service,True,,Ionity,Ionity,4486.0,350.0,FRIOYP9587356,11625
+A61 - LES CORBIERES NORD,,ASF,2113,nord,aire de service,True,,Ionity,Ionity,2943.0,350.0,FRIOYP9587314,11603
+Gasparets,,,1305,,aire de repos,True,,Electra,Electra,4522.0,400.0,FRELCP12954401,9631
+Sigean,,,1306,,aire de repos,True,,,,,,,
+Bages,,,1311,,aire de repos,True,,Electra,Electra,3922.0,400.0,FRELCP12954400,9630
+Prat de Cest,,,1312,est,aire de repos,True,,,,,,,
+Bizanet Nord,,,1317,nord,aire de repos,True,,,,,,,
+Bizanet Sud,,,1318,sud,aire de repos,True,,,,,,,
+Narbonne Joncquieres,,,1316,,aire de repos,True,,,,,,,
+Pech-Loubat,,,1315,,aire de repos,True,,,,,,,
+A9 - NARBONNE VINASSAN SUD,,ASF,1230,sud,aire de service,True,,,,,,,
+A9 - NARBONNE VINASSAN NORD,,ASF,2111,nord,aire de service,True,,Ionity,Ionity,2943.0,350.0,FRIOYP9587275,11591
+,,,2424,,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,1150.0,175.0,FRHPCPNF059472TOTEM,10967
+Lespignan Nord,,,1330,nord,aire de repos,True,,Allego,Allego,600.0,300.0,FRALLPGO800006,5272
+Lespignan Nord,,,1330,nord,aire de repos,True,,Allego,Allego,600.0,300.0,FRALLPGO800066,5315
+Lespignan Nord,,,1330,nord,aire de repos,True,,Allego,Allego,600.0,300.0,FRALLPGO800068,5317
+Lespignan Nord,,,1330,nord,aire de repos,True,,Allego,Allego,600.0,300.0,FRALLPGO800083,5324
+Lespignan Nord,,,1330,nord,aire de repos,True,,Allego,Allego,600.0,300.0,FRALLPGO800252,5424
+Lespignan Nord,,,1330,nord,aire de repos,True,,Allego,Allego,650.0,300.0,FRALLPGO800407,5493
+Lespignan Nord,,,1330,nord,aire de repos,True,,Allego,Allego,44.0,22.0,FRALLPGO800728,5613
+Lespignan Sud,,,1331,sud,aire de repos,True,,Allego,Allego,600.0,300.0,FRALLPGO800067,5316
+Lespignan Sud,,,1331,sud,aire de repos,True,,Allego,Allego,600.0,300.0,FRALLPGO800074,5322
+Lespignan Sud,,,1331,sud,aire de repos,True,,Allego,Allego,600.0,300.0,FRALLPGO800139,5368
+Lespignan Sud,,,1331,sud,aire de repos,True,,Allego,Allego,600.0,300.0,FRALLPGO800141,5370
+Lespignan Sud,,,1331,sud,aire de repos,True,,Allego,Allego,600.0,300.0,FRALLPGO800265,5437
+Lespignan Sud,,,1331,sud,aire de repos,True,,Allego,Allego,650.0,300.0,FRALLPGO800406,5492
+Lespignan Sud,,,1331,sud,aire de repos,True,,Allego,Allego,44.0,22.0,FRALLPGO800740,5619
+Pia,,,1300,,aire de repos,True,,Electra,Electra,2722.0,400.0,FRELCP12954206,9572
+Pia,,,1300,,aire de repos,True,,Electra,Electra,2722.0,400.0,FRELCP12954207,9573
+Rivesaltes,,,2115,,aire de repos,True,,,,,,,
+Salses Est,,,1301,est,aire de repos,True,,,,,,,
+Salses Ouest,,,1302,ouest,aire de repos,True,,,,,,,
+Fitou Est,,,1303,est,aire de repos,True,,,,,,,
+Fitou Ouest,,,1304,ouest,aire de repos,True,,,,,,,
+A9 - LA PALME EST,,ASF,2116,est,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,2400.0,300.0,FRHPCPNF080363TIERSTOTEM,11163
+A9 - LA PALME OUEST,,ASF,2233,ouest,aire de service,True,,CityFMET,SPIE CityNetworks,2260.0,300.0,FREVAP11188A,10219
+Contrôle Frontalier Sud,,,1229,sud,aire de service,True,,,,,,,
+Contrôle Frontalier Nord,,,1228,nord,aire de service,True,,,,,,,
+A9 - VILLAGE CATALAN EST,,ASF,2229,est,aire de service,True,,Ionity,Ionity,1543.0,350.0,FRIOYP9587470,11664
+A9 - VILLAGE CATALAN EST,,ASF,2229,est,aire de service,True,,Ionity,Ionity,1543.0,350.0,FRIOYP9587474,11667
+Village Catalan Ouest,,,2114,ouest,aire de service,True,,,,,,,
+Pavillons Est,,,1298,est,aire de repos,True,,,,,,,
+Pavillons Ouest,,,1299,ouest,aire de repos,True,,,,,,,
+,,,2386,,aire de service,False,,,,,,,
+A55 - GIGNAC LA NERTHE,,ASF,2237,,aire de service,False,,TotalEnergies Marketing France,TotalEnergies Marketing France,500.0,150.0,FRHPCPNF059602TOTEM,10977
+A55 - GIGNAC REBUTY,,ASF,2126,,aire de service,False,,Electra,Electra,2644.0,300.0,FRELCP12953936,9393
+A7 - VITROLLES,,ASF,2127,,aire de service,False,,Electra,Electra,3244.0,300.0,FRELCP12953939,9396
+A51 - LA CHAMPOUSE,,ASF,2246,,aire de service,True,,CityFMET,SPIE CityNetworks,4154.0,300.0,FREVAP13015A,10220
+A51 - LES CHABAUDS,,ASF,2124,,aire de service,True,,ENGIE Vianeo,ENGIE Vianeo,2250.5,300.0,FRVIAP103108,18130
+A8 - LE CANAVER,,ESCOTA,2138,,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,1043.0,150.0,FRHPCPNF059499TOTEMSA,10969
+Jas Pelicot,,,1351,,aire de repos,True,,,,,,,
+A8 - VIDAUBAN NORD,,ESCOTA,2241,nord,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,2650.0,300.0,FRHPCPNF080371TIERSTOTEM,11166
+A8 - VIDAUBAN SUD,,ESCOTA,2139,sud,aire de service,True,,Ionity,Ionity,2243.0,350.0,FRIOYP9587460,11659
+A8 - VIDAUBAN SUD,,ESCOTA,2139,sud,aire de service,True,,Tesla,Tesla,3000.0,150.0,FRTSLP5670,17501
+Gonfaron,,,1338,,aire de repos,False,,,,,,,
+Sigues,,,1339,,aire de repos,False,,,,,,,
+Lauvets,,,1335,,aire de repos,False,,,,,,,
+Suvé du vent,,,1332,,aire de repos,False,,,,,,,
+Candumy,,,1345,,aire de repos,True,,,,,,,
+Roudai,,,1346,,aire de repos,True,,,,,,,
+A8 - LES TERRASSES DE PROVENCE,,ESCOTA,2242,,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,1003.0,150.0,FRHPCPNF059599TOTEM,10975
+A8 - CAMBARETTE NORD,,ESCOTA,2121,nord,aire de service,True,,Ionity,Ionity,1543.0,350.0,FRIOYP9587534,11690
+A8 - CAMBARETTE NORD,,ESCOTA,2121,nord,aire de service,True,,Tesla,Tesla,3000.0,150.0,FRTSLP5671,17502
+Barcelone,,,1353,,aire de repos,True,,,,,,,
+St Hilaire,,,1354,,aire de repos,True,,,,,,,
+A57 - LA BIGUE,,ESCOTA,2120,,aire de service,False,,,,,,,
+A57 - LA CHABERTE,,ESCOTA,2140,,aire de service,False,,Ionity,Ionity,5952.0,350.0,FRIOYP9587555,11695
+Sanary Nord,,,1313,nord,aire de repos,False,,,,,,,
+Sanary Sud,,,1314,sud,aire de repos,False,,,,,,,
+A50 - LES PLAINES BARONNES,,ESCOTA,2245,,aire de service,False,,ENGIE Vianeo,ENGIE Vianeo,3264.0,300.0,FRVIAP104105,18143
+Pas d'Oullier,,,1327,,aire de repos,False,,,,,,,
+A50 - LE LIOUQUET,,ESCOTA,2119,,aire de service,False,,ENGIE Vianeo,ENGIE Vianeo,3264.0,300.0,FRVIAP104104,18142
+,,,2385,,aire de service,False,,TotalEnergies Marketing France,TotalEnergies Marketing France,400.0,150.0,FRHPCPNF067705TOTEM,11024
+A8 - L'ARC,,ESCOTA,2243,,aire de service,True,,Shell Recharge,Shell Recharge,2691.0,300.0,FRSHEP3780497,16569
+A8 - DE ROUSSET,,ESCOTA,2122,,aire de service,True,,Ionity,Ionity,5952.0,350.0,FRIOYP9587203,11568
+A52 - PEYPIN,,ESCOTA,1233,,aire de service,False,,ENGIE Vianeo,ENGIE Vianeo,2064.0,300.0,FRVIAP104107,18145
+A52 - BAUME DE MARRON,,ESCOTA,2123,,aire de service,False,,ENGIE Vianeo,ENGIE Vianeo,2064.0,300.0,FRVIAP104106,18144
+,,,2427,,aire de service,False,,,,,,,
+Aix Lattre de Tassigny,,,1234,,aire de service,False,,Plenitude On The Road,Plenitude On The Road,702.0,150.0,FRPLNP11293199,14844
+Meyrargues,,,1363,,aire de repos,False,,,,,,,
+Meyrargues Est,,,2132,est,aire de repos,False,,,,,,,
+A51 - MEYRARGUES-FONTBELLE,,ESCOTA,2244,,aire de service,False,,Ionity,Ionity,4486.0,350.0,FRIOYP9587340,11619
+Pont Mirabeau,,,1371,,aire de repos,False,,,,,,,
+Jouques,,,1374,,aire de repos,False,,,,,,,
+Volx Ouest,,,1240,ouest,aire de service,False,,TotalEnergies Marketing France,TotalEnergies Marketing France,400.0,150.0,FRHPCPNF080044TOTEM,11096
+A51 - VOLX,,ESCOTA,2133,,aire de service,False,,,,,,,
+A51 - MANOSQUE,,ESCOTA,2239,,aire de service,False,,TotalEnergies Marketing France,TotalEnergies Marketing France,450.0,150.0,FRHPCPNF080045TOTEMSA,11097
+Ganagobie Est,,,1403,est,aire de repos,False,,,,,,,
+Ganagobie Ouest,,,1404,ouest,aire de repos,False,,,,,,,
+A51 - AUBIGNOSC OUEST,,ESCOTA,2131,ouest,aire de service,False,,ENGIE Vianeo,ENGIE Vianeo,3264.0,300.0,FRVIAP104113,18151
+A51 - AUBIGNOSC EST,,ESCOTA,2240,est,aire de service,False,,ENGIE Vianeo,ENGIE Vianeo,2664.0,300.0,FRVIAP104112,18150
+Peyruis Les Mees,,,1411,,aire de repos,False,,,,,,,
+A8 - L'ESTEREL,,ESCOTA,2137,,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,3700.0,300.0,FRHPCPNF080360TIERSTOTEMSA,11160
+A8 - LES BREGUIERES NORD,,ESCOTA,2247,nord,aire de service,True,,Ionity,Ionity,2943.0,350.0,FRIOYP9587542,11692
+A8 - LES BREGUIERES SUD,,ESCOTA,2134,sud,aire de service,True,,TotalEnergies Marketing France,TotalEnergies Marketing France,3400.0,300.0,FRHPCPNF078564,11081
+Piccolaret,,,1361,,aire de repos,True,,,,,,,
+A8 - BEAUSOLEIL,,ESCOTA,2136,,aire de service,True,,CityFMET,SPIE CityNetworks,2810.0,300.0,FREVAP06012A,10218
+A8 - LA SCOPERTA,,ESCOTA,2135,,aire de service,True,,ENGIE Vianeo,ENGIE Vianeo,3434.0,300.0,FRVIAP103114,18136
