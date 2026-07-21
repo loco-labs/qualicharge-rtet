@@ -130,6 +130,22 @@ def to_sampled_state_pdc(
         drop=True
     )
 
+def to_state_poc_d(state_pdc: pd.DataFrame, echantillons: int) -> pd.DataFrame:
+    """Génère les états quotidiens des pdc à partir de leur état échantillonné.
+
+    Le temps passé dans chaque état est restitué en minutes.
+    """
+    sampled = state_pdc[["id_pdc_itinerance", "state"]].reset_index()
+    sampled["occupe"] = sampled["state"] == "occupe"
+    sampled["hors_service"] = sampled["state"] == "hors_service"
+    sampled["libre"] = sampled["state"] == "libre"
+
+    state_d = sampled.groupby(["id_pdc_itinerance"]).agg("sum").reset_index()
+
+    for etat in ["occupe", "hors_service", "libre"]:
+        state_d[etat] = state_d[etat] * 60 * 24 / echantillons
+
+    return state_d[["id_pdc_itinerance", "occupe", "hors_service", "libre"]]
 
 def to_sampled_state_grp(
     state_pdc: pd.DataFrame,
