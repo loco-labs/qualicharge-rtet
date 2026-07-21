@@ -329,3 +329,46 @@ def sampled_state_poc(
     sampled_state_poc = to_sampled_state_pdc(sampled_sessions, sampled_statuses)
     print("state : ", len(sampled_state_poc))
     return sampled_state_poc
+
+def to_state_grp_d(
+    state_grp_h: pd.DataFrame,
+    group_name: str,
+) -> pd.DataFrame:
+    """Génère les états journaliers à partir de l'état horaire d'un ensemble de pdc.
+
+    Le temps passé dans chaque état est restitué en minutes.
+    Deux états horaires booléens 'sature_h' et 'surcharge_h' sont calculé à partir d'un
+    seuil de temps passé dans l'état.
+    """
+
+    sampled = state_grp_h.reset_index()
+
+    sampled_h = sampled.groupby([group_name, "periode"]).agg("sum")
+    sampled_h = sampled_h / nb_ech_hour
+    for etat in ["hs", "inactif", "sature", "surcharge", "actif"]:
+        sampled_h[etat] = sampled_h[etat] * 60
+    sampled_h["nb_pdc"] = sampled_h["nb_pdc"].astype("int")
+
+    sampled_h["sature_h"] = (sampled_h["sature"] + sampled_h["hs"]) >= duree_etat_min
+    sampled_h["surcharge_h"] = ~sampled_h["sature_h"] & (
+        (sampled_h["surcharge"] + sampled_h["sature"] + sampled_h["hs"])
+        >= duree_etat_min
+    )
+
+    sampled_h = sampled_h.reset_index()
+
+    return sampled_h[
+        [
+            group_name,
+            "periode",
+            "periode_h",
+            "nb_pdc",
+            "hs",
+            "inactif",
+            "sature",
+            "surcharge",
+            "actif",
+            "sature_h",
+            "surcharge_h",
+        ]
+    ]
