@@ -12,6 +12,7 @@ Les fonctions d'évaluation de la saturation sont :
 """
 
 import pandas as pd
+from pandas import NamedAgg
 import datetime
 #import shapely
 #import folium
@@ -225,7 +226,7 @@ def to_sampled_state_grp(
     ]
 
 
-def to_sampled_state_grp_h(
+def to_state_grp_h(
     state_grp: pd.DataFrame, group_name: str, echantillons: int, duree_etat_min: float
 ) -> pd.DataFrame:
     """Génère les états horaires à partir de l'état échantillonné d'un ensemble de pdc.
@@ -337,38 +338,18 @@ def to_state_grp_d(
     """Génère les états journaliers à partir de l'état horaire d'un ensemble de pdc.
 
     Le temps passé dans chaque état est restitué en minutes.
-    Deux états horaires booléens 'sature_h' et 'surcharge_h' sont calculé à partir d'un
-    seuil de temps passé dans l'état.
     """
 
-    sampled = state_grp_h.reset_index()
+    grouped = state_grp_h.groupby([group_name, 'periode'])
+    state_grp_d = grouped.agg(
+        nb_pdc=NamedAgg("nb_pdc", "max"),
+        nb_h=NamedAgg("periode", "count"),
+        hs=NamedAgg("hs", "sum"),
+        inactif=NamedAgg("inactif", "sum"),
+        sature_cum=NamedAgg("sature", "sum"),
+        sature_max=NamedAgg("sature", "max"),
+        surcharge=NamedAgg("surcharge", "sum"),
+        actif=NamedAgg("actif", "sum"),
+        ).reset_index()
 
-    sampled_h = sampled.groupby([group_name, "periode"]).agg("sum")
-    sampled_h = sampled_h / nb_ech_hour
-    for etat in ["hs", "inactif", "sature", "surcharge", "actif"]:
-        sampled_h[etat] = sampled_h[etat] * 60
-    sampled_h["nb_pdc"] = sampled_h["nb_pdc"].astype("int")
-
-    sampled_h["sature_h"] = (sampled_h["sature"] + sampled_h["hs"]) >= duree_etat_min
-    sampled_h["surcharge_h"] = ~sampled_h["sature_h"] & (
-        (sampled_h["surcharge"] + sampled_h["sature"] + sampled_h["hs"])
-        >= duree_etat_min
-    )
-
-    sampled_h = sampled_h.reset_index()
-
-    return sampled_h[
-        [
-            group_name,
-            "periode",
-            "periode_h",
-            "nb_pdc",
-            "hs",
-            "inactif",
-            "sature",
-            "surcharge",
-            "actif",
-            "sature_h",
-            "surcharge_h",
-        ]
-    ]
+    return state_grp_d
