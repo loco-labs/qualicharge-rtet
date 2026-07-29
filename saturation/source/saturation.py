@@ -26,6 +26,7 @@ def to_sampled_statuses(
     init_data: pd.DataFrame,
     timestamp: pd.Timestamp,
     echantillons: int,
+    min_duration: datetime.timedelta = datetime.timedelta(),
 ) -> pd.DataFrame:
     """Génère les statuts échantillonnés pour une date donnée à partir d'un ensemble de statuts et de valeurs initiales.
 
@@ -45,8 +46,9 @@ def to_sampled_statuses(
     state["f_id_pdc_itinerance"] = list(state["id_pdc_itinerance"])[1 : len(state)] + [
         "aucun"
     ]
-
-    crossed = pd.merge(state, periode, how="cross")
+    state["duration"] = state["f_horodatage"] - state["horodatage"]
+    filtered_state = state[(state["duration"] > min_duration) | (state["id_pdc_itinerance"] != state["f_id_pdc_itinerance"])]
+    crossed = pd.merge(filtered_state, periode, how="cross")
     sampled = crossed[
         (
             (crossed["id_pdc_itinerance"].eq(crossed["f_id_pdc_itinerance"]))
