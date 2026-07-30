@@ -46,8 +46,16 @@ def to_sampled_statuses(
     state["f_id_pdc_itinerance"] = list(state["id_pdc_itinerance"])[1 : len(state)] + [
         "aucun"
     ]
+    # remove statuses with short duration
     state["duration"] = state["f_horodatage"] - state["horodatage"]
-    filtered_state = state[(state["duration"] > min_duration) | (state["id_pdc_itinerance"] != state["f_id_pdc_itinerance"])]
+    filtered_state = state[(state["duration"] > min_duration) | (state["id_pdc_itinerance"] != state["f_id_pdc_itinerance"])].copy()
+    filtered_state["f_horodatage"] = list(filtered_state["horodatage"])[1 : len(filtered_state)] + [
+        samples[echantillons]
+    ]
+    filtered_state["f_id_pdc_itinerance"] = list(filtered_state["id_pdc_itinerance"])[1 : len(filtered_state)] + [
+        "aucun"
+    ]
+    # create sampled statuses
     crossed = pd.merge(filtered_state, periode, how="cross")
     sampled = crossed[
         (
