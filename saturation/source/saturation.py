@@ -80,11 +80,16 @@ def to_sampled_sessions(
     init_data: pd.DataFrame,
     timestamp: pd.Timestamp,
     echantillons: int,
+    min_duration: datetime.timedelta = datetime.timedelta(),
+    max_duration: datetime.timedelta = datetime.timedelta(hours=24),
 ) -> pd.DataFrame:
-    """Génère les sessions échantillonnées pour une date donnée à partir d'un ensemble de sessions et de valeurs initiales.
+    """Generate sampled sessions for a given date.
 
-    Les états de sortie ('occupation_pdc') sont soit 'occupe', soit 'f_libre.
-    La valeur 'inconnu' n'est pas prise en compte."""
+    Generation is based on a set of sessions and initial values.
+    Input data: set of sessions and initial values.
+    The output states ('occupation_pdc') are either 'occupe' or 'libre'.
+    The 'inconnu' value is not taken into account.
+    """
     samples = pd.date_range(
         start=timestamp, end=timestamp + pd.Timedelta(days=1), periods=echantillons + 1
     )
@@ -92,11 +97,14 @@ def to_sampled_sessions(
     sessions = pd.concat([data, init_data]).sort_values(
         by=["id_pdc_itinerance", "start"]
     )
-    sessions["occupation_pdc"] = "occupe"
+    # remove invalid sessions : duplicates, short duration, long duration
+    unic = ["start", "end", "id_pdc_itinerance"]
+    sessions["duration"] = sessions["end"] - sessions["start"]
+    filtered_sessions = sessions[(sessions["duration"] > min_duration) & (sessions["duration"] < max_duration)].copy().drop_duplicates(subset=unic)
 
-    # crossed = pd.merge(sessions, periode, how="cross")
-    unic = ["start", "end", "periode", "id_pdc_itinerance"]
-    crossed = pd.merge(sessions, periode, how="cross").drop_duplicates(subset=unic)
+    # create sampled sessions
+    filtered_sessions["occupation_pdc"] = "occupe"
+    crossed = pd.merge(filtered_sessions, periode, how="cross")
     sampled = crossed[
         (
             (crossed["periode"] >= crossed["start"])
