@@ -1,8 +1,7 @@
-# -*- coding: utf-8 -*-
 """
 Ce module contient les fonctions utilisées pour le calcul de la saturation.
 """
-from datetime import date, datetime, timedelta
+from datetime import date, timedelta
 
 import pandas as pd
 from pandas import NamedAgg

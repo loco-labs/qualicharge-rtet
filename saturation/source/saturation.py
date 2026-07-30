@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Ce module contient les fonctions utilisées pour le calcul de la saturation.
 
@@ -11,9 +10,11 @@ Les fonctions d'évaluation de la saturation sont :
 - ajout d'une couche d'animation sur une carte (animate)
 """
 
+import datetime
+
 import numpy as np
 import pandas as pd
-import datetime
+
 #import shapely
 #import folium
 #from folium.plugins import TimestampedGeoJson
@@ -309,7 +310,7 @@ def sampled_state_poc(
     timestamp = pd.Timestamp(day.isoformat() + "T00:00:00+00:00")
     pocs_with_sessions = sessions[ID_POC].unique()
     pocs_with_statuses = statuses[ID_POC].unique()
-    pocs_ids = set(pocs_with_sessions).intersection(set(pocs_with_statuses))
+    # pocs_ids = set(pocs_with_sessions).intersection(set(pocs_with_statuses))
 
     attributes_sessions = [ID_POC, "start", "end"]
     attributes_statuses = [ID_POC, "horodatage", "etat_pdc"]
@@ -320,9 +321,9 @@ def sampled_state_poc(
     sessions["start"] = sessions["start"].astype("datetime64[s, UTC]")
     sessions["end"] = sessions["end"].astype("datetime64[s, UTC]")
 
-    pocs_stations = statics[statics[ID_POC].isin(pocs_with_sessions)]
-    pocs = pocs_stations[ID_POC].unique()
-    stations = pocs_stations[ID_STATION].unique()
+    # pocs_stations = statics[statics[ID_POC].isin(pocs_with_sessions)]
+    # pocs = pocs_stations[ID_POC].unique()
+    # stations = pocs_stations[ID_STATION].unique()
 
     init = pd.DataFrame(
         {
