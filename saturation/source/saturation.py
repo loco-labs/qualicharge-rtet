@@ -14,7 +14,6 @@ import datetime
 
 import numpy as np
 import pandas as pd
-import datetime
 
 # import shapely
 # import folium
@@ -22,6 +21,8 @@ import datetime
 
 ID_POC: str = "id_pdc_itinerance"
 ID_STATION: str = "id_station_itinerance"
+START_FULL_USE = 0.99
+END_FULL_USE = 0.8
 
 
 def hysteresis(x, low_hysteresis_level, high_hysteresis_level, initial=False):
@@ -180,12 +181,29 @@ def to_sampled_state_grp(
     group_name: str,
     pourcent_sature: float,
     pourcent_surcharge: float,
+    add_full_use: bool = False,
 ) -> pd.DataFrame:
     """Génère le cumul du nombre de pdc par état et l'état d'un ensemble de pdc à partir de l'état de chaque pdc.
 
     La surcharge est activée à moins de 20% de pdc libres et la saturation à moins de 10%.
     Chaque état est restitué par un booléen ainsi que par une valeur aggrégée numérique
     ('hs': 1, 'inactif': 2, 'actif': 3, 'surcharge': 4, 'sature': 5)."""
+
+    returned_fields = [
+                group_name,
+                "periode",
+                "occupe",
+                "hors_service",
+                "libre",
+                "nb_pdc",
+                "hs",
+                "inactif",
+                "sature",
+                "surcharge",
+                "actif",
+                "pleine_occ",
+                "state",
+            ]
     nb_pdc = (
         pdc_group.groupby([group_name])
         .count()
@@ -234,43 +252,28 @@ def to_sampled_state_grp(
         + grouped["sature"] * 5
     )
 
-    saturation_rate = (grouped["hors_service"] + grouped["occupe"]) / grouped["nb_pdc"]
-    start_full_use = 0.99
-    end_full_use = 0.8
-    not_full_use = 0
-    maybe_full_use = 0.5
-    full_use = 1
-    tmp_full_use = pd.cut(
-        saturation_rate,
-        [-np.inf, end_full_use, start_full_use, np.inf],
-        labels=[not_full_use, maybe_full_use, full_use],
-    )
-    grouped["pleine_occ"] = tmp_full_use.where(
-        tmp_full_use != maybe_full_use,
-        np.where(
-            hysteresis(tmp_full_use.values, maybe_full_use, full_use),
-            full_use,
-            not_full_use,
-        ),
-    ).astype("bool")
+    if add_full_use:
+        not_full_use = 0
+        maybe_full_use = 0.5
+        full_use = 1
 
-    return grouped[
-        [
-            group_name,
-            "periode",
-            "occupe",
-            "hors_service",
-            "libre",
-            "nb_pdc",
-            "hs",
-            "inactif",
-            "sature",
-            "surcharge",
-            "actif",
-            "pleine_occ",
-            "state",
-        ]
-    ]
+        saturation_rate = (grouped["hors_service"] + grouped["occupe"]) / grouped["nb_pdc"]
+        tmp_full_use = pd.cut(
+            saturation_rate,
+            [-np.inf, END_FULL_USE, START_FULL_USE, np.inf],
+            labels=[not_full_use, maybe_full_use, full_use],
+        )
+        grouped["pleine_occ"] = tmp_full_use.where(
+            tmp_full_use != maybe_full_use,
+            np.where(
+                hysteresis(tmp_full_use.values, maybe_full_use, full_use),
+                full_use,
+                not_full_use,
+            ),
+        ).astype("bool")
+        returned_fields += ["pleine_occ"]
+
+    return grouped[returned_fields]
 
 
 def to_sampled_state_grp_h(

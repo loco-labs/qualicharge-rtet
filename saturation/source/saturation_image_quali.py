@@ -3,6 +3,7 @@ Ce module contient les fonctions utilisées pour le calcul de la saturation.
 """
 from datetime import date, timedelta
 
+import numpy as np
 import pandas as pd
 from pandas import NamedAgg
 
@@ -13,8 +14,21 @@ from pandas import NamedAgg
 ID_POC: str = "id_pdc_itinerance"
 ID_STATION: str = "id_station_itinerance"
 MAX_SESSION_DURATION_HOURS: float = 10
+START_FULL_USE = 0.99
+END_FULL_USE = 0.8
 
 # fonctions de utils
+
+def hysteresis(x, low_hysteresis_level, high_hysteresis_level, initial=False):
+    """Calculate hysteresis for an array x with given low and high hysteresis levels."""
+    high = x >= high_hysteresis_level
+    low_or_high = (x < low_hysteresis_level) | high
+    ind_low_or_high = np.nonzero(low_or_high)[0]
+    if not ind_low_or_high.size:  # prevent index error if ind_low_or_high is empty
+        return np.zeros_like(x, dtype=bool) | initial
+    cnt = np.cumsum(low_or_high)
+    return np.where(cnt, high[ind_low_or_high[cnt - 1]], initial)
+
 
 def to_sampled_statuses(
     data: pd.DataFrame,
@@ -47,13 +61,17 @@ def to_sampled_statuses(
     ]
     # remove statuses with short duration
     state["duration"] = state["f_horodatage"] - state["horodatage"]
-    filtered_state = state[(state["duration"] > min_duration) | (state["id_pdc_itinerance"] != state["f_id_pdc_itinerance"])].copy()
-    filtered_state["f_horodatage"] = list(filtered_state["horodatage"])[1 : len(filtered_state)] + [
-        samples[samples_per_day]
-    ]
-    filtered_state["f_id_pdc_itinerance"] = list(filtered_state["id_pdc_itinerance"])[1 : len(filtered_state)] + [
-        "aucun"
-    ]
+    filtered_state = state[
+        (state["duration"] > min_duration)
+        | (state["id_pdc_itinerance"] != state["f_id_pdc_itinerance"])
+    ].copy()
+    filtered_state["f_horodatage"] = list(filtered_state["horodatage"])[
+        1 : len(filtered_state)
+    ] + [samples[samples_per_day]]
+    filtered_state["f_id_pdc_itinerance"] = list(filtered_state["id_pdc_itinerance"])[
+        1 : len(filtered_state)
+    ] + ["aucun"]
+
     # create sampled statuses
     crossed = pd.merge(filtered_state, periode, how="cross")
     sampled = crossed[
@@ -74,7 +92,7 @@ def to_sampled_statuses(
     )
 
 
-def to_sampled_sessions(
+def to_sampled_sessions(  # noqa: PLR0913
     data: pd.DataFrame,
     init_data: pd.DataFrame,
     timestamp: pd.Timestamp,
@@ -101,7 +119,15 @@ def to_sampled_sessions(
     # remove invalid sessions : duplicates, short duration, long duration
     unic = ["start", "end", "id_pdc_itinerance"]
     sessions["duration"] = sessions["end"] - sessions["start"]
-    filtered_sessions = sessions[(sessions["duration"] > min_duration) & (sessions["duration"] < max_duration)].copy().drop_duplicates(subset=unic)
+    filtered_sessions = (
+        sessions[
+            (sessions["duration"] > min_duration)
+            & (sessions["duration"] < max_duration)
+        ]
+        .copy()
+        .drop_duplicates(subset=unic)
+    )
+
     # create sampled sessions
     filtered_sessions["occupation_pdc"] = "occupe"
     crossed = pd.merge(filtered_sessions, periode, how="cross")
@@ -179,6 +205,7 @@ def to_sampled_state_grp(
     group_name: str,
     saturation_ratio: float,
     overload_ratio: float,
+    add_full_use: bool = False,
 ) -> pd.DataFrame:
     """Generate the aggregated states of a set of charge points.
 
@@ -187,6 +214,20 @@ def to_sampled_state_grp(
     Each state is represented by a boolean value as well as an aggregated numeric value
     ('hs': 1, 'inactif': 2, 'actif': 3, 'surcharge': 4, 'sature': 5).
     """
+    returned_fields = [
+                group_name,
+                "periode",
+                "occupe",
+                "hors_service",
+                "libre",
+                "nb_pdc",
+                "hs",
+                "inactif",
+                "sature",
+                "surcharge",
+                "actif",
+                "state",
+            ]
     nb_pdc = (
         pdc_group.groupby([group_name])
         .count()
@@ -234,22 +275,29 @@ def to_sampled_state_grp(
         + grouped["sature"] * 5
     )
 
-    return grouped[
-        [
-            group_name,
-            "periode",
-            "occupe",
-            "hors_service",
-            "libre",
-            "nb_pdc",
-            "hs",
-            "inactif",
-            "sature",
-            "surcharge",
-            "actif",
-            "state",
-        ]
-    ]
+    if add_full_use:
+        not_full_use = 0
+        maybe_full_use = 0.5
+        full_use = 1
+
+        saturation_rate = (grouped["hors_service"] + grouped["occupe"]) / grouped["nb_pdc"]
+        tmp_full_use = pd.cut(
+            saturation_rate,
+            [-np.inf, END_FULL_USE, START_FULL_USE, np.inf],
+            labels=[not_full_use, maybe_full_use, full_use],
+        )
+        grouped["pleine_utilisation"] = tmp_full_use.where(
+            tmp_full_use != maybe_full_use,
+            np.where(
+                hysteresis(tmp_full_use.values, maybe_full_use, full_use),
+                full_use,
+                not_full_use,
+            ),
+        ).astype("bool")
+        returned_fields += ["pleine_utilisation"]
+
+    return grouped[returned_fields]
+
 
 
 def to_state_grp_h(
@@ -270,12 +318,12 @@ def to_state_grp_h(
     sampled["periode_h"] = sampled["periode"].dt.hour
     sampled["periode"] = sampled["periode"].dt.date
 
-    # sampled_h = sampled.groupby([group_name, "periode", "periode_h"]).agg("sum")
-    sampled_h = sampled.groupby([group_name, "nb_pdc", "periode", "periode_h"]).agg("sum")
+    sampled_h = sampled.groupby([group_name, "nb_pdc", "periode", "periode_h"]).agg(
+        "sum"
+    )
     sampled_h = sampled_h / nb_ech_hour
     for etat in ["hs", "inactif", "sature", "surcharge", "actif"]:
         sampled_h[etat] = sampled_h[etat] * 60
-    # sampled_h["nb_pdc"] = sampled_h["nb_pdc"].astype("int")
 
     sampled_h["sature_h"] = (sampled_h["sature"] + sampled_h["hs"]) >= duree_etat_min
     sampled_h["surcharge_h"] = ~sampled_h["sature_h"] & (
