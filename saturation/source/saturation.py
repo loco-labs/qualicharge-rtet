@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Ce module contient les fonctions utilisées pour le calcul de la saturation.
 
@@ -10,6 +9,8 @@ Les fonctions d'évaluation de la saturation sont :
 - création des données d'animation (features) des cartes (filter_animate, add_filter_animate)
 - ajout d'une couche d'animation sur une carte (animate)
 """
+
+import datetime
 
 import numpy as np
 import pandas as pd
@@ -39,6 +40,7 @@ def to_sampled_statuses(
     init_data: pd.DataFrame,
     timestamp: pd.Timestamp,
     echantillons: int,
+    min_duration: datetime.timedelta = datetime.timedelta(),
 ) -> pd.DataFrame:
     """Génère les statuts échantillonnés pour une date donnée à partir d'un ensemble de statuts et de valeurs initiales.
 
@@ -58,8 +60,20 @@ def to_sampled_statuses(
     state["f_id_pdc_itinerance"] = list(state["id_pdc_itinerance"])[1 : len(state)] + [
         "aucun"
     ]
-
-    crossed = pd.merge(state, periode, how="cross")
+    # remove statuses with short duration
+    state["duration"] = state["f_horodatage"] - state["horodatage"]
+    filtered_state = state[
+        (state["duration"] > min_duration)
+        | (state["id_pdc_itinerance"] != state["f_id_pdc_itinerance"])
+    ].copy()
+    filtered_state["f_horodatage"] = list(filtered_state["horodatage"])[
+        1 : len(filtered_state)
+    ] + [samples[echantillons]]
+    filtered_state["f_id_pdc_itinerance"] = list(filtered_state["id_pdc_itinerance"])[
+        1 : len(filtered_state)
+    ] + ["aucun"]
+    # create sampled statuses
+    crossed = pd.merge(filtered_state, periode, how="cross")
     sampled = crossed[
         (
             (crossed["id_pdc_itinerance"].eq(crossed["f_id_pdc_itinerance"]))
@@ -83,11 +97,16 @@ def to_sampled_sessions(
     init_data: pd.DataFrame,
     timestamp: pd.Timestamp,
     echantillons: int,
+    min_duration: datetime.timedelta = datetime.timedelta(),
+    max_duration: datetime.timedelta = datetime.timedelta(hours=24),
 ) -> pd.DataFrame:
-    """Génère les sessions échantillonnées pour une date donnée à partir d'un ensemble de sessions et de valeurs initiales.
+    """Generate sampled sessions for a given date.
 
-    Les états de sortie ('occupation_pdc') sont soit 'occupe', soit 'f_libre.
-    La valeur 'inconnu' n'est pas prise en compte."""
+    Generation is based on a set of sessions and initial values.
+    Input data: set of sessions and initial values.
+    The output states ('occupation_pdc') are either 'occupe' or 'libre'.
+    The 'inconnu' value is not taken into account.
+    """
     samples = pd.date_range(
         start=timestamp, end=timestamp + pd.Timedelta(days=1), periods=echantillons + 1
     )
@@ -95,11 +114,21 @@ def to_sampled_sessions(
     sessions = pd.concat([data, init_data]).sort_values(
         by=["id_pdc_itinerance", "start"]
     )
-    sessions["occupation_pdc"] = "occupe"
+    # remove invalid sessions : duplicates, short duration, long duration
+    unic = ["start", "end", "id_pdc_itinerance"]
+    sessions["duration"] = sessions["end"] - sessions["start"]
+    filtered_sessions = (
+        sessions[
+            (sessions["duration"] > min_duration)
+            & (sessions["duration"] < max_duration)
+        ]
+        .copy()
+        .drop_duplicates(subset=unic)
+    )
 
-    # crossed = pd.merge(sessions, periode, how="cross")
-    unic = ["start", "end", "periode", "id_pdc_itinerance"]
-    crossed = pd.merge(sessions, periode, how="cross").drop_duplicates(subset=unic)
+    # create sampled sessions
+    filtered_sessions["occupation_pdc"] = "occupe"
+    crossed = pd.merge(filtered_sessions, periode, how="cross")
     sampled = crossed[
         (
             (crossed["periode"] >= crossed["start"])
@@ -313,7 +342,7 @@ def sampled_state_poc(
     timestamp = pd.Timestamp(day.isoformat() + "T00:00:00+00:00")
     pocs_with_sessions = sessions[ID_POC].unique()
     pocs_with_statuses = statuses[ID_POC].unique()
-    pocs_ids = set(pocs_with_sessions).intersection(set(pocs_with_statuses))
+    # pocs_ids = set(pocs_with_sessions).intersection(set(pocs_with_statuses))
 
     attributes_sessions = [ID_POC, "start", "end"]
     attributes_statuses = [ID_POC, "horodatage", "etat_pdc"]
@@ -324,9 +353,9 @@ def sampled_state_poc(
     sessions["start"] = sessions["start"].astype("datetime64[s, UTC]")
     sessions["end"] = sessions["end"].astype("datetime64[s, UTC]")
 
-    pocs_stations = statics[statics[ID_POC].isin(pocs_with_sessions)]
-    pocs = pocs_stations[ID_POC].unique()
-    stations = pocs_stations[ID_STATION].unique()
+    # pocs_stations = statics[statics[ID_POC].isin(pocs_with_sessions)]
+    # pocs = pocs_stations[ID_POC].unique()
+    # stations = pocs_stations[ID_STATION].unique()
 
     init = pd.DataFrame(
         {
