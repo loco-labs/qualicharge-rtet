@@ -14,12 +14,25 @@ Les fonctions d'évaluation de la saturation sont :
 import numpy as np
 import pandas as pd
 import datetime
-#import shapely
-#import folium
-#from folium.plugins import TimestampedGeoJson
+
+# import shapely
+# import folium
+# from folium.plugins import TimestampedGeoJson
 
 ID_POC: str = "id_pdc_itinerance"
 ID_STATION: str = "id_station_itinerance"
+
+
+def hysteresis(x, low_hysteresis_level, high_hysteresis_level, initial=False):
+    """Calculate hysteresis for an array x with given low and high hysteresis levels."""
+    high = x >= high_hysteresis_level
+    low_or_high = (x < low_hysteresis_level) | high
+    ind_low_or_high = np.nonzero(low_or_high)[0]
+    if not ind_low_or_high.size:  # prevent index error if ind_low_or_high is empty
+        return np.zeros_like(x, dtype=bool) | initial
+    cnt = np.cumsum(low_or_high)
+    return np.where(cnt, high[ind_low_or_high[cnt - 1]], initial)
+
 
 def to_sampled_statuses(
     data: pd.DataFrame,
@@ -191,19 +204,27 @@ def to_sampled_state_grp(
         + grouped["surcharge"] * 4
         + grouped["sature"] * 5
     )
-    def hyst(x, th_lo, th_hi, initial = False):
-        hi = x >= th_hi
-        lo_or_hi = (x < th_lo) | hi
-        ind = np.nonzero(lo_or_hi)[0]
-        if not ind.size: # prevent index error if ind is empty
-            return np.zeros_like(x, dtype=bool) | initial
-        cnt = np.cumsum(lo_or_hi) # from 0 to len(x)
-        return np.where(cnt, hi[ind[cnt-1]], initial)
-        
-    pourcent = (grouped["hors_service"] + grouped["occupe"]) / grouped["nb_pdc"]
-    tmp = pd.cut(pourcent, [-np.inf, 0.8, 0.99, np.inf], labels=[0, 0.5, 1])
-    grouped["pleine_occ"] = tmp.where(tmp != 0.5, np.where(hyst(tmp.values, 0.5, 1), 1, 0)).astype('bool')
-    
+
+    saturation_rate = (grouped["hors_service"] + grouped["occupe"]) / grouped["nb_pdc"]
+    start_full_use = 0.99
+    end_full_use = 0.8
+    not_full_use = 0
+    maybe_full_use = 0.5
+    full_use = 1
+    tmp_full_use = pd.cut(
+        saturation_rate,
+        [-np.inf, end_full_use, start_full_use, np.inf],
+        labels=[not_full_use, maybe_full_use, full_use],
+    )
+    grouped["pleine_occ"] = tmp_full_use.where(
+        tmp_full_use != maybe_full_use,
+        np.where(
+            hysteresis(tmp_full_use.values, maybe_full_use, full_use),
+            full_use,
+            not_full_use,
+        ),
+    ).astype("bool")
+
     return grouped[
         [
             group_name,
@@ -280,6 +301,7 @@ def to_sampled_state_grp_h(
         ]
     ]
 
+
 def sampled_state_poc(
     day: datetime.date,
     samples_per_day: int,
@@ -314,7 +336,7 @@ def sampled_state_poc(
         }
     )
     sampled_statuses = to_sampled_statuses(statuses, init, timestamp, samples_per_day)
-    print("status : ", len(sampled_statuses)) 
+    print("status : ", len(sampled_statuses))
 
     init = pd.DataFrame(
         {
