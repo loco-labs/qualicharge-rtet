@@ -12,6 +12,7 @@ from pandas import NamedAgg
 
 ID_POC: str = "id_pdc_itinerance"
 ID_STATION: str = "id_station_itinerance"
+MAX_SESSION_DURATION_HOURS: float = 10
 
 # fonctions de utils
 
@@ -101,7 +102,6 @@ def to_sampled_sessions(
     unic = ["start", "end", "id_pdc_itinerance"]
     sessions["duration"] = sessions["end"] - sessions["start"]
     filtered_sessions = sessions[(sessions["duration"] > min_duration) & (sessions["duration"] < max_duration)].copy().drop_duplicates(subset=unic)
-
     # create sampled sessions
     filtered_sessions["occupation_pdc"] = "occupe"
     crossed = pd.merge(filtered_sessions, periode, how="cross")
@@ -270,11 +270,12 @@ def to_state_grp_h(
     sampled["periode_h"] = sampled["periode"].dt.hour
     sampled["periode"] = sampled["periode"].dt.date
 
-    sampled_h = sampled.groupby([group_name, "periode", "periode_h"]).agg("sum")
+    # sampled_h = sampled.groupby([group_name, "periode", "periode_h"]).agg("sum")
+    sampled_h = sampled.groupby([group_name, "nb_pdc", "periode", "periode_h"]).agg("sum")
     sampled_h = sampled_h / nb_ech_hour
     for etat in ["hs", "inactif", "sature", "surcharge", "actif"]:
         sampled_h[etat] = sampled_h[etat] * 60
-    sampled_h["nb_pdc"] = sampled_h["nb_pdc"].astype("int")
+    # sampled_h["nb_pdc"] = sampled_h["nb_pdc"].astype("int")
 
     sampled_h["sature_h"] = (sampled_h["sature"] + sampled_h["hs"]) >= duree_etat_min
     sampled_h["surcharge_h"] = ~sampled_h["sature_h"] & (
@@ -343,6 +344,7 @@ def get_sampled_state_poc(
 ) -> pd.DataFrame:
     """Extract complete POC with sessions and statuses."""
     min_duration = timedelta (minutes=24 * 60 / samples_per_day)
+    max_duration = timedelta (hours=MAX_SESSION_DURATION_HOURS)
     timestamp = pd.Timestamp(day.isoformat() + "T00:00:00+00:00")
     pocs_with_sessions = sessions[ID_POC].unique()
     pocs_with_statuses = statuses[ID_POC].unique()
@@ -370,13 +372,13 @@ def get_sampled_state_poc(
 
     init_sessions = pd.DataFrame(
         {
-            "start": [timestamp + pd.Timedelta(days=-1)] * len(pocs_with_sessions),
+            "start": [timestamp + pd.Timedelta(hours=-2)] * len(pocs_with_sessions),
             "end": [timestamp + pd.Timedelta(hours=-1)] * len(pocs_with_sessions),
             "id_pdc_itinerance": pocs_with_sessions,
         }
     )
     sampled_sessions = to_sampled_sessions(
-        sessions, init_sessions, timestamp, samples_per_day, min_duration=min_duration
+        sessions, init_sessions, timestamp, samples_per_day, min_duration=min_duration, max_duration=max_duration
     )
 
     return to_sampled_state_poc(sampled_sessions, sampled_statuses)
