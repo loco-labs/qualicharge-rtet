@@ -19,16 +19,35 @@ END_FULL_USE = 0.8
 
 # fonctions de utils
 
-def hysteresis(x, low_hysteresis_level, high_hysteresis_level, initial=False):
-    """Calculate hysteresis for an array x with given low and high hysteresis levels."""
+def hysteresis(x: pd.Series, low_hysteresis_level: float, high_hysteresis_level: float) -> pd.Series:
+    """Apply hysteresis to a Series with given low and high hysteresis levels."""
     high = x >= high_hysteresis_level
     low_or_high = (x < low_hysteresis_level) | high
     ind_low_or_high = np.nonzero(low_or_high)[0]
     if not ind_low_or_high.size:  # prevent index error if ind_low_or_high is empty
-        return np.zeros_like(x, dtype=bool) | initial
+        return None
     cnt = np.cumsum(low_or_high)
-    return np.where(cnt, high[ind_low_or_high[cnt - 1]], initial)
+    return np.where(cnt, high[ind_low_or_high[cnt - 1]], False)
 
+def maxi_periode_PU(state_grp: pd.DataFrame, group_name: str) -> pd.DataFrame:
+    '''Calculate de PU periode with the maximum duration.'''
+    df = state_grp.sort_values(by=[group_name, 'periode']).reset_index(drop=True)
+
+    groups = df["occupe"].ne(
+        df.groupby(group_name)["occupe"].shift()
+    ).groupby(df[group_name]).cumsum()
+
+    valid_groups = df[df["occupe"]].assign(valid_group=groups[df["occupe"]])
+
+    maxi_period = valid_groups.groupby([group_name, "valid_group"]).agg(
+            start=("periode", "first"),
+            end=("periode", "last"),
+        )
+    maxi_period['duration'] = maxi_period['end'] - maxi_period['start']
+    maxi_period = maxi_period.loc[
+        maxi_period.groupby(level=0)["duration"].idxmax()
+    ]
+    return maxi_period
 
 def to_sampled_statuses(
     data: pd.DataFrame,
@@ -102,8 +121,8 @@ def to_sampled_sessions(  # noqa: PLR0913
     timestamp: pd.Timestamp,
     samples_per_day: int,
     min_duration: timedelta = timedelta(),
-    max_duration: timedelta = timedelta(hours=24),
-    latency: timedelta = timedelta()
+    max_duration: timedelta = timedelta(hours=24)
+    # latency: timedelta = timedelta()
 ) -> pd.DataFrame:
     """Generate sampled sessions for a given date.
 
@@ -113,8 +132,8 @@ def to_sampled_sessions(  # noqa: PLR0913
     The 'inconnu' value is not taken into account.
     """
     # add a latency for full_use
-    if latency:
-        data = data.assign(end=data['end']+latency)
+    #if latency:
+    #    data = data.assign(end=data['end']+latency)
 
     # init variables
     samples = pd.date_range(
@@ -230,6 +249,7 @@ def to_sampled_state_grp(
                 "occupe",
                 "hors_service",
                 "libre",
+                "pleine_utilisation",
                 "nb_pdc",
                 "hs",
                 "inactif",
@@ -247,16 +267,19 @@ def to_sampled_state_grp(
     merged["occupe"] = merged["state"] == "occupe"
     merged["hors_service"] = merged["state"] == "hors_service"
     merged["libre"] = merged["state"] == "libre"
+    # add a 5 min interval for 'pleine utilisation'
+    occupe_hs = merged['occupe'] | merged['hors_service']
+    merged['pleine_utilisation'] = occupe_hs | occupe_hs.shift(fill_value=False)
 
     grouped = (
-        merged[[group_name, "periode", "occupe", "hors_service", "libre"]]
+        merged[[group_name, "periode", "occupe", "hors_service", "libre", "pleine_utilisation"]]
         .groupby([group_name, "periode"])
         .sum()
         .reset_index()
     )
     grouped = pd.merge(grouped, nb_pdc, how="left", on=group_name)
 
-    grouped["hs"] = (grouped["libre"] + grouped["occupe"] == 0) & (
+    grouped["hs"] = ((grouped["libre"] + grouped["occupe"]) == 0) & (
         grouped["hors_service"] > 0
     )
     grouped["inactif"] = ~grouped["hs"] & (grouped["occupe"] == 0)
@@ -290,13 +313,13 @@ def to_sampled_state_grp(
         maybe_full_use = 0.5
         full_use = 1
 
-        saturation_rate = (grouped["hors_service"] + grouped["occupe"]) / grouped["nb_pdc"]
+        full_use_rate = grouped["pleine_utilisation"] / grouped["nb_pdc"]
         tmp_full_use = pd.cut(
-            saturation_rate,
+            full_use_rate,
             [-np.inf, END_FULL_USE, START_FULL_USE, np.inf],
             labels=[not_full_use, maybe_full_use, full_use],
         )
-        grouped["pleine_utilisation"] = tmp_full_use.where(
+        grouped["pu"] = tmp_full_use.where(
             tmp_full_use != maybe_full_use,
             np.where(
                 hysteresis(tmp_full_use.values, maybe_full_use, full_use),
@@ -304,7 +327,7 @@ def to_sampled_state_grp(
                 not_full_use,
             ),
         ).astype("bool")
-        returned_fields += ["pleine_utilisation"]
+        returned_fields += ["pu"]
 
     return grouped[returned_fields]
 
@@ -323,16 +346,18 @@ def to_state_grp_h(
     threshold for the time spent in the state.
     """
     nb_ech_hour = samples_per_day / 24
+    state_fields = ["hs", "inactif", "sature", "surcharge", "actif"]
+    state_fields += ["pu"] if "pu" in state_grp.columns else []
 
     sampled = state_grp.reset_index()
     sampled["periode_h"] = sampled["periode"].dt.hour
-    sampled["periode"] = sampled["periode"].dt.date
+    sampled["periode_d"] = sampled["periode"].dt.date
 
-    sampled_h = sampled.groupby([group_name, "nb_pdc", "periode", "periode_h"]).agg(
-        "sum"
+    sampled_h = sampled.groupby([group_name, "nb_pdc", "periode_d", "periode_h"]).agg(
+        "sum"  # !!!!! ici à changer
     )
     sampled_h = sampled_h / nb_ech_hour
-    for etat in ["hs", "inactif", "sature", "surcharge", "actif"]:
+    for etat in state_fields:
         sampled_h[etat] = sampled_h[etat] * 60
 
     sampled_h["sature_h"] = (sampled_h["sature"] + sampled_h["hs"]) >= duree_etat_min
@@ -343,21 +368,7 @@ def to_state_grp_h(
 
     sampled_h = sampled_h.reset_index()
 
-    return sampled_h[
-        [
-            group_name,
-            "periode",
-            "periode_h",
-            "nb_pdc",
-            "hs",
-            "inactif",
-            "sature",
-            "surcharge",
-            "actif",
-            "sature_h",
-            "surcharge_h",
-        ]
-    ]
+    return sampled_h[[group_name, "periode_d", "periode_h", "nb_pdc"] + state_fields + ["sature_h", "surcharge_h"]]
 
 
 def to_state_grp_d(
@@ -368,7 +379,7 @@ def to_state_grp_d(
 
     The time spent in each state is returned in minutes.
     """
-    grouped = state_grp_h.groupby([group_name, "periode"])
+    grouped = state_grp_h.groupby([group_name, "periode_d"])
     state_grp_d = grouped.agg(
         nb_pdc=NamedAgg("nb_pdc", "max"),
         nb_h=NamedAgg("periode", "count"),
