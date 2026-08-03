@@ -53,12 +53,16 @@ def to_sampled_statuses(
         by=["id_pdc_itinerance", "horodatage"]
     )
     state = state[(state["etat_pdc"] != "inconnu")]
-    state["f_horodatage"] = list(state["horodatage"])[1 : len(state)] + [
-        samples[samples_per_day]
-    ]
-    state["f_id_pdc_itinerance"] = list(state["id_pdc_itinerance"])[1 : len(state)] + [
-        "aucun"
-    ]
+    #state["f_horodatage"] = list(state["horodatage"])[1 : len(state)] + [
+    #    samples[samples_per_day]
+    #]
+    #state["f_id_pdc_itinerance"] = list(state["id_pdc_itinerance"])[1 : len(state)] + [
+    #    "aucun"
+    #]
+    state["f_horodatage"] = state["horodatage"].shift(-1)
+    state.loc[state.index[-1], "f_horodatage"] = samples[samples_per_day]
+    state["f_id_pdc_itinerance"] = state["id_pdc_itinerance"].shift(-1)
+    state.loc[state.index[-1], "f_id_pdc_itinerance"] = "aucun"
     # remove statuses with short duration
     state["duration"] = state["f_horodatage"] - state["horodatage"]
     filtered_state = state[
@@ -99,6 +103,7 @@ def to_sampled_sessions(  # noqa: PLR0913
     samples_per_day: int,
     min_duration: timedelta = timedelta(),
     max_duration: timedelta = timedelta(hours=24),
+    latency: timedelta = timedelta()
 ) -> pd.DataFrame:
     """Generate sampled sessions for a given date.
 
@@ -107,6 +112,11 @@ def to_sampled_sessions(  # noqa: PLR0913
     The output states ('occupation_pdc') are either 'occupe' or 'libre'.
     The 'inconnu' value is not taken into account.
     """
+    # add a latency for full_use
+    if latency:
+        data = data.assign(end=data['end']+latency)
+
+    # init variables
     samples = pd.date_range(
         start=timestamp,
         end=timestamp + pd.Timedelta(days=1),
