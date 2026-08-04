@@ -34,10 +34,10 @@ def hysteresis(
     return np.where(cnt, high[ind_low_or_high[cnt - 1]], False)
 
 
-def maxi_period(
+def maxi_duration(
     state_grp: pd.DataFrame, group_name: str, sorted: str, values: str
 ) -> pd.DataFrame:
-    """Calculate de PU periode with the maximum duration."""
+    """Calculate the maximum duration of a given value for each group."""
     df = state_grp.sort_values(by=[group_name, sorted]).reset_index(drop=True)
 
     groups = (
@@ -52,11 +52,23 @@ def maxi_period(
     maxi_period = valid_groups.groupby([group_name, "valid_group"]).agg(
         start=(sorted, "first"),
         end=(sorted, "last"),
+        nb=(sorted, "count")
     )
-    maxi_period["duration"] = maxi_period["end"] - maxi_period["start"]
+    maxi_period["duration"] = (maxi_period["end"] - maxi_period["start"]) / (maxi_period["nb"] - 1) * maxi_period["nb"]
     maxi_period = maxi_period.loc[maxi_period.groupby(level=0)["duration"].idxmax()]
-    return maxi_period
+    return maxi_period.reset_index()
 
+def hourly_maximum(state_grp: pd.DataFrame, group_name: str, sorted: str, values: str, samples_per_hour: int) -> pd.DataFrame:
+    """Calculate the hourly maximum of a given value for each group."""
+    df = state_grp.sort_values(by=[group_name, sorted]).reset_index(drop=True)
+    cumul_hours = (
+        df.groupby(group_name)[values]
+        .rolling(window=samples_per_hour, min_periods=1)
+        .sum()
+    )
+    cumul_hours_max = cumul_hours.groupby(group_name).idxmax()
+    hourly_max = cumul_hours.loc[cumul_hours_max].reset_index().rename(columns={'level_1':'index_state_grp', values: values + '_max'})
+    return hourly_max
 
 def to_sampled_statuses(
     data: pd.DataFrame,
@@ -140,10 +152,6 @@ def to_sampled_sessions(  # noqa: PLR0913
     The output states ('occupation_pdc') are either 'occupe' or 'libre'.
     The 'inconnu' value is not taken into account.
     """
-    # add a latency for full_use
-    # if latency:
-    #    data = data.assign(end=data['end']+latency)
-
     # init variables
     samples = pd.date_range(
         start=timestamp,
