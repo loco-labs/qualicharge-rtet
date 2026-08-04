@@ -1,15 +1,16 @@
 """
 Ce module contient les fonctions utilisées pour le calcul de la saturation.
 """
+
 from datetime import date, timedelta
 
 import numpy as np
 import pandas as pd
 from pandas import NamedAgg
 
-#import shapely
-#import folium
-#from folium.plugins import TimestampedGeoJson
+# import shapely
+# import folium
+# from folium.plugins import TimestampedGeoJson
 
 ID_POC: str = "id_pdc_itinerance"
 ID_STATION: str = "id_station_itinerance"
@@ -19,7 +20,10 @@ END_FULL_USE = 0.8
 
 # fonctions de utils
 
-def hysteresis(x: pd.Series, low_hysteresis_level: float, high_hysteresis_level: float) -> pd.Series:
+
+def hysteresis(
+    x: pd.Series, low_hysteresis_level: float, high_hysteresis_level: float
+) -> pd.Series:
     """Apply hysteresis to a Series with given low and high hysteresis levels."""
     high = x >= high_hysteresis_level
     low_or_high = (x < low_hysteresis_level) | high
@@ -29,25 +33,30 @@ def hysteresis(x: pd.Series, low_hysteresis_level: float, high_hysteresis_level:
     cnt = np.cumsum(low_or_high)
     return np.where(cnt, high[ind_low_or_high[cnt - 1]], False)
 
-def maxi_periode_PU(state_grp: pd.DataFrame, group_name: str) -> pd.DataFrame:
-    '''Calculate de PU periode with the maximum duration.'''
-    df = state_grp.sort_values(by=[group_name, 'periode']).reset_index(drop=True)
 
-    groups = df["occupe"].ne(
-        df.groupby(group_name)["occupe"].shift()
-    ).groupby(df[group_name]).cumsum()
+def maxi_period(
+    state_grp: pd.DataFrame, group_name: str, sorted: str, values: str
+) -> pd.DataFrame:
+    """Calculate de PU periode with the maximum duration."""
+    df = state_grp.sort_values(by=[group_name, sorted]).reset_index(drop=True)
 
-    valid_groups = df[df["occupe"]].assign(valid_group=groups[df["occupe"]])
+    groups = (
+        df[values]
+        .ne(df.groupby(group_name)[values].shift())
+        .groupby(df[group_name])
+        .cumsum()
+    )
+
+    valid_groups = df[df[values]].assign(valid_group=groups[df[values]])
 
     maxi_period = valid_groups.groupby([group_name, "valid_group"]).agg(
-            start=("periode", "first"),
-            end=("periode", "last"),
-        )
-    maxi_period['duration'] = maxi_period['end'] - maxi_period['start']
-    maxi_period = maxi_period.loc[
-        maxi_period.groupby(level=0)["duration"].idxmax()
-    ]
+        start=(sorted, "first"),
+        end=(sorted, "last"),
+    )
+    maxi_period["duration"] = maxi_period["end"] - maxi_period["start"]
+    maxi_period = maxi_period.loc[maxi_period.groupby(level=0)["duration"].idxmax()]
     return maxi_period
+
 
 def to_sampled_statuses(
     data: pd.DataFrame,
@@ -72,12 +81,12 @@ def to_sampled_statuses(
         by=["id_pdc_itinerance", "horodatage"]
     )
     state = state[(state["etat_pdc"] != "inconnu")]
-    #state["f_horodatage"] = list(state["horodatage"])[1 : len(state)] + [
+    # state["f_horodatage"] = list(state["horodatage"])[1 : len(state)] + [
     #    samples[samples_per_day]
-    #]
-    #state["f_id_pdc_itinerance"] = list(state["id_pdc_itinerance"])[1 : len(state)] + [
+    # ]
+    # state["f_id_pdc_itinerance"] = list(state["id_pdc_itinerance"])[1 : len(state)] + [
     #    "aucun"
-    #]
+    # ]
     state["f_horodatage"] = state["horodatage"].shift(-1)
     state.loc[state.index[-1], "f_horodatage"] = samples[samples_per_day]
     state["f_id_pdc_itinerance"] = state["id_pdc_itinerance"].shift(-1)
@@ -121,7 +130,7 @@ def to_sampled_sessions(  # noqa: PLR0913
     timestamp: pd.Timestamp,
     samples_per_day: int,
     min_duration: timedelta = timedelta(),
-    max_duration: timedelta = timedelta(hours=24)
+    max_duration: timedelta = timedelta(hours=24),
     # latency: timedelta = timedelta()
 ) -> pd.DataFrame:
     """Generate sampled sessions for a given date.
@@ -132,7 +141,7 @@ def to_sampled_sessions(  # noqa: PLR0913
     The 'inconnu' value is not taken into account.
     """
     # add a latency for full_use
-    #if latency:
+    # if latency:
     #    data = data.assign(end=data['end']+latency)
 
     # init variables
@@ -244,21 +253,21 @@ def to_sampled_state_grp(
     ('hs': 1, 'inactif': 2, 'actif': 3, 'surcharge': 4, 'sature': 5).
     """
     returned_fields = [
-                group_name,
-                "periode",
-                "occupe",
-                "hors_service",
-                "libre",
-                "pleine_utilisation",
-                "nb_pdc",
-                "hs",
-                "inactif",
-                "pu",
-                "sature",
-                "surcharge",
-                "actif",
-                "state",
-            ]
+        group_name,
+        "periode",
+        "occupe",
+        "hors_service",
+        "libre",
+        "pleine_utilisation",
+        "nb_pdc",
+        "hs",
+        "inactif",
+        "pu",
+        "sature",
+        "surcharge",
+        "actif",
+        "state",
+    ]
     nb_pdc = (
         pdc_group.groupby([group_name])
         .count()
@@ -269,11 +278,20 @@ def to_sampled_state_grp(
     merged["hors_service"] = merged["state"] == "hors_service"
     merged["libre"] = merged["state"] == "libre"
     # add a 5 min interval for 'pleine utilisation'
-    occupe_hs = merged['occupe'] | merged['hors_service']
-    merged['pleine_utilisation'] = occupe_hs | occupe_hs.shift(fill_value=False)
+    occupe_hs = merged["occupe"] | merged["hors_service"]
+    merged["pleine_utilisation"] = occupe_hs | occupe_hs.shift(fill_value=False)
 
     grouped = (
-        merged[[group_name, "periode", "occupe", "hors_service", "libre", "pleine_utilisation"]]
+        merged[
+            [
+                group_name,
+                "periode",
+                "occupe",
+                "hors_service",
+                "libre",
+                "pleine_utilisation",
+            ]
+        ]
         .groupby([group_name, "periode"])
         .sum()
         .reset_index()
@@ -328,11 +346,10 @@ def to_sampled_state_grp(
                 not_full_use,
             ),
         ).astype("bool")
-    else :
+    else:
         grouped["pu"] = False
 
     return grouped[returned_fields]
-
 
 
 def to_state_grp_h(
@@ -354,21 +371,30 @@ def to_state_grp_h(
     sampled["periode_h"] = sampled["periode"].dt.hour
     sampled["periode_d"] = sampled["periode"].dt.date
     grouped = sampled.groupby([group_name, "nb_pdc", "periode_d", "periode_h"])
-    sampled_h = grouped.agg(
-        hs=NamedAgg("hs", "sum"),
-        inactif=NamedAgg("inactif", "sum"),
-        sature_cum=NamedAgg("sature", "sum"),
-        pu_cum=NamedAgg("pu", "sum"),
-        surcharge=NamedAgg("surcharge", "sum"),
-        actif=NamedAgg("actif", "sum"),
-    ) * sample_duration
+    sampled_h = (
+        grouped.agg(
+            hs=NamedAgg("hs", "sum"),
+            inactif=NamedAgg("inactif", "sum"),
+            sature_cum=NamedAgg("sature", "sum"),
+            pu_cum=NamedAgg("pu", "sum"),
+            surcharge=NamedAgg("surcharge", "sum"),
+            actif=NamedAgg("actif", "sum"),
+        )
+        * sample_duration
+    )
 
-    sampled_h["sature_h"] = (sampled_h["sature_cum"] + sampled_h["hs"]) >= duree_etat_min
+    sampled_h["sature_h"] = (
+        sampled_h["sature_cum"] + sampled_h["hs"]
+    ) >= duree_etat_min
     sampled_h["surcharge_h"] = ~sampled_h["sature_h"] & (
         (sampled_h["surcharge"] + sampled_h["sature_cum"] + sampled_h["hs"])
         >= duree_etat_min
     )
-    return sampled_h.reset_index()[[group_name, "periode_d", "periode_h", "nb_pdc"] + state_fields_h + ["sature_h", "surcharge_h"]]
+    return sampled_h.reset_index()[
+        [group_name, "periode_d", "periode_h", "nb_pdc"]
+        + state_fields_h
+        + ["sature_h", "surcharge_h"]
+    ]
 
 
 def to_state_grp_d(
@@ -393,7 +419,9 @@ def to_state_grp_d(
 
     return state_grp_d
 
+
 # fonctions de e2_e3
+
 
 def filter_statuses_sessions(
     sessions: pd.DataFrame, statuses: pd.DataFrame, statics: pd.DataFrame
@@ -412,8 +440,8 @@ def get_sampled_state_poc(
     statuses: pd.DataFrame,
 ) -> pd.DataFrame:
     """Extract complete POC with sessions and statuses."""
-    min_duration = timedelta (minutes=24 * 60 / samples_per_day)
-    max_duration = timedelta (hours=MAX_SESSION_DURATION_HOURS)
+    min_duration = timedelta(minutes=24 * 60 / samples_per_day)
+    max_duration = timedelta(hours=MAX_SESSION_DURATION_HOURS)
     timestamp = pd.Timestamp(day.isoformat() + "T00:00:00+00:00")
     pocs_with_sessions = sessions[ID_POC].unique()
     pocs_with_statuses = statuses[ID_POC].unique()
@@ -421,7 +449,7 @@ def get_sampled_state_poc(
     attributes_statuses = [ID_POC, "horodatage", "etat_pdc"]
     statuses = statuses[attributes_statuses].copy()
     statuses["horodatage"] = statuses["horodatage"].astype("datetime64[s, UTC]")
-    
+
     attributes_sessions = [ID_POC, "start", "end"]
     sessions = sessions[attributes_sessions].copy()
     sessions["start"] = sessions["start"].astype("datetime64[s, UTC]")
@@ -447,7 +475,12 @@ def get_sampled_state_poc(
         }
     )
     sampled_sessions = to_sampled_sessions(
-        sessions, init_sessions, timestamp, samples_per_day, min_duration=min_duration, max_duration=max_duration
+        sessions,
+        init_sessions,
+        timestamp,
+        samples_per_day,
+        min_duration=min_duration,
+        max_duration=max_duration,
     )
 
     return to_sampled_state_poc(sampled_sessions, sampled_statuses)
