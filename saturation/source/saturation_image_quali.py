@@ -253,6 +253,7 @@ def to_sampled_state_grp(
                 "nb_pdc",
                 "hs",
                 "inactif",
+                "pu",
                 "sature",
                 "surcharge",
                 "actif",
@@ -327,7 +328,8 @@ def to_sampled_state_grp(
                 not_full_use,
             ),
         ).astype("bool")
-        returned_fields += ["pu"]
+    else :
+        grouped["pu"] = False
 
     return grouped[returned_fields]
 
@@ -345,30 +347,28 @@ def to_state_grp_h(
     Two boolean hourly states, 'sature_h' and 'surcharge_h', are calculated based on a
     threshold for the time spent in the state.
     """
-    nb_ech_hour = samples_per_day / 24
-    state_fields = ["hs", "inactif", "sature", "surcharge", "actif"]
-    state_fields += ["pu"] if "pu" in state_grp.columns else []
+    sample_duration = 24 * 60 / samples_per_day
+    state_fields_h = ["hs", "inactif", "pu_cum", "sature_cum", "surcharge", "actif"]
 
     sampled = state_grp.reset_index()
     sampled["periode_h"] = sampled["periode"].dt.hour
     sampled["periode_d"] = sampled["periode"].dt.date
+    grouped = sampled.groupby([group_name, "nb_pdc", "periode_d", "periode_h"])
+    sampled_h = grouped.agg(
+        hs=NamedAgg("hs", "sum"),
+        inactif=NamedAgg("inactif", "sum"),
+        sature_cum=NamedAgg("sature", "sum"),
+        pu_cum=NamedAgg("pu", "sum"),
+        surcharge=NamedAgg("surcharge", "sum"),
+        actif=NamedAgg("actif", "sum"),
+    ) * sample_duration
 
-    sampled_h = sampled.groupby([group_name, "nb_pdc", "periode_d", "periode_h"]).agg(
-        "sum"  # !!!!! ici à changer
-    )
-    sampled_h = sampled_h / nb_ech_hour
-    for etat in state_fields:
-        sampled_h[etat] = sampled_h[etat] * 60
-
-    sampled_h["sature_h"] = (sampled_h["sature"] + sampled_h["hs"]) >= duree_etat_min
+    sampled_h["sature_h"] = (sampled_h["sature_cum"] + sampled_h["hs"]) >= duree_etat_min
     sampled_h["surcharge_h"] = ~sampled_h["sature_h"] & (
-        (sampled_h["surcharge"] + sampled_h["sature"] + sampled_h["hs"])
+        (sampled_h["surcharge"] + sampled_h["sature_cum"] + sampled_h["hs"])
         >= duree_etat_min
     )
-
-    sampled_h = sampled_h.reset_index()
-
-    return sampled_h[[group_name, "periode_d", "periode_h", "nb_pdc"] + state_fields + ["sature_h", "surcharge_h"]]
+    return sampled_h.reset_index()[[group_name, "periode_d", "periode_h", "nb_pdc"] + state_fields_h + ["sature_h", "surcharge_h"]]
 
 
 def to_state_grp_d(
