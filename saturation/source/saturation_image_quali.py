@@ -50,15 +50,24 @@ def maxi_duration(
     valid_groups = df[df[values]].assign(valid_group=groups[df[values]])
 
     maxi_period = valid_groups.groupby([group_name, "valid_group"]).agg(
-        start=(sorted, "first"),
-        end=(sorted, "last"),
-        nb=(sorted, "count")
+        start=(sorted, "first"), end=(sorted, "last"), nb=(sorted, "count")
     )
-    maxi_period["duration"] = (maxi_period["end"] - maxi_period["start"]) / (maxi_period["nb"] - 1) * maxi_period["nb"]
+    maxi_period["duration"] = (
+        (maxi_period["end"] - maxi_period["start"])
+        / (maxi_period["nb"] - 1)
+        * maxi_period["nb"]
+    )
     maxi_period = maxi_period.loc[maxi_period.groupby(level=0)["duration"].idxmax()]
     return maxi_period.reset_index()
 
-def hourly_maximum(state_grp: pd.DataFrame, group_name: str, sorted: str, values: str, samples_per_hour: int) -> pd.DataFrame:
+
+def hourly_maximum(
+    state_grp: pd.DataFrame,
+    group_name: str,
+    sorted: str,
+    values: str,
+    samples_per_hour: int,
+) -> pd.DataFrame:
     """Calculate the hourly maximum of a given value for each group."""
     df = state_grp.sort_values(by=[group_name, sorted]).reset_index(drop=True)
     cumul_hours = (
@@ -67,8 +76,13 @@ def hourly_maximum(state_grp: pd.DataFrame, group_name: str, sorted: str, values
         .sum()
     )
     cumul_hours_max = cumul_hours.groupby(group_name).idxmax()
-    hourly_max = cumul_hours.loc[cumul_hours_max].reset_index().rename(columns={'level_1':'index_state_grp', values: values + '_max'})
+    hourly_max = (
+        cumul_hours.loc[cumul_hours_max]
+        .reset_index()
+        .rename(columns={"level_1": "index_state_grp", values: values + "_max"})
+    )
     return hourly_max
+
 
 def to_sampled_statuses(
     data: pd.DataFrame,
@@ -252,6 +266,7 @@ def to_sampled_state_grp(
     saturation_ratio: float,
     overload_ratio: float,
     add_full_use: bool = False,
+    add_latency: bool = False,
 ) -> pd.DataFrame:
     """Generate the aggregated states of a set of charge points.
 
@@ -286,9 +301,9 @@ def to_sampled_state_grp(
     merged["hors_service"] = merged["state"] == "hors_service"
     merged["libre"] = merged["state"] == "libre"
     # add a 5 min interval for 'pleine utilisation'
-    occupe_hs = merged["occupe"] | merged["hors_service"]
-    merged["pleine_utilisation"] = occupe_hs | occupe_hs.shift(fill_value=False)
-
+    if add_latency:
+        occupe_hs = merged["occupe"] | merged["hors_service"]
+        merged["pleine_utilisation"] = occupe_hs | occupe_hs.shift(fill_value=False)
     grouped = (
         merged[
             [
@@ -379,7 +394,7 @@ def to_state_grp_h(
     sampled["periode_h"] = sampled["periode"].dt.hour
     sampled["periode_d"] = sampled["periode"].dt.date
     grouped = sampled.groupby([group_name, "nb_pdc", "periode_d", "periode_h"])
-    sampled_h = (
+    state_grp_h = (
         grouped.agg(
             hs=NamedAgg("hs", "sum"),
             inactif=NamedAgg("inactif", "sum"),
@@ -391,14 +406,14 @@ def to_state_grp_h(
         * sample_duration
     )
 
-    sampled_h["sature_h"] = (
-        sampled_h["sature_cum"] + sampled_h["hs"]
+    state_grp_h["sature_h"] = (
+        state_grp_h["sature_cum"] + state_grp_h["hs"]
     ) >= duree_etat_min
-    sampled_h["surcharge_h"] = ~sampled_h["sature_h"] & (
-        (sampled_h["surcharge"] + sampled_h["sature_cum"] + sampled_h["hs"])
+    state_grp_h["surcharge_h"] = ~state_grp_h["sature_h"] & (
+        (state_grp_h["surcharge"] + state_grp_h["sature_cum"] + state_grp_h["hs"])
         >= duree_etat_min
     )
-    return sampled_h.reset_index()[
+    return state_grp_h.reset_index()[
         [group_name, "periode_d", "periode_h", "nb_pdc"]
         + state_fields_h
         + ["sature_h", "surcharge_h"]
@@ -406,24 +421,30 @@ def to_state_grp_h(
 
 
 def to_state_grp_d(
-    state_grp_h: pd.DataFrame,
+    state_grp: pd.DataFrame,
     group_name: str,
+    samples_per_day: int,
 ) -> pd.DataFrame:
-    """Generate daily states from the hourly state of a set of charge points.
+    """Generate daily states based on the sampled state of a set of charge points.
 
     The time spent in each state is returned in minutes.
     """
-    grouped = state_grp_h.groupby([group_name, "periode_d"])
-    state_grp_d = grouped.agg(
-        nb_pdc=NamedAgg("nb_pdc", "max"),
-        nb_h=NamedAgg("periode", "count"),
-        hs=NamedAgg("hs", "sum"),
-        inactif=NamedAgg("inactif", "sum"),
-        sature_cum=NamedAgg("sature", "sum"),
-        sature_max=NamedAgg("sature", "max"),
-        surcharge=NamedAgg("surcharge", "sum"),
-        actif=NamedAgg("actif", "sum"),
-    ).reset_index()
+    sample_duration = 24 * 60 / samples_per_day
+    state_fields_d = ["hs", "inactif", "pu_cum", "sature_cum", "surcharge", "actif"]
+
+    sampled = state_grp.reset_index()
+    grouped = sampled.groupby([group_name, "nb_pdc"])
+    state_grp_d = (
+        grouped.agg(
+            nb_h=NamedAgg("periode", "count"),
+            hs=NamedAgg("hs", "sum"),
+            inactif=NamedAgg("inactif", "sum"),
+            sature_cum=NamedAgg("sature", "sum"),
+            surcharge=NamedAgg("surcharge", "sum"),
+            actif=NamedAgg("actif", "sum"),
+        )
+        * sample_duration.reset_index()
+    )
 
     return state_grp_d
 
