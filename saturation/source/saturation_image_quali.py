@@ -95,7 +95,8 @@ def to_sampled_statuses(
 
     Generation is based on a set of statuses and initial values.
     The output states ('etat_pdc') are either 'en_service' or 'hors_service'.
-    The 'inconnu' value is not taken into account.
+    The output states ('occupation_pdc') are either 'occupe' or 'libre'.
+    A state with an 'inconnu' value is not taken into account.
     """
     samples = pd.date_range(
         start=timestamp,
@@ -106,23 +107,18 @@ def to_sampled_statuses(
     state = pd.concat([data, init_data]).sort_values(
         by=["id_pdc_itinerance", "horodatage"]
     )
-    state = state[(state["etat_pdc"] != "inconnu")]
-    # state["f_horodatage"] = list(state["horodatage"])[1 : len(state)] + [
-    #    samples[samples_per_day]
-    # ]
-    # state["f_id_pdc_itinerance"] = list(state["id_pdc_itinerance"])[1 : len(state)] + [
-    #    "aucun"
-    # ]
+    state = state[(state["etat_pdc"] != "inconnu") & (state["occupation_pdc"] != "inconnu")].copy().reset_index(drop=True)
     state["f_horodatage"] = state["horodatage"].shift(-1)
     state.loc[state.index[-1], "f_horodatage"] = samples[samples_per_day]
     state["f_id_pdc_itinerance"] = state["id_pdc_itinerance"].shift(-1)
     state.loc[state.index[-1], "f_id_pdc_itinerance"] = "aucun"
+
     # remove statuses with short duration
     state["duration"] = state["f_horodatage"] - state["horodatage"]
     filtered_state = state[
         (state["duration"] > min_duration)
         | (state["id_pdc_itinerance"] != state["f_id_pdc_itinerance"])
-    ].copy()
+    ].copy().reset_index(drop=True)
     filtered_state["f_horodatage"] = list(filtered_state["horodatage"])[
         1 : len(filtered_state)
     ] + [samples[samples_per_day]]
@@ -133,17 +129,11 @@ def to_sampled_statuses(
     # create sampled statuses
     crossed = pd.merge(filtered_state, periode, how="cross")
     sampled = crossed[
-        (
-            (crossed["id_pdc_itinerance"].eq(crossed["f_id_pdc_itinerance"]))
-            & (crossed["periode"] >= crossed["horodatage"])
-            & (crossed["periode"] < crossed["f_horodatage"])
-        )
-        | (
-            ~(crossed["id_pdc_itinerance"].eq(crossed["f_id_pdc_itinerance"]))
-            & (crossed["periode"] >= crossed["horodatage"])
-        )
+        (crossed["id_pdc_itinerance"].eq(crossed["f_id_pdc_itinerance"]))
+        & (crossed["periode"] >= crossed["horodatage"])
+        & (crossed["periode"] < crossed["f_horodatage"])
     ]
-    sampled = sampled[["periode", "etat_pdc", "id_pdc_itinerance"]]
+    sampled = sampled[["periode", "etat_pdc", "occupation_pdc", "id_pdc_itinerance"]]
 
     return sampled.sort_values(by=["id_pdc_itinerance", "periode"]).reset_index(
         drop=True
@@ -304,6 +294,8 @@ def to_sampled_state_grp(
     if add_latency:
         occupe_hs = merged["occupe"] | merged["hors_service"]
         merged["pleine_utilisation"] = occupe_hs | occupe_hs.shift(fill_value=False)
+    else:
+        merged["pleine_utilisation"] = merged["occupe"]
     grouped = (
         merged[
             [
