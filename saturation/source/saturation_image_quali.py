@@ -461,8 +461,8 @@ def to_state_grp_d(
             surcharge=NamedAgg("surcharge", "sum"),
             actif=NamedAgg("actif", "sum"),
         )
-        * sample_duration.reset_index()
-    )
+        * sample_duration
+    ).reset_index()
 
     return state_grp_d
 
@@ -490,8 +490,9 @@ def get_sampled_state_poc(
     min_duration = timedelta(minutes=24 * 60 / samples_per_day)
     max_duration = timedelta(hours=MAX_SESSION_DURATION_HOURS)
     timestamp = pd.Timestamp(day.isoformat() + "T00:00:00+00:00")
-    pocs_with_sessions = sessions[ID_POC].unique()
-    pocs_with_statuses = statuses[ID_POC].unique()
+    pocs_with_sessions = pd.Series(sessions[ID_POC].unique())
+    pocs_with_statuses = pd.Series(statuses[ID_POC].unique())
+    all_pocs = pd.concat([pocs_with_sessions, pocs_with_statuses]).drop_duplicates().reset_index(drop=True)
 
     attributes_statuses = [ID_POC, "horodatage", "etat_pdc"]
     statuses = statuses[attributes_statuses].copy()
@@ -502,13 +503,24 @@ def get_sampled_state_poc(
     sessions["start"] = sessions["start"].astype("datetime64[s, UTC]")
     sessions["end"] = sessions["end"].astype("datetime64[s, UTC]")
 
-    init_statuses = pd.DataFrame(
+    init_start_statuses = pd.DataFrame(
         {
-            "horodatage": [timestamp + pd.Timedelta(days=-1)] * len(pocs_with_statuses),
-            "etat_pdc": ["en_service"] * len(pocs_with_statuses),
-            "id_pdc_itinerance": pocs_with_statuses,
+            "horodatage": [timestamp + pd.Timedelta(days=-1)] * len(all_pocs),
+            "etat_pdc": ["en_service"] * len(all_pocs),
+            "occupation_pdc": ["libre"] * len(all_pocs),
+            "id_pdc_itinerance": all_pocs,
         }
     )
+    init_end_statuses = pd.DataFrame(
+            {
+                "horodatage": [timestamp + pd.Timedelta(days=1)] * len(all_pocs),
+                "etat_pdc": ["en_service"] * len(all_pocs),
+                "occupation_pdc": ["libre"] * len(all_pocs),
+                "id_pdc_itinerance": all_pocs,
+            }
+        )
+    init_statuses = pd.concat([init_start_statuses, init_end_statuses])
+
     init_statuses["horodatage"] = pd.to_datetime(init_statuses["horodatage"], utc=True)
     sampled_statuses = to_sampled_statuses(
         statuses, init_statuses, timestamp, samples_per_day, min_duration=min_duration
@@ -516,9 +528,9 @@ def get_sampled_state_poc(
 
     init_sessions = pd.DataFrame(
         {
-            "start": [timestamp + pd.Timedelta(hours=-2)] * len(pocs_with_sessions),
-            "end": [timestamp + pd.Timedelta(hours=-1)] * len(pocs_with_sessions),
-            "id_pdc_itinerance": pocs_with_sessions,
+            "start": [timestamp + pd.Timedelta(hours=-2)] * len(all_pocs),
+            "end": [timestamp + pd.Timedelta(hours=-1)] * len(all_pocs),
+            "id_pdc_itinerance": all_pocs,
         }
     )
     sampled_sessions = to_sampled_sessions(
