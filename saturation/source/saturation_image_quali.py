@@ -94,9 +94,8 @@ def to_sampled_statuses(
     """Generate sampled statuses for a given date.
 
     Generation is based on a set of statuses and initial values.
-    The output states ('etat_pdc') are either 'en_service' or 'hors_service'.
-    The output states ('occupation_pdc') are either 'occupe' or 'libre'.
-    A state with an 'inconnu' value is not taken into account.
+    The output states ('etat_pdc') are either 'en_service' or 'hors_service' ('inconnu' value is not taken into account).
+    The output states ('occupation_pdc') are either 'occupe', 'libre' or 'inconnu'.
     """
     samples = pd.date_range(
         start=timestamp,
@@ -107,7 +106,7 @@ def to_sampled_statuses(
     state = pd.concat([data, init_data]).sort_values(
         by=["id_pdc_itinerance", "horodatage"]
     )
-    state = state[(state["etat_pdc"] != "inconnu") & (state["occupation_pdc"] != "inconnu")].copy().reset_index(drop=True)
+    state = state[state["etat_pdc"] != "inconnu"].copy().reset_index(drop=True)
     state["f_horodatage"] = state["horodatage"].shift(-1)
     state.loc[state.index[-1], "f_horodatage"] = samples[samples_per_day]
     state["f_id_pdc_itinerance"] = state["id_pdc_itinerance"].shift(-1)
@@ -115,10 +114,14 @@ def to_sampled_statuses(
 
     # remove statuses with short duration
     state["duration"] = state["f_horodatage"] - state["horodatage"]
-    filtered_state = state[
-        (state["duration"] > min_duration)
-        | (state["id_pdc_itinerance"] != state["f_id_pdc_itinerance"])
-    ].copy().reset_index(drop=True)
+    filtered_state = (
+        state[
+            (state["duration"] > min_duration)
+            | (state["id_pdc_itinerance"] != state["f_id_pdc_itinerance"])
+        ]
+        .copy()
+        .reset_index(drop=True)
+    )
     filtered_state["f_horodatage"] = list(filtered_state["horodatage"])[
         1 : len(filtered_state)
     ] + [samples[samples_per_day]]
@@ -210,7 +213,10 @@ def to_sampled_state_poc(
     The session 'occupe' state takes precedence over the status state.
     A session's 'f_libre' (not occupied) state translates to the 'hors_service' state if
     the status state is 'hors_service'; otherwise, it translates to the 'libre' state.
+    The "pseudo-libre" state corresponds to a "libre" status with a session that is not.
+    The "pseudo-occupe" state corresponds to a "occupe" status with a session that is not.
     """
+    statuses = statuses.rename(columns={"occupation_pdc": "occupation_pdc_status"})
     merged = pd.merge(
         sessions, statuses, how="outer", on=["id_pdc_itinerance", "periode"]
     ).fillna("aaa")
@@ -222,10 +228,19 @@ def to_sampled_state_poc(
         .agg("max", axis=1)
         .replace("en_service", "libre")
     )
-    merged = merged[["id_pdc_itinerance", "periode", "state"]].replace(
-        "f_libre", "libre"
+    merged["pseudo_libre"] = (
+        merged["occupation_pdc_status"].eq("libre")
+        & merged["occupation_pdc"].ne("f_libre")
+        & merged["etat_pdc"].eq("en_service")
     )
-
+    merged["pseudo_occupe"] = (
+        merged["occupation_pdc_status"].eq("occupe")
+        & merged["occupation_pdc"].ne("occupe")
+        & merged["etat_pdc"].eq("en_service")
+    )
+    merged = merged[
+        ["id_pdc_itinerance", "periode", "state", "pseudo_libre", "pseudo_occupe"]
+    ].replace("f_libre", "libre")
     return merged.sort_values(by=["id_pdc_itinerance", "periode"]).reset_index(
         drop=True
     )
@@ -236,17 +251,28 @@ def to_state_poc_d(state_poc: pd.DataFrame, samples_per_day: int) -> pd.DataFram
 
     The time spent in each state is returne d in minutes.
     """
-    sampled = state_poc[["id_pdc_itinerance", "state"]].reset_index()
+    sampled = state_poc[
+        ["id_pdc_itinerance", "state", "pseudo_libre", "pseudo_occupe"]
+    ].reset_index()
     sampled["occupe"] = sampled["state"] == "occupe"
     sampled["hors_service"] = sampled["state"] == "hors_service"
     sampled["libre"] = sampled["state"] == "libre"
 
     state_d = sampled.groupby(["id_pdc_itinerance"]).agg("sum").reset_index()
 
-    for etat in ["occupe", "hors_service", "libre"]:
+    for etat in ["occupe", "hors_service", "libre", "pseudo_libre", "pseudo_occupe"]:
         state_d[etat] = state_d[etat] * 60 * 24 / samples_per_day
 
-    return state_d[["id_pdc_itinerance", "occupe", "hors_service", "libre"]]
+    return state_d[
+        [
+            "id_pdc_itinerance",
+            "occupe",
+            "hors_service",
+            "libre",
+            "pseudo_libre",
+            "pseudo_occupe",
+        ]
+    ]
 
 
 def to_sampled_state_grp(
