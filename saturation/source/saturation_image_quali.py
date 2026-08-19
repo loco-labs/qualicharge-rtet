@@ -102,6 +102,15 @@ def filter_sessions_duration(
     )
     return filtered_sessions
 
+def add_sessions_info(states: pd.DataFrame, sessions: pd.DataFrame, group_name: str) -> pd.DataFrame:
+    """Add sessions information to the states DataFrame."""
+    poc = sessions.groupby(group_name).agg(
+                sessions_nb=NamedAgg("energy", "count"),
+                energy_cum=NamedAgg("energy", "sum")
+            ).reset_index()
+
+    full_states = pd.merge(states, poc, on=group_name, how='left').fillna(0)
+    return full_states
 
 def to_sampled_statuses(
     data: pd.DataFrame,
@@ -256,22 +265,25 @@ def to_state_poc_d(state_poc: pd.DataFrame, samples_per_day: int) -> pd.DataFram
 
     The time spent in each state is returned in minutes.
     """
+    samples_per_hour = samples_per_day // 24
     sampled = state_poc[
-        ["id_pdc_itinerance", "state", "pseudo_libre", "pseudo_occupe"]
+        ["id_pdc_itinerance", "state", "pseudo_libre", "pseudo_occupe", "periode"]
     ].reset_index()
     sampled["occupe"] = sampled["state"] == "occupe"
     sampled["hors_service"] = sampled["state"] == "hors_service"
     sampled["libre"] = sampled["state"] == "libre"
-
-    state_d = sampled.groupby(["id_pdc_itinerance"]).agg("sum").reset_index()
+    occupe_max = hourly_maximum(sampled, "id_pdc_itinerance", "periode", "occupe", samples_per_hour)
+    occupe_max["occupe_max"] = occupe_max["occupe_max"] * 60 * 24 / samples_per_day
+    state_d = sampled[["id_pdc_itinerance", "occupe", "hors_service", "libre", "pseudo_libre", "pseudo_occupe"]].groupby(["id_pdc_itinerance"]).agg("sum").reset_index()
 
     for etat in ["occupe", "hors_service", "libre", "pseudo_libre", "pseudo_occupe"]:
         state_d[etat] = state_d[etat] * 60 * 24 / samples_per_day
-
-    return state_d[
+    full_state_d = pd.merge(state_d, occupe_max[["id_pdc_itinerance", "occupe_max"]], on="id_pdc_itinerance", how='left').fillna(0)
+    return full_state_d[
         [
             "id_pdc_itinerance",
             "occupe",
+            "occupe_max",
             "hors_service",
             "libre",
             "pseudo_libre",
