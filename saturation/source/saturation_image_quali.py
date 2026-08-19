@@ -83,6 +83,25 @@ def hourly_maximum(
     )
     return hourly_max
 
+def filter_sessions_duration(
+    sessions: pd.DataFrame,
+    min_duration: timedelta = timedelta(),
+    max_duration: timedelta = timedelta(hours=24),
+) -> pd.DataFrame:
+    """Filter sessions based on minimum and maximum duration."""
+    unic = ["start", "end", "id_pdc_itinerance"]
+    sessions["duration"] = sessions["end"] - sessions["start"]
+    filtered_sessions = (
+        sessions[
+            (sessions["duration"] > min_duration)
+            & (sessions["duration"] < max_duration)
+        ]
+        .copy()
+        .drop_duplicates(subset=unic)
+        .reset_index(drop=True)
+    )
+    return filtered_sessions
+
 
 def to_sampled_statuses(
     data: pd.DataFrame,
@@ -148,9 +167,6 @@ def to_sampled_sessions(  # noqa: PLR0913
     init_data: pd.DataFrame,
     timestamp: pd.Timestamp,
     samples_per_day: int,
-    min_duration: timedelta = timedelta(),
-    max_duration: timedelta = timedelta(hours=24),
-    # latency: timedelta = timedelta()
 ) -> pd.DataFrame:
     """Generate sampled sessions for a given date.
 
@@ -168,22 +184,11 @@ def to_sampled_sessions(  # noqa: PLR0913
     periode = pd.DataFrame({"periode": samples[0:samples_per_day]})
     sessions = pd.concat([data, init_data]).sort_values(
         by=["id_pdc_itinerance", "start"]
-    )
-    # remove invalid sessions : duplicates, short duration, long duration
-    unic = ["start", "end", "id_pdc_itinerance"]
-    sessions["duration"] = sessions["end"] - sessions["start"]
-    filtered_sessions = (
-        sessions[
-            (sessions["duration"] > min_duration)
-            & (sessions["duration"] < max_duration)
-        ]
-        .copy()
-        .drop_duplicates(subset=unic)
-    )
+    ).reset_index(drop=True)
 
     # create sampled sessions
-    filtered_sessions["occupation_pdc"] = "occupe"
-    crossed = pd.merge(filtered_sessions, periode, how="cross")
+    sessions["occupation_pdc"] = "occupe"
+    crossed = pd.merge(sessions, periode, how="cross")
     sampled = crossed[
         (
             (crossed["periode"] >= crossed["start"])
@@ -488,13 +493,13 @@ def get_sampled_state_poc(
 ) -> pd.DataFrame:
     """Extract complete POC with sessions and statuses."""
     min_duration = timedelta(minutes=24 * 60 / samples_per_day)
-    max_duration = timedelta(hours=MAX_SESSION_DURATION_HOURS)
+    #max_duration = timedelta(hours=MAX_SESSION_DURATION_HOURS)
     timestamp = pd.Timestamp(day.isoformat() + "T00:00:00+00:00")
     pocs_with_sessions = pd.Series(sessions[ID_POC].unique())
     pocs_with_statuses = pd.Series(statuses[ID_POC].unique())
     all_pocs = pd.concat([pocs_with_sessions, pocs_with_statuses]).drop_duplicates().reset_index(drop=True)
 
-    attributes_statuses = [ID_POC, "horodatage", "etat_pdc"]
+    attributes_statuses = [ID_POC, "horodatage", "etat_pdc", "occupation_pdc"]
     statuses = statuses[attributes_statuses].copy()
     statuses["horodatage"] = statuses["horodatage"].astype("datetime64[s, UTC]")
 
@@ -533,13 +538,14 @@ def get_sampled_state_poc(
             "id_pdc_itinerance": all_pocs,
         }
     )
+    #filtered_sessions = filter_sessions_duration(
+    #    sessions, min_duration=min_duration, max_duration=max_duration
+    #)
     sampled_sessions = to_sampled_sessions(
         sessions,
         init_sessions,
         timestamp,
         samples_per_day,
-        min_duration=min_duration,
-        max_duration=max_duration,
     )
 
     return to_sampled_state_poc(sampled_sessions, sampled_statuses)
