@@ -56,7 +56,7 @@ def maxi_duration(
         (maxi_period["end"] - maxi_period["start"])
         / (maxi_period["nb"] - 1)
         * maxi_period["nb"]
-    )
+    ).fillna(timedelta())
     maxi_period = maxi_period.loc[maxi_period.groupby(level=0)["duration"].idxmax()]
     return maxi_period.reset_index()
 
@@ -426,11 +426,11 @@ def to_state_grp_d(
 
     sature_max = hourly_maximum(sampled, group_name, "periode", "sature", samples_per_hour)
     pu_max = hourly_maximum(sampled, group_name, "periode", "pu", samples_per_hour)
-    pu_duration = maxi_duration(sampled, group_name, "periode", "pu")
+    pu_duration = maxi_duration(sampled, group_name, "periode", "pu").rename(columns={"duration":"pu_len"})
 
     sature_max["sature_max"] = sature_max["sature_max"] * sample_duration
     sature_max["pu_max"] = pu_max["pu_max"] * sample_duration
-    sature_max["pu_len"] = pu_duration["duration"]
+    #sature_max["pu_len"] = pu_duration["duration"]
 
 
     grouped = sampled.groupby([group_name, "nb_pdc"])
@@ -445,8 +445,9 @@ def to_state_grp_d(
         )
         * sample_duration
     ).reset_index()
-    full_state_grp_d = pd.merge(state_grp_d, sature_max[[group_name, "sature_max", "pu_max", "pu_len"]], on=group_name, how='left').fillna(0)
-
+    full_state_grp_d = pd.merge(state_grp_d, sature_max[[group_name, "sature_max", "pu_max"]], on=group_name, how='left').fillna(0)
+    full_state_grp_d = pd.merge(full_state_grp_d, pu_duration[[group_name, "pu_len"]], on=group_name, how='left').fillna(timedelta())
+    
     return full_state_grp_d
 
 
