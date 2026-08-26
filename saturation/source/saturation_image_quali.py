@@ -29,15 +29,16 @@ def hysteresis(
     low_or_high = (x < low_hysteresis_level) | high
     ind_low_or_high = np.nonzero(low_or_high)[0]
     if not ind_low_or_high.size:  # prevent index error if ind_low_or_high is empty
-        return None
+        #return None
+        return pd.Series(False, index=x.index)
     cnt = np.cumsum(low_or_high)
-    return np.where(cnt, high[ind_low_or_high[cnt - 1]], False)
+    return pd.Series(np.where(cnt, high[ind_low_or_high[cnt - 1]], False), index=x.index)
 
 
 def maxi_duration(
     state_grp: pd.DataFrame, group_name: str, sorted: str, values: str
 ) -> pd.DataFrame:
-    """Calculate the maximum duration of a given value for each group."""
+    """Calculate the maximum number of periods of a given value for each group."""
     df = state_grp.sort_values(by=[group_name, sorted]).reset_index(drop=True)
 
     groups = (
@@ -50,13 +51,8 @@ def maxi_duration(
     valid_groups = df[df[values]].assign(valid_group=groups[df[values]])
 
     maxi_period = valid_groups.groupby([group_name, "valid_group"]).agg(
-        start=(sorted, "first"), end=(sorted, "last"), nb=(sorted, "count")
+        first=(sorted, "first"), last=(sorted, "last"), duration=(sorted, "count")
     )
-    maxi_period["duration"] = (
-        (maxi_period["end"] - maxi_period["start"])
-        / (maxi_period["nb"] - 1)
-        * maxi_period["nb"]
-    ).fillna(timedelta())
     maxi_period = maxi_period.loc[maxi_period.groupby(level=0)["duration"].idxmax()]
     return maxi_period.reset_index()
 
@@ -391,15 +387,27 @@ def to_sampled_state_grp(
         full_use = 1
 
         full_use_rate = (grouped["pleine_utilisation"] + grouped["hors_service"]) / grouped["nb_pdc"]
-        tmp_full_use = pd.cut(
-            full_use_rate,
-            [-np.inf, END_FULL_USE, START_FULL_USE, np.inf],
-            labels=[not_full_use, maybe_full_use, full_use],
+
+        tmp_full_use = pd.Series(
+            pd.cut(
+                full_use_rate,
+                [-np.inf, END_FULL_USE, START_FULL_USE, np.inf],
+                labels=[not_full_use, maybe_full_use, full_use],
+            ),
+            index=full_use_rate.index,
         )
+
+        #tmp_full_use = pd.cut(
+        #    full_use_rate,
+        #    [-np.inf, END_FULL_USE, START_FULL_USE, np.inf],
+        #    labels=[not_full_use, maybe_full_use, full_use],
+        #)
+
         grouped["pu"] = tmp_full_use.where(
             tmp_full_use != maybe_full_use,
             np.where(
-                hysteresis(tmp_full_use.values, maybe_full_use, full_use),
+                #hysteresis(tmp_full_use.values, maybe_full_use, full_use),
+                hysteresis(tmp_full_use, maybe_full_use, full_use),
                 full_use,
                 not_full_use,
             ),
@@ -424,13 +432,13 @@ def to_state_grp_d(
 
     sampled = state_grp.reset_index()
 
-    sature_max = hourly_maximum(sampled, group_name, "periode", "sature", samples_per_hour)
+    hourly_max = hourly_maximum(sampled, group_name, "periode", "sature", samples_per_hour)
     pu_max = hourly_maximum(sampled, group_name, "periode", "pu", samples_per_hour)
-    pu_duration = maxi_duration(sampled, group_name, "periode", "pu").rename(columns={"duration":"pu_len"})
+    pu_duration = maxi_duration(sampled, group_name, "periode", "pu")
 
-    sature_max["sature_max"] = sature_max["sature_max"] * sample_duration
-    sature_max["pu_max"] = pu_max["pu_max"] * sample_duration
-    #sature_max["pu_len"] = pu_duration["duration"]
+    hourly_max["sature_max"] = hourly_max["sature_max"] * sample_duration
+    hourly_max["pu_max"] = pu_max["pu_max"] * sample_duration
+    hourly_max["pu_len"] = pu_duration["duration"] * sample_duration
 
 
     grouped = sampled.groupby([group_name, "nb_pdc"])
@@ -445,8 +453,8 @@ def to_state_grp_d(
         )
         * sample_duration
     ).reset_index()
-    full_state_grp_d = pd.merge(state_grp_d, sature_max[[group_name, "sature_max", "pu_max"]], on=group_name, how='left').fillna(0)
-    full_state_grp_d = pd.merge(full_state_grp_d, pu_duration[[group_name, "pu_len"]], on=group_name, how='left').fillna(timedelta())
+    full_state_grp_d = pd.merge(state_grp_d, hourly_max[[group_name, "sature_max", "pu_max", "pu_len"]], on=group_name, how='left').fillna(0)
+    #full_state_grp_d = pd.merge(full_state_grp_d, pu_duration[[group_name, "pu_len"]], on=group_name, how='left').fillna(timedelta())
     
     return full_state_grp_d
 
