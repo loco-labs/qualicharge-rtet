@@ -320,15 +320,19 @@ def to_sampled_state_grp(
         .count()
         .rename(columns={"id_pdc_itinerance": "nb_pdc"})
     )
-    merged = pd.merge(state_poc, pdc_group, how="left", on="id_pdc_itinerance")
+    merged = pd.merge(state_poc, pdc_group, how="left", on="id_pdc_itinerance")#.sort_values(by=["id_pdc_itinerance", "periode"]).reset_index(drop=True)
     merged["occupe"] = merged["state"] == "occupe"
     merged["hors_service"] = merged["state"] == "hors_service"
     merged["libre"] = merged["state"] == "libre"
     # add a 5 min interval for 'pleine utilisation'
     if add_latency:
         occupe_hs = merged["occupe"] | merged["hors_service"]
-        merged["pleine_utilisation"] = occupe_hs | occupe_hs.shift(fill_value=False)
-    else:
+        merged["pleine_utilisation"] = (
+            occupe_hs | occupe_hs.shift(fill_value=False)
+            ) & (
+                merged["id_pdc_itinerance"] == merged["id_pdc_itinerance"].shift(fill_value="")
+                )
+    else: 
         merged["pleine_utilisation"] = merged["occupe"]
     grouped = (
         merged[
@@ -438,7 +442,7 @@ def to_state_grp_d(
 
     hourly_max["sature_max"] = hourly_max["sature_max"] * sample_duration
     hourly_max["pu_max"] = pu_max["pu_max"] * sample_duration
-    hourly_max["pu_len"] = pu_duration["duration"] * sample_duration
+    pu_duration["pu_len"] = pu_duration["duration"] * sample_duration
 
 
     grouped = sampled.groupby([group_name, "nb_pdc"])
@@ -453,8 +457,8 @@ def to_state_grp_d(
         )
         * sample_duration
     ).reset_index()
-    full_state_grp_d = pd.merge(state_grp_d, hourly_max[[group_name, "sature_max", "pu_max", "pu_len"]], on=group_name, how='left').fillna(0)
-    #full_state_grp_d = pd.merge(full_state_grp_d, pu_duration[[group_name, "pu_len"]], on=group_name, how='left').fillna(timedelta())
+    full_state_grp_d = pd.merge(state_grp_d, hourly_max[[group_name, "sature_max", "pu_max"]], on=group_name, how='left').fillna(0)
+    full_state_grp_d = pd.merge(full_state_grp_d, pu_duration[[group_name, "pu_len"]], on=group_name, how='left').fillna(0)
     
     return full_state_grp_d
 
