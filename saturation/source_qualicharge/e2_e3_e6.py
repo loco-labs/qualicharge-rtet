@@ -18,8 +18,8 @@ from pandas import NamedAgg
 # from indicators.extract.utils import (
 from utils import (
     filter_sessions_duration,
-    get_pdc_station_for_day,
-    get_station_pool_for_day,
+    # get_pdc_station_for_day,
+    # get_station_pool_for_day,
     to_sampled_sessions,
     to_sampled_state_grp,
     to_sampled_state_poc,
@@ -36,7 +36,7 @@ from utils import (
 # )
 
 # HISTORY_STRATEGY_FIELD: str = "mean"
-# PERIOD = IndicatorPeriod.DAY
+PERIOD = 288
 CHUNK_SIZE: int = 200
 SAMPLES: int = 288  # 5 min
 SATURE_H: int = 45  # minimum duration (min) of saturation to have a saturated hour
@@ -214,7 +214,7 @@ def get_chunked_state_grp(  # noqa: PLR0913
     chunks = statics.groupby("chunk")
 
     futures = [
-        to_state_grp.submit(
+        to_state_grp(  # .submit(
             to_sampled_state_grp(
                 sampled_state_poc[sampled_state_poc[ID_POC].isin(chunk[ID_POC])],
                 chunk,
@@ -230,7 +230,8 @@ def get_chunked_state_grp(  # noqa: PLR0913
         for _, chunk in chunks
     ]
 
-    state_grp = pd.concat([future.result() for future in futures], ignore_index=True)
+    # state_grp = pd.concat([future.result() for future in futures], ignore_index=True)
+    state_grp = pd.concat([future for future in futures], ignore_index=True)
     return state_grp
 
 
@@ -290,24 +291,23 @@ def get_chunked_state_pools(  # noqa: PLR0913
     return state_pools
 
 
-'''@flow(flow_run_name="meta-e2-d")
+# @flow(flow_run_name="meta-e2-d")
 def e2(  # noqa: PLR0913
-    environment: Environment,
+    # environment: Environment,
     state_poc: pd.DataFrame,
     sessions_poc: pd.DataFrame,
     day: date,
-    create_artifact: bool,
-    persist: bool,
+    # create_artifact: bool,
+    # persist: bool,
 ) -> pd.DataFrame:
     """Run e2 subflow."""
-    # state_poc = to_state_poc(sampled_state_poc, samples_per_day)
     full_state_poc = pd.merge(state_poc, sessions_poc, on=ID_POC, how="left").fillna(0)
     indicators_e2 = pd.DataFrame(
         {
             "target": "00",
             "value": len(full_state_poc),
             "code": "e2",
-            "level": Level.NATIONAL,
+            # "level": Level.NATIONAL,
             "period": PERIOD,
             "timestamp": day.isoformat(),
             "category": None,
@@ -327,21 +327,21 @@ def e2(  # noqa: PLR0913
         }
     )
     desc_e2 = f"e2 report at {day} (period: {PERIOD})"
-    flow_name_e2 = "e2-" + runtime.flow_run.name
-    export_indicators(
-        indicators_e2, environment, flow_name_e2, desc_e2, create_artifact, persist
-    )
+    # flow_name_e2 = "e2-" + runtime.flow_run.name
+    # export_indicators(
+    #    indicators_e2, environment, flow_name_e2, desc_e2, create_artifact, persist
+    # )
     return indicators_e2
 
 
-@flow(flow_run_name="meta-e3-d")
+# @flow(flow_run_name="meta-e3-d")
 def e3(  # noqa: PLR0913
-    environment: Environment,
+    # environment: Environment,
     state_station: pd.DataFrame,
     info_sessions_stations: pd.DataFrame,
     day: date,
-    create_artifact: bool,
-    persist: bool,
+    # create_artifact: bool,
+    # persist: bool,
 ) -> pd.DataFrame:
     """Run e3 subflow."""
     # state_station = to_state_grp(sampled_state_station, ID_STATION, SAMPLES)
@@ -353,7 +353,7 @@ def e3(  # noqa: PLR0913
             "target": "00",
             "value": len(full_state_station),
             "code": "e3",
-            "level": Level.NATIONAL,
+            # "level": Level.NATIONAL,
             "period": PERIOD,
             "timestamp": day.isoformat(),
             "category": None,
@@ -378,21 +378,21 @@ def e3(  # noqa: PLR0913
     )
 
     desc_e3 = f"e3 report at {day} (period: {PERIOD})"
-    flow_name_e3 = "e3-" + runtime.flow_run.name
-    export_indicators(
-        indicators_e3, environment, flow_name_e3, desc_e3, create_artifact, persist
-    )
+    # flow_name_e3 = "e3-" + runtime.flow_run.name
+    # export_indicators(
+    #    indicators_e3, environment, flow_name_e3, desc_e3, create_artifact, persist
+    # )
     return indicators_e3
 
 
-@flow(flow_run_name="meta-e6-d")
+# @flow(flow_run_name="meta-e6-d")
 def e6(  # noqa: PLR0913
-    environment: Environment,
+    # environment: Environment,
     state_pool: pd.DataFrame,
     info_sessions_pools: pd.DataFrame,
     day: date,
-    create_artifact: bool,
-    persist: bool,
+    # create_artifact: bool,
+    # persist: bool,
 ) -> pd.DataFrame:
     """Run e6 subflow."""
     full_state_pool = pd.merge(
@@ -403,7 +403,7 @@ def e6(  # noqa: PLR0913
             "target": "00",
             "value": len(full_state_pool),
             "code": "e6",
-            "level": Level.NATIONAL,
+            # "level": Level.NATIONAL,
             "period": PERIOD,
             "timestamp": day.isoformat(),
             "category": None,
@@ -427,13 +427,14 @@ def e6(  # noqa: PLR0913
         }
     )
     desc_e6 = f"e6 report at {day} (period: {PERIOD})"
-    flow_name_e6 = "e6-" + runtime.flow_run.name
-    export_indicators(
-        indicators_e6, environment, flow_name_e6, desc_e6, create_artifact, persist
-    )
+    # flow_name_e6 = "e6-" + runtime.flow_run.name
+    # export_indicators(
+    #    indicators_e6, environment, flow_name_e6, desc_e6, create_artifact, persist
+    # )
     return indicators_e6
 
 
+'''
 @flow(flow_run_name="meta-e2e3e6-d")
 def e2_e3_e6(  # noqa: PLR0913
     environment: Environment,

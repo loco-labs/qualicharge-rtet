@@ -326,7 +326,7 @@ def to_sampled_state_poc(
     )
 
 
-@task(task_run_name="state-poc-d")
+# @task(task_run_name="state-poc-d")
 def to_state_poc(state_poc: pd.DataFrame, samples_per_day: int) -> pd.DataFrame:
     """Generate daily states for the charge points based on their sampled state.
 
