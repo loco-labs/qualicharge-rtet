@@ -396,7 +396,7 @@ def e6(  # noqa: PLR0913
 ) -> pd.DataFrame:
     """Run e6 subflow."""
     full_state_pool = pd.merge(
-        state_pool, info_sessions_pools, on=ID_POC, how="left"
+        state_pool, info_sessions_pools, on=ID_POOL, how="left"
     ).fillna(0)
     indicators_e6 = pd.DataFrame(
         {
@@ -409,7 +409,7 @@ def e6(  # noqa: PLR0913
             "category": None,
             "extras": [
                 {
-                    "id_station_itinerance": list(full_state_pool[ID_POC]),
+                    "id_pool": list(full_state_pool[ID_POOL]),
                     "nb_pdc": list(full_state_pool["nb_pdc"]),
                     "hs": list(full_state_pool["hs"]),
                     "inactif": list(full_state_pool["inactif"]),
