@@ -5,8 +5,8 @@ E3: daily states of stations in activity.
 E6: daily states of pools.
 """
 
-import os
-from datetime import date, datetime, timedelta
+#import os
+from datetime import date, timedelta
 
 import pandas as pd
 from pandas import NamedAgg
@@ -14,10 +14,9 @@ from pandas import NamedAgg
 # from prefect import flow, runtime, task
 # from prefect.cache_policies import NONE
 # from prefect.futures import wait
-
 # from indicators.extract.utils import (
 from utils import (
-    filter_sessions_duration,
+    # filter_sessions_duration,
     # get_pdc_station_for_day,
     # get_station_pool_for_day,
     to_sampled_sessions,
