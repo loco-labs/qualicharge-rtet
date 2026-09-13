@@ -161,7 +161,7 @@ def get_state_poc_for_chunk(
     state_poc_chunk = to_state_poc(sampled_state_poc_chunk, samples_per_day)
     return (sampled_state_poc_chunk, state_poc_chunk)
 
-
+'''
 def get_chunked_state_poc(  # noqa: PLR0913
     statics: pd.DataFrame,
     day: date,
@@ -288,7 +288,7 @@ def get_chunked_state_pools(  # noqa: PLR0913
         ignore_index=True,
     ).fillna(0)
     return state_pools
-
+'''
 
 # @flow(flow_run_name="meta-e2-d")
 def e2(  # noqa: PLR0913
