@@ -5,8 +5,10 @@ E3: daily states of stations in activity.
 E6: daily states of pools.
 """
 
+import json
+
 #import os
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 
 import pandas as pd
 from pandas import NamedAgg
@@ -16,8 +18,9 @@ from pandas import NamedAgg
 # from prefect.futures import wait
 # from indicators.extract.utils import (
 from utils import (
-    # filter_sessions_duration,
-    # get_pdc_station_for_day,
+    filter_sessions_duration,
+    get_chunks,
+    # get_poc_station_for_day,
     # get_station_pool_for_day,
     to_sampled_sessions,
     to_sampled_state_grp,
@@ -161,134 +164,53 @@ def get_state_poc_for_chunk(
     state_poc_chunk = to_state_poc(sampled_state_poc_chunk, samples_per_day)
     return (sampled_state_poc_chunk, state_poc_chunk)
 
-'''
-def get_chunked_state_poc(  # noqa: PLR0913
+#@task(task_run_name="to_state_chunk-{day:%y-%m-%d}", cache_policy=NONE)
+def to_state(  # noqa: PLR0913
     statics: pd.DataFrame,
-    day: date,
-    samples_per_day: int,
-    chunk_size: int,
+    chunk: pd.DataFrame,
     sessions: pd.DataFrame,
     statuses: pd.DataFrame,
-) -> tuple[pd.DataFrame, pd.DataFrame]:
-    """Calculate sampled_state_poc and state_poc in chunks."""
-    chunks = [
-        statics.iloc[i : i + chunk_size] for i in range(0, len(statics), chunk_size)
-    ]
-    futures = [
-        get_state_poc_for_chunk(  # ).submit(
-            day,
-            samples_per_day,
-            chunk,
-            sessions,
-            statuses,
-        )  # type: ignore[call-overload]
-        for chunk in chunks
-    ]
-    # wait(futures)
-
-    sampled_state_poc = pd.concat(
-        # [future.result()[0] for future in futures], ignore_index=True
-        [future[0] for future in futures],
-        ignore_index=True,
-    )
-    # state_poc = pd.concat([future.result()[1] for future in futures], ignore_index=True)
-    state_poc = pd.concat([future[1] for future in futures], ignore_index=True)
-    return (sampled_state_poc, state_poc)
-
-
-def get_chunked_state_grp(  # noqa: PLR0913
-    statics: pd.DataFrame,
-    sampled_state_poc: pd.DataFrame,
-    chunk_size: int,
-    id_grp: str,
+    day: date,
     samples_per_day: int,
-    saturation_ratio: float,
-    overload_ratio: float,
-    add_full_use: bool,
-    add_latency: bool,
-) -> pd.DataFrame:
-    """Calculate state_grp in chunks."""
-    codes, _ = pd.factorize(statics[id_grp])
-    statics["chunk"] = codes // chunk_size
-    chunks = statics.groupby("chunk")
-
-    futures = [
-        to_state_grp(  # .submit(
+    add_pool: bool = True,
+) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+    """Convert the data to a state representation."""
+    statics_chunk = statics[statics[ID_POC].isin(chunk[ID_POC])]
+    sampled_state_poc, state_poc = get_state_poc_for_chunk(
+        day, samples_per_day, statics_chunk, sessions, statuses
+    )
+    state_station = to_state_grp(
+        to_sampled_state_grp(
+            sampled_state_poc[sampled_state_poc[ID_POC].isin(chunk[ID_POC])],
+            chunk[[ID_POC, ID_STATION]],
+            ID_STATION,
+            SATURATION_RATIO,
+            OVERLOAD_RATIO,
+            add_full_use=True,
+            add_latency=True,
+        ),  # type: ignore[call-overload]
+        ID_STATION,
+        samples_per_day,
+    )
+    state_pool = (
+        to_state_grp(
             to_sampled_state_grp(
                 sampled_state_poc[sampled_state_poc[ID_POC].isin(chunk[ID_POC])],
-                chunk,
-                id_grp,
-                saturation_ratio,
-                overload_ratio,
-                add_full_use,
-                add_latency,
+                chunk[[ID_POC, ID_POOL]],
+                ID_POOL,
+                SATURATION_RATIO,
+                OVERLOAD_RATIO,
+                add_full_use=True,
+                add_latency=True,
             ),  # type: ignore[call-overload]
-            id_grp,
+            ID_POOL,
             samples_per_day,
         )
-        for _, chunk in chunks
-    ]
-
-    # state_grp = pd.concat([future.result() for future in futures], ignore_index=True)
-    state_grp = pd.concat([future for future in futures], ignore_index=True)
-    return state_grp
-
-
-def get_chunked_state_pools(  # noqa: PLR0913
-    statics,
-    pools_stations,
-    state_station,
-    sampled_state_poc,
-    chunk_size,
-    samples_per_day,
-    saturation_ratio,
-    overload_ratio,
-    add_full_use,
-    add_latency,
-):
-    """Calculate state_grp in chunks."""
-    stats_per_pool = pools_stations.groupby(ID_POOL).agg(
-        nb_stations=NamedAgg(column=ID_STATION, aggfunc="count")
+        if add_pool
+        else pd.DataFrame()
     )
-    single_station_pools = stats_per_pool[
-        stats_per_pool["nb_stations"] == 1
-    ].index.tolist()
-    multi_station_pools = stats_per_pool[
-        stats_per_pool["nb_stations"] > 1
-    ].index.tolist()
-    station_less_pools = stats_per_pool[
-        stats_per_pool["nb_stations"] == 0
-    ].index.tolist()
+    return (state_poc, state_station, state_pool)
 
-    single_state_pools = pools_stations[
-        pools_stations[ID_POOL].isin(single_station_pools)
-    ].merge(state_station, on=ID_STATION, how="left")
-    del single_state_pools[ID_STATION]
-
-    pools_pdcs = pools_stations[
-        pools_stations[ID_POOL].isin(multi_station_pools)
-    ].merge(statics, on=ID_STATION, how="left")[[ID_POOL, ID_POC]]
-    multi_state_pools = get_chunked_state_grp(
-        pools_pdcs,
-        sampled_state_poc,
-        chunk_size,
-        ID_POOL,
-        samples_per_day,
-        saturation_ratio,
-        overload_ratio,
-        add_full_use,
-        add_latency,
-    )
-    state_pools = pd.concat(
-        [
-            single_state_pools,
-            multi_state_pools,
-            pd.DataFrame(station_less_pools, columns=[ID_POOL]),
-        ],
-        ignore_index=True,
-    ).fillna(0)
-    return state_pools
-'''
 
 # @flow(flow_run_name="meta-e2-d")
 def e2(  # noqa: PLR0913
@@ -432,38 +354,49 @@ def e6(  # noqa: PLR0913
     # )
     return indicators_e6
 
+def read_statics(day: date, min_power: float) -> pd.DataFrame:
+    """Read static data for pocs and stations."""
+    date_statics = f"{day.day:02d}-{day.month:02d}-{day.year}"
+    e5_str = pd.read_csv(f"../data_DMR_e2_e3/e5_{date_statics}.csv")["extras"][0]
+    statics = pd.DataFrame(json.loads(e5_str))
+    statics["unite"] = statics["id_pdc_itinerance"].str[:5]
+    return statics[statics["puissance_nominale"] >= min_power]
 
-'''
-@flow(flow_run_name="meta-e2e3e6-d")
+def read_statics_pools(day:date, min_power: float) -> pd.DataFrame:
+    """Read static data for stations and pools."""
+    e1_statics = pd.read_csv("../source/tests_DMR/aires_pdc_2026-07-25.csv")[[ID_POOL, ID_STATION]].drop_duplicates()
+    return e1_statics
+
+#@flow(flow_run_name="meta-e2e3e6-d")
 def e2_e3_e6(  # noqa: PLR0913
-    environment: Environment,
+    #environment: Environment,
     min_power: float,
-    start: datetime | None = None,
-    offset: int = -1,
+    day: date,
+    #offset: int = -1,
     chunk_size: int = CHUNK_SIZE,
     samples_per_day: int = SAMPLES,
-    create_artifact: bool = False,
-    persist: bool = False,
+    #create_artifact: bool = False,
+    #persist: bool = False,
 ) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     """Run all e2, e3, and e6 subflows."""
-    start = (
-        datetime.now()
-        if not offset and start is None
-        else get_period_start_from_pit(start, offset, PERIOD)
-    )
     # common to indicators e2 and e3
-    day = start.date()
+    date_file = f"{day.year}{day.month:02d}{day.day:02d}"
+    data_quali = "../data/"
     min_duration = timedelta(minutes=24 * 60 / samples_per_day)
     max_duration = timedelta(hours=MAX_SESSION_DURATION_HOURS)
 
-    statuses = read_s3_data(day, environment, "qualicharge-statuses")
-    sessions_s3 = read_s3_data(day, environment, "qualicharge-sessions")
+    e1_statics = read_statics_pools(day, min_power)
+
+    statuses = pd.read_parquet(data_quali + "qualicharge-" + date_file + "/statuses/production.parquet", engine="pyarrow")
+    sessions_s3 = pd.read_parquet(data_quali + "qualicharge-" + date_file + "/sessions/production.parquet", engine="pyarrow")
     sessions = filter_sessions_duration(
         sessions_s3, min_duration=min_duration, max_duration=max_duration
     )
-    statics = get_pdc_station_for_day(day, environment)
-    # statics["unite"] = statics["id_pdc_itinerance"].str[:5]
+    statics = read_statics(day, min_power)
     statics = statics[statics["puissance_nominale"] >= min_power]
+    pools_statics = read_statics_pools(day, min_power) 
+    pools_stations = pools_statics[[ID_POOL, ID_STATION]].drop_duplicates()
+    pools_stations_pocs = pools_statics.merge(statics, on=ID_STATION, how="left")
 
     sessions_poc = (
         sessions.groupby(ID_POC)
@@ -473,29 +406,53 @@ def e2_e3_e6(  # noqa: PLR0913
         )
         .reset_index()
     )
+    # chunk calculation for pools and stations
+    chunks_pools = get_chunks(pools_stations_pocs, ID_POOL, chunk_size)
+    futures_pools = [
+        to_state(statics, chunk, sessions, statuses, day, samples_per_day)
+        for chunk in chunks_pools
+    ]
+    # wait(futures_pools)
+
+    statics_no_pools = statics[~statics[ID_POC].isin(pools_stations_pocs[ID_POC])]
+    chunks_no_pools = get_chunks(statics_no_pools, ID_STATION, chunk_size)
+    futures_no_pools = [
+        to_state(
+            statics_no_pools,
+            chunk,
+            sessions,
+            statuses,
+            day,
+            samples_per_day,
+            add_pool=False,
+        )
+        for chunk in chunks_no_pools
+    ]
+    # wait(futures_no_pools)
+
     # e2 indicator
-    sampled_state_poc, state_poc = get_chunked_state_poc(
-        statics, day, samples_per_day, chunk_size, sessions, statuses
-    )
+    state_poc = pd.concat(
+            [
+                pd.concat([future[0] for future in futures_pools], ignore_index=True),
+                pd.concat([future[0] for future in futures_no_pools], ignore_index=True),
+            ],
+            ignore_index=True,
+        )
     indicators_e2 = e2(
-        environment,
+        # environment,
         state_poc,
         sessions_poc,
         day,
-        create_artifact,
-        persist,
+        # create_artifact,
+        # persist,
     )
     # e3 indicator
-    state_station = get_chunked_state_grp(
-        statics,
-        sampled_state_poc,
-        chunk_size,
-        ID_STATION,
-        SAMPLES,
-        SATURATION_RATIO,
-        OVERLOAD_RATIO,
-        add_full_use=True,
-        add_latency=True,
+    state_station = pd.concat(
+        [
+            pd.concat([future[1] for future in futures_pools], ignore_index=True),
+            pd.concat([future[1] for future in futures_no_pools], ignore_index=True),
+        ],
+        ignore_index=True
     )
     sessions_stations = pd.merge(
         statics[[ID_POC, ID_STATION]], sessions_poc, on=ID_POC, how="left"
@@ -507,31 +464,17 @@ def e2_e3_e6(  # noqa: PLR0913
         .reset_index()
     )
     indicators_e3 = e3(
-        environment,
+        #environment,
         state_station,
         info_sessions_stations,
         day,
-        create_artifact,
-        persist,
+        #create_artifact,
+        #persist,
     )
     # e6 indicator
-    pools_statics = get_station_pool_for_day(day, environment)
-    pools_stations = pools_statics[[ID_POOL, ID_STATION]].drop_duplicates()
-
-    state_pool = get_chunked_state_pools(
-        statics,
-        pools_stations,
-        state_station,
-        sampled_state_poc,
-        chunk_size,
-        SAMPLES,
-        SATURATION_RATIO,
-        OVERLOAD_RATIO,
-        add_full_use=True,
-        add_latency=True,
-    )
+    state_pool = pd.concat([future[2] for future in futures_pools], ignore_index=True)
     sessions_pools = pd.merge(
-        pools_statics, sessions_poc, on=ID_POC, how="left"
+        pools_stations_pocs[[ID_POOL, ID_POC]], sessions_poc, on=ID_POC, how="left"
     ).fillna(0)
     info_sessions_pools = (
         sessions_pools[[ID_POOL, "sessions_nb", "energy_cum"]]
@@ -540,13 +483,12 @@ def e2_e3_e6(  # noqa: PLR0913
         .reset_index()
     )
     indicators_e6 = e6(
-        environment,
+        #environment,
         state_pool,
         info_sessions_pools,
         day,
-        create_artifact,
-        persist,
+        #create_artifact,
+        #persist,
     )
-
-    return (indicators_e2, indicators_e3, indicators_e6)
-'''
+    #return (indicators_e2, indicators_e3, indicators_e6)
+    return (state_poc, state_station, state_pool)
