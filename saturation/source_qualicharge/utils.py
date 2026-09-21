@@ -176,6 +176,9 @@ def to_sampled_statuses(
         by=["id_pdc_itinerance", "horodatage"]
     )
     state = state[state["etat_pdc"] != "inconnu"].copy().reset_index(drop=True)
+    # bug
+    if len(state) == 0:
+        return pd.DataFrame()
     state["f_horodatage"] = state["horodatage"].shift(-1)
     state.loc[state.index[-1], "f_horodatage"] = samples[samples_per_day]
     state["f_id_pdc_itinerance"] = state["id_pdc_itinerance"].shift(-1)
@@ -273,28 +276,37 @@ def to_sampled_state_poc(
     The 'pseudo-libre' corresponds to a 'libre' status with a session that is not.
     The 'pseudo-occupe' corresponds to a 'occupe' status with a session that is not.
     """
-    statuses = statuses.rename(columns={"occupation_pdc": "occupation_pdc_status"})
-    merged = pd.merge(
-        sessions, statuses, how="outer", on=["id_pdc_itinerance", "periode"]
-    ).fillna("aaa")
+    # bug
+    if len(statuses) > 0 :
+        statuses = statuses.rename(columns={"occupation_pdc": "occupation_pdc_status"})
+        merged = pd.merge(
+            sessions, statuses, how="outer", on=["id_pdc_itinerance", "periode"]
+        ).fillna("aaa")
 
-    # ! The state names are chosen so that alphabetical sorting respects
-    # the order of priority.
-    merged["state"] = (
-        merged[["etat_pdc", "occupation_pdc"]]
-        .agg("max", axis=1)
-        .replace("en_service", "libre")
-    )
-    merged["pseudo_libre"] = (
-        merged["occupation_pdc_status"].eq("libre")
-        & merged["occupation_pdc"].ne("f_libre")
-        & merged["etat_pdc"].eq("en_service")
-    )
-    merged["pseudo_occupe"] = (
-        merged["occupation_pdc_status"].eq("occupe")
-        & merged["occupation_pdc"].ne("occupe")
-        & merged["etat_pdc"].eq("en_service")
-    )
+
+        # ! The state names are chosen so that alphabetical sorting respects
+        # the order of priority.
+        merged["state"] = (
+            merged[["etat_pdc", "occupation_pdc"]]
+            .agg("max", axis=1)
+            .replace("en_service", "libre")
+        )
+        merged["pseudo_libre"] = (
+            merged["occupation_pdc_status"].eq("libre")
+            & merged["occupation_pdc"].ne("f_libre")
+            & merged["etat_pdc"].eq("en_service")
+        )
+        merged["pseudo_occupe"] = (
+            merged["occupation_pdc_status"].eq("occupe")
+            & merged["occupation_pdc"].ne("occupe")
+            & merged["etat_pdc"].eq("en_service")
+        )
+    else :
+        merged = sessions
+        merged["state"] = merged["occupation_pdc"]
+        merged["pseudo_libre"] = False
+        merged["pseudo_occupe"] = False
+
     merged = merged[
         ["id_pdc_itinerance", "periode", "state", "pseudo_libre", "pseudo_occupe"]
     ].replace("f_libre", "libre")
