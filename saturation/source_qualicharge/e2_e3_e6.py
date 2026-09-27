@@ -581,7 +581,7 @@ def e2_e3_e6_with_details(  # noqa: PLR0913
     )
     # chunk calculation for pools and stations
     chunks_pools = get_chunks(pools_stations_pocs, ID_POOL, chunk_size)
-    print("chunks_pools ", chunks_pools)
+    #print("chunks_pools ", len(chunks_pools))
     futures_pools = [
         to_state_with_details(statics, chunk, sessions, statuses, day, samples_per_day)
         for chunk in chunks_pools
@@ -590,7 +590,7 @@ def e2_e3_e6_with_details(  # noqa: PLR0913
 
     statics_no_pools = statics[~statics[ID_POC].isin(pools_stations_pocs[ID_POC])]
     chunks_no_pools = get_chunks(statics_no_pools, ID_STATION, chunk_size)
-    print("chunks_no_pools ", chunks_no_pools)
+    #print("chunks_no_pools ", len(chunks_no_pools))
     futures_no_pools = [
         to_state_with_details(
             statics_no_pools,
@@ -612,8 +612,8 @@ def e2_e3_e6_with_details(  # noqa: PLR0913
     sampled_state_poc = pd.concat([future[3] for future in futures], ignore_index=True)
     
     # e3 indicator
-    state_station = pd.concat([future[1] for future in futures], ignore_index=True),
-    sampled_state_station = pd.concat([future[4] for future in futures], ignore_index=True),
+    state_station = pd.concat([future[1] for future in futures], ignore_index=True)
+    sampled_state_station = pd.concat([future[4] for future in futures], ignore_index=True)
 
     # e6 indicator
     state_pool = pd.concat([future[2] for future in futures_pools], ignore_index=True)
