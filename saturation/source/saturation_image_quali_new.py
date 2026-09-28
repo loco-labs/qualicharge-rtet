@@ -37,7 +37,7 @@ def hysteresis(
 def maxi_duration(
     state_grp: pd.DataFrame, group_name: str, sorted: str, values: str
 ) -> pd.DataFrame:
-    """Calculate the maximum duration of a given value for each group."""
+    """Calculate the maximum number of periods of a given value for each group."""
     df = state_grp.sort_values(by=[group_name, sorted]).reset_index(drop=True)
 
     groups = (
@@ -50,12 +50,7 @@ def maxi_duration(
     valid_groups = df[df[values]].assign(valid_group=groups[df[values]])
 
     maxi_period = valid_groups.groupby([group_name, "valid_group"]).agg(
-        start=(sorted, "first"), end=(sorted, "last"), nb=(sorted, "count")
-    )
-    maxi_period["duration"] = (
-        (maxi_period["end"] - maxi_period["start"])
-        / (maxi_period["nb"] - 1)
-        * maxi_period["nb"]
+        first=(sorted, "first"), last=(sorted, "last"), duration=(sorted, "count")
     )
     maxi_period = maxi_period.loc[maxi_period.groupby(level=0)["duration"].idxmax()]
     return maxi_period.reset_index()
@@ -293,7 +288,12 @@ def to_sampled_state_grp(
     # add a 5 min interval for 'pleine utilisation'
     if add_latency:
         occupe_hs = merged["occupe"] | merged["hors_service"]
-        merged["pleine_utilisation"] = occupe_hs | occupe_hs.shift(fill_value=False)
+        merged["pleine_utilisation"] = (
+                    occupe_hs | occupe_hs.shift(periods=2, fill_value=False)
+                ) & (
+                    merged["id_pdc_itinerance"]
+                    == merged["id_pdc_itinerance"].shift(periods=2, fill_value="")
+                )
     else:
         merged["pleine_utilisation"] = merged["occupe"]
     grouped = (

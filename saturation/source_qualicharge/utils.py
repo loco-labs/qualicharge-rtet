@@ -417,14 +417,14 @@ def to_sampled_state_grp(  # noqa: PLR0913
     merged["occupe"] = merged["state"] == "occupe"
     merged["hors_service"] = merged["state"] == "hors_service"
     merged["libre"] = merged["state"] == "libre"
-    # add a 5 min interval for 'pleine utilisation'
+    # add a 10 min interval for 'pleine utilisation'
     if add_latency:
         occupe_hs = merged["occupe"] | merged["hors_service"]
         merged["pleine_utilisation"] = (
-            occupe_hs | occupe_hs.shift(fill_value=False)
+            occupe_hs | occupe_hs.shift(periods=2, fill_value=False)
         ) & (
             merged["id_pdc_itinerance"]
-            == merged["id_pdc_itinerance"].shift(fill_value="")
+            == merged["id_pdc_itinerance"].shift(periods=2, fill_value="")
         )
     else:
         merged["pleine_utilisation"] = merged["occupe"]
