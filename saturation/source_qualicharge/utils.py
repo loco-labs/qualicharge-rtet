@@ -52,6 +52,17 @@ MAX_SESSION_DURATION_HOURS: float = 10
 START_FULL_USE: float = 0.99
 END_FULL_USE: float = 0.8
 
+def full_use_poc(group:pd.Series, occupation: pd.Series,  add_latency=True) -> pd.Series:
+    """Extend the occupation of the pocs."""
+    if add_latency :
+        df = pd.DataFrame({'occupe': occupation, 'group': group})
+        df['pu_inv'] = 1 - df.groupby(group)['occupe'].transform(lambda x: x.rolling(3, min_periods=1).max())
+        df_inv = df.iloc[::-1].reset_index(drop=True)
+
+        df_inv['pu'] = 1 - df_inv.groupby(group)['pu_inv'].transform(lambda x: x.rolling(3, min_periods=1).max())
+        df_final = df_inv.iloc[::-1].reset_index(drop=True)
+        return df_final['pu'].astype(bool)
+    return occupation
 
 def hysteresis(
     x: pd.Series, low_hysteresis_level: float, high_hysteresis_level: float
@@ -418,6 +429,13 @@ def to_sampled_state_grp(  # noqa: PLR0913
     merged["hors_service"] = merged["state"] == "hors_service"
     merged["libre"] = merged["state"] == "libre"
     # add a 10 min interval for 'pleine utilisation'
+    merged["pleine_utilisation"] = full_use_poc(
+        merged['id_pdc_itinerance'], merged['occupe'] | merged["hors_service"]
+    )
+    '''
+    peak 691, inc 478 avec full_use
+    peak 672.23 MiB, increment: 545.28 MiB avec ancien
+    660.42 MiB, increment: 533.50 MiB avec full_use
     if add_latency:
         occupe_hs = merged["occupe"] | merged["hors_service"]
         merged["pleine_utilisation"] = (
@@ -428,6 +446,7 @@ def to_sampled_state_grp(  # noqa: PLR0913
         )
     else:
         merged["pleine_utilisation"] = merged["occupe"]
+    '''
     grouped = (
         merged[
             [
@@ -447,9 +466,9 @@ def to_sampled_state_grp(  # noqa: PLR0913
     )
     grouped = pd.merge(grouped, nb_pdc, how="left", on=group_name)
 
-    # a poc without statuses and without sessions is considered as hors_service
     grouped["hors_service"] = grouped["nb_pdc"] - grouped["libre"] - grouped["occupe"]
 
+    # a poc without statuses and without sessions is considered as hors_service
     grouped["hs"] = ((grouped["libre"] + grouped["occupe"]) == 0) & (
         grouped["hors_service"] > 0
     )
