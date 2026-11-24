@@ -4,6 +4,7 @@ Common indicators functions and constants.
 """
 
 from datetime import timedelta
+
 # from string import Template
 
 import numpy as np
@@ -151,6 +152,7 @@ def filter_sessions_duration(
     )
     return filtered_sessions
 
+
 def get_chunks(
     statics: pd.DataFrame, id_grp: str, chunk_size: int
 ) -> list[pd.DataFrame]:
@@ -170,6 +172,7 @@ def get_chunks(
         for _, group in df_nb_pocs.groupby("group")
     ]
     return static_chunks
+
 
 def to_sampled_statuses(
     data: pd.DataFrame,
@@ -403,8 +406,9 @@ def to_sampled_state_grp(  # noqa: PLR0913
 
     "surcharge" occurs when the number of charge points falls below 'overload_ratio'
     value, and "sature" occurs below 'saturation_ratio' value.
-    Each state is represented by a boolean value as well as an aggregated numeric value
-    ('hs': 1, 'inactif': 2, 'actif': 3, 'surcharge': 4, 'sature': 5).
+    "occupe", "hors_service", "libre", "pleine_utilisation", "pseudo_libre",
+    "pseudo_occupe" and "nb_pdc" : number of pdc.
+    "hs", "inactif", "pu", "sature", "surcharge", "actif" : boolean state of the group.
     """
     returned_fields = [
         group_name,
@@ -435,11 +439,11 @@ def to_sampled_state_grp(  # noqa: PLR0913
     merged["libre"] = merged["state"] == "libre"
     # add a 10 min interval for 'pleine utilisation'
     merged["pleine_utilisation"] = full_use_poc(
-        merged["id_pdc_itinerance"], 
+        merged["id_pdc_itinerance"],
         merged["occupe"] | merged["hors_service"],
         add_latency=add_latency,
     )
-    '''
+    """
     peak 691, inc 478 avec full_use
     peak 672.23 MiB, increment: 545.28 MiB avec ancien
     660.42 MiB, increment: 533.50 MiB avec full_use
@@ -453,7 +457,7 @@ def to_sampled_state_grp(  # noqa: PLR0913
         )
     else:
         merged["pleine_utilisation"] = merged["occupe"]
-    '''
+    """
     grouped = (
         merged[
             [
@@ -473,7 +477,6 @@ def to_sampled_state_grp(  # noqa: PLR0913
     )
     grouped = pd.merge(grouped, nb_pdc, how="left", on=group_name)
 
-    # a poc without statuses and without sessions is considered as hors_service
     grouped["hors_service"] = grouped["nb_pdc"] - grouped["libre"] - grouped["occupe"]
 
     grouped["hs"] = ((grouped["libre"] + grouped["occupe"]) == 0) & (
@@ -511,7 +514,7 @@ def to_sampled_state_grp(  # noqa: PLR0913
         full_use = 1
 
         full_use_rate = (
-            grouped["pleine_utilisation"] + grouped["hors_service"]
+            grouped["pleine_utilisation"]  # + grouped["hors_service"]
         ) / grouped["nb_pdc"]
         tmp_full_use = pd.Series(
             pd.cut(
