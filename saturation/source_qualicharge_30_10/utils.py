@@ -4,9 +4,10 @@ Common indicators functions and constants.
 """
 
 from datetime import timedelta
+from enum import StrEnum
 
 # from string import Template
-
+import geopandas as gpd
 import numpy as np
 import pandas as pd
 from pandas import NamedAgg
@@ -47,11 +48,48 @@ ORDER BY
 PERIOD = IndicatorPeriod.DAY
 '''
 
-ID_POC: str = "id_pdc_itinerance"
-ID_STATION: str = "id_station_itinerance"
 MAX_SESSION_DURATION_HOURS: float = 10
 START_FULL_USE: float = 0.99
 END_FULL_USE: float = 0.8
+
+RAYON_ECHANGEUR: float = 3000
+
+
+class NaturePool(StrEnum):
+    AIRE = "Aire"
+    ECHANGEUR = "Echangeur"
+    ALL = "All"
+
+
+def stations_echangeurs(
+    stations: gpd.GeoDataFrame,
+    echangeurs: gpd.GeoDataFrame,
+) -> gpd.GeoDataFrame:
+    """Return the nearest echangeur for each station within a maximum distance."""
+    stations = stations.drop_duplicates(subset=["id_station_itinerance"])
+    ech_geo = gpd.GeoDataFrame(
+        echangeurs,
+        geometry=gpd.points_from_xy(echangeurs["longitude"], echangeurs["latitude"]),
+        crs="EPSG:4326",
+    )
+    stations_geo = gpd.GeoDataFrame(
+        stations,
+        geometry=gpd.points_from_xy(stations["longitude"], stations["latitude"]),
+        crs="EPSG:4326",
+    )
+
+    ech_station = gpd.sjoin_nearest(
+        stations_geo[["id_station_itinerance", "geometry"]].to_crs(epsg=2154),
+        ech_geo[["id_pool", "geometry"]].to_crs(epsg=2154),
+        how="inner",
+        max_distance=RAYON_ECHANGEUR,
+        distance_col="distance",
+    )
+    return (
+        ech_station[["id_station_itinerance", "geometry", "id_pool", "distance"]]
+        .reset_index(drop=True)
+        .to_crs(epsg=4326)
+    )
 
 
 def full_use_poc(
