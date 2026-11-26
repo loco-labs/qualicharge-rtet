@@ -126,6 +126,32 @@ def hysteresis(
     )
 
 
+def full_use_group(pu_nb: pd.Series, nb_pdc: pd.Series) -> pd.Series:
+    """Calculate the full use at the station or pool level"""
+    not_full_use = 0
+    maybe_full_use = 0.5
+    full_use = 1
+
+    full_use_rate = pu_nb / nb_pdc
+    tmp_full_use = pd.Series(
+        pd.cut(
+            full_use_rate,
+            [-np.inf, END_FULL_USE, START_FULL_USE, np.inf],
+            labels=[not_full_use, maybe_full_use, full_use],
+        ),
+        index=full_use_rate.index,
+    )
+    pu_grp = tmp_full_use.where(
+        tmp_full_use != maybe_full_use,
+        np.where(
+            hysteresis(tmp_full_use, maybe_full_use, full_use),
+            full_use,
+            not_full_use,
+        ),
+    ).astype("bool")
+    return pu_grp
+
+
 def maxi_duration(
     state_grp: pd.DataFrame, group_name: str, sorted: str, values: str
 ) -> pd.DataFrame:
@@ -481,21 +507,6 @@ def to_sampled_state_grp(  # noqa: PLR0913
         merged["occupe"] | merged["hors_service"],
         add_latency=add_latency,
     )
-    """
-    peak 691, inc 478 avec full_use
-    peak 672.23 MiB, increment: 545.28 MiB avec ancien
-    660.42 MiB, increment: 533.50 MiB avec full_use
-    if add_latency:
-        occupe_hs = merged["occupe"] | merged["hors_service"]
-        merged["pleine_utilisation"] = (
-            occupe_hs | occupe_hs.shift(periods=2, fill_value=False)
-        ) & (
-            merged["id_pdc_itinerance"]
-            == merged["id_pdc_itinerance"].shift(periods=2, fill_value="")
-        )
-    else:
-        merged["pleine_utilisation"] = merged["occupe"]
-    """
     grouped = (
         merged[
             [
@@ -547,29 +558,7 @@ def to_sampled_state_grp(  # noqa: PLR0913
     )
 
     if add_full_use:
-        not_full_use = 0
-        maybe_full_use = 0.5
-        full_use = 1
-
-        full_use_rate = (
-            grouped["pleine_utilisation"]  # + grouped["hors_service"]
-        ) / grouped["nb_pdc"]
-        tmp_full_use = pd.Series(
-            pd.cut(
-                full_use_rate,
-                [-np.inf, END_FULL_USE, START_FULL_USE, np.inf],
-                labels=[not_full_use, maybe_full_use, full_use],
-            ),
-            index=full_use_rate.index,
-        )
-        grouped["pu"] = tmp_full_use.where(
-            tmp_full_use != maybe_full_use,
-            np.where(
-                hysteresis(tmp_full_use, maybe_full_use, full_use),
-                full_use,
-                not_full_use,
-            ),
-        ).astype("bool")
+        grouped["pu"] = full_use_group(grouped["pleine_utilisation"], grouped["nb_pdc"])
     else:
         grouped["pu"] = False
 
