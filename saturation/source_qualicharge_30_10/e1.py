@@ -5,6 +5,7 @@ E1: the list of stations of pools in activity.
 data : id_pool
 """
 
+import json
 from datetime import date, datetime
 from pathlib import Path
 
@@ -16,13 +17,13 @@ import pandas as pd  # type: ignore
 # from indicators.models import IndicatorPeriod, Level
 # from indicators.types import Environment
 from utils import (
+    NaturePool,
     stations_echangeurs,
     #    POOLS_FILE,
     #    export_indicators,
     #    get_period_start_from_pit,
     #    init_pools,
 )
-from utils import NaturePool
 
 # HISTORY_STRATEGY_FIELD: str = "mean"
 PERIOD = "d"
@@ -33,23 +34,13 @@ def init_pools(
     file_path: Path, filter: NaturePool = NaturePool.AIRE
 ) -> gpd.GeoDataFrame:
     """Initialize pools from a geojson file."""
-    # pools = pd.read_csv(pools_file).rename(columns={"id_aire": "id_pool"})
-    pools = gpd.read_file(file_path).rename(columns={"id_aire": "id_pool"})
-    match filter:
-        case NaturePool.AIRE:
-            return pools[pools["id_pool"].str[:1] == "A"]
-        case NaturePool.ECHANGEUR:
-            return pools[pools["id_pool"].str[:1] == "E"]
-        case _:
-            return pools
+    return gpd.read_file(file_path).rename(columns={"id_aire": "id_pool"})
 
 
-def read_statics(day: date, min_power: float) -> pd.DataFrame:
+def read_statics(day: date) -> pd.DataFrame:
     """Read static data for pocs and stations."""
     date_statics = f"{day.day:02d}-{day.month:02d}-{day.year}"
-    e5_str = pd.read_csv(f"../saturation/data_DMR_e2_e3/e5_{date_statics}.csv")[
-        "extras"
-    ][0]
+    e5_str = pd.read_csv(f"../data_DMR_e2_e3/e5_{date_statics}.csv")["extras"][0]
     statics = pd.DataFrame(json.loads(e5_str))
     statics["unite"] = statics["id_pdc_itinerance"].str[:5]
     return statics
@@ -68,12 +59,12 @@ def get_station_pool_for_day(from_date: date) -> pd.DataFrame:
         stations_df,
         geometry=gpd.points_from_xy(stations_df["longitude"], stations_df["latitude"]),
         crs="EPSG:4326",
-    )[["id_station_itinerance", "geometry"]]
+    )
 
-    aires = pools[pools["id_pool"].str[:1] == "A"]
+    aires = pools[pools["id_pool"].str[:1] == NaturePool.AIRE.value]
     aires_with_stations = gpd.sjoin(aires, stations, how="left", predicate="contains")
 
-    echangeurs = pools[pools["id_pool"].str[:1] == "E"]
+    echangeurs = pools[pools["id_pool"].str[:1] == NaturePool.ECHANGEUR.value]
     echangeurs_with_stations = stations_echangeurs(stations, echangeurs)
 
     pools_with_stations = pd.concat(
@@ -120,9 +111,9 @@ def e1_national(
 def e1(
     # environment: Environment,
     start: datetime | None = None,
-    offset: int = -1,
-    create_artifact: bool = False,
-    persist: bool = False,
+    # offset: int = -1,
+    # create_artifact: bool = False,
+    # persist: bool = False,
 ) -> pd.DataFrame:
     """Run all e1 subflows."""
     # start = (

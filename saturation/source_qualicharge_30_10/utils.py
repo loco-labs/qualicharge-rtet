@@ -56,9 +56,8 @@ RAYON_ECHANGEUR: float = 3000
 
 
 class NaturePool(StrEnum):
-    AIRE = "Aire"
-    ECHANGEUR = "Echangeur"
-    ALL = "All"
+    AIRE = "A"
+    ECHANGEUR = "E"
 
 
 def stations_echangeurs(

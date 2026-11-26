@@ -1,0 +1,192 @@
+"""QualiCharge prefect indicators: utils.
+
+Common indicators functions and constants.
+"""
+
+from datetime import datetime
+from pathlib import Path
+from string import Template
+
+import geopandas as gpd  # type: ignore
+import pandas as pd  # type: ignore
+from dateutil.relativedelta import MO, relativedelta
+from prefect import task
+from prefect.artifacts import create_markdown_artifact
+from sqlalchemy.orm import Session
+
+from .db import get_api_db_engine, save_indicators
+from .models import IndicatorPeriod, IndicatorTimeSpan, Level
+from .types import Environment
+
+# in AFIR regulation, 22 kw belongs interval [7.4, 22] and not [22, 50]
+POWER_RANGE_CTE: dict = {"power_range": """
+    puissance(category, p_cat) AS (
+        VALUES
+            (numrange(0.0, 7.4), 1),
+            (numrange(7.4, 22.0, '[]'), 2),
+            (numrange(22.0, 50.0, '()'), 3),
+            (numrange(50, 150.0), 4),
+            (numrange(150, 350.0), 5),
+            (numrange(350, NULL), 6)
+    )"""}
+IS_VALID_PDL: dict = {"is_valid_pdl": """
+    NOT (
+        num_pdl IS NULL
+        OR num_pdl LIKE '%% %%'
+        OR num_pdl LIKE '%%123456789%%'
+        OR num_pdl LIKE '000%%'
+        OR num_pdl IN ('', '11111111111111', '99999999999999')
+        OR num_pdl !~ '[0-9]'
+    )"""}
+IS_DC: dict = {"is_dc": """
+    max(
+      (
+        puissance_nominale >= 50
+        OR prise_type_combo_ccs
+        OR prise_type_chademo
+      ) :: int
+    ) :: bool
+"""}
+ALIMENTATION: dict = {"alimentation": """
+    CASE
+      WHEN is_dc AND is_direct AND is_valid_pdl THEN 'DC_direct_valid'
+      WHEN is_dc AND is_direct AND not is_valid_pdl THEN 'DC_direct_invalid'
+      WHEN is_dc AND not is_direct THEN 'DC_indirect'
+      WHEN NOT is_dc AND is_direct AND is_valid_pdl THEN 'AC_direct_valid'
+      WHEN NOT is_dc AND is_direct AND not is_valid_pdl THEN 'AC_direct_invalid'
+      ELSE 'AC_indirect'
+    END
+"""}
+POOLS_FILE: Path = Path("./data/last_statics_dmr.geojson")
+
+
+def init_pools(file_path: Path) -> gpd.GeoDataFrame:
+    """Initialize a GeoDataFrame for pools."""
+    return gpd.read_file(file_path).rename(columns={"id_aire": "id_pool"})
+
+
+def get_period_start_from_pit(  # noqa: PLR0911
+    pit: datetime | None = None,
+    offset: int = 0,
+    period: IndicatorPeriod = IndicatorPeriod.DAY,
+) -> datetime:
+    """Return the starting datetime of a period given a point in time (PIT) definition and an offset."""  # noqa: E501
+    first_minute = {"minute": 0, "second": 0, "microsecond": 0}
+    first_hour = first_minute | {"hour": 0}
+    start_date = datetime.now() if pit is None else pit
+    start_date += period.duration * offset
+    match period:
+        case IndicatorPeriod.DAY:
+            return start_date + relativedelta(**first_hour)  # type: ignore[arg-type]
+        case IndicatorPeriod.MONTH:
+            return start_date + relativedelta(day=1, **first_hour)  # type: ignore[arg-type]
+        case IndicatorPeriod.QUARTER:
+            first_month = (start_date.month - 1) // 3 * 3 + 1
+            return start_date + relativedelta(month=first_month, day=1, **first_hour)  # type: ignore[arg-type]
+        case IndicatorPeriod.YEAR:
+            return start_date + relativedelta(month=1, day=1, **first_hour)  # type: ignore[arg-type]
+        case IndicatorPeriod.WEEK:
+            return start_date + relativedelta(weekday=MO(-1), **first_hour)  # type: ignore[arg-type]
+        case IndicatorPeriod.HOUR:
+            return start_date + relativedelta(**first_minute)  # type: ignore[arg-type]
+        case _:
+            return start_date
+
+
+def get_timespan_filter_query_params(timespan: IndicatorTimeSpan, session: bool = True):
+    """Get timespan query parameters."""
+    date_end = timespan.start + timespan.period.duration
+    sql_start = f"'{timespan.start.isoformat(sep=' ')}'"
+    sql_end = f"'{date_end.isoformat(sep=' ')}'"
+    interval_session = "start >= timestamp $start AND start < timestamp $end"
+    interval_status = "horodatage >= timestamp $start AND horodatage < timestamp $end"
+    interval = interval_session if session else interval_status
+    return {
+        "timespan": Template(interval).substitute({"start": sql_start, "end": sql_end})
+    }
+
+
+def get_num_for_level_query_params(level: Level, use_statique: bool = True) -> dict:
+    """Get level_id and join_extras query parameters.
+
+    Args:
+        level: the Level enum value for which to get query parameters.
+        use_statique: True for queries with `statique`,
+                      False for queries with `_pointdecharge` (default: True).
+    """
+    match (level, use_statique):
+        case (Level.CITY, _):
+            return {
+                "level_id": "City.id",
+                "join_extras": "INNER JOIN City ON code_insee_commune = City.code",
+            }
+        case (Level.EPCI, _):
+            return {
+                "level_id": "EPCI.id",
+                "join_extras": """
+                    INNER JOIN City ON code_insee_commune = City.code
+                    INNER JOIN EPCI ON City.epci_id = EPCI.id""",
+            }
+        case (Level.DEPARTMENT, _):
+            return {
+                "level_id": "Department.id",
+                "join_extras": """
+                    INNER JOIN City ON code_insee_commune = City.code
+                    INNER JOIN Department ON City.department_id = Department.id
+                    """,
+            }
+        case (Level.REGION, _):
+            return {
+                "level_id": "Region.id",
+                "join_extras": """
+                    INNER JOIN City ON code_insee_commune = City.code
+                    INNER JOIN Department ON City.department_id = Department.id
+                    INNER JOIN Region ON Department.region_id = Region.id
+                    """,
+            }
+        case (Level.OPERATIONALUNIT, True):
+            return {
+                "level_id": "Operationalunit.id",
+                "join_extras": """
+                    INNER JOIN Pointdecharge ON Pointdecharge.id = pdc_id
+                    INNER JOIN Station ON station.id = station_id
+                    INNER JOIN Operationalunit ON Station.operational_unit_id = Operationalunit.id
+                    """,  # noqa: E501
+            }
+        case (Level.OPERATIONALUNIT, False):
+            return {
+                "level_id": "Operationalunit.id",
+                "join_extras": """
+                    INNER JOIN Operationalunit ON operational_unit_id = Operationalunit.id
+                    """,  # noqa: E501
+            }
+        case _:
+            raise NotImplementedError(f"Unsupported level {level}")
+
+
+@task(task_run_name="targets-for-level-{level:02d}")
+def get_targets_for_level(level: Level, environment: Environment) -> pd.DataFrame:
+    """Get registered targets for level from QualiCharge database."""
+    if level == Level.NATIONAL:
+        raise NotImplementedError(f"Unsupported level {level}")
+    with Session(get_api_db_engine(environment)) as session:
+        return pd.read_sql_table(level.name.lower(), con=session.connection())
+
+
+@task(task_run_name="export-indicators")
+def export_indicators(  # noqa: PLR0913
+    indicators: pd.DataFrame,
+    environment: Environment,
+    flow_name: str,
+    description: str,
+    create_artifact: bool,
+    persist: bool,
+):
+    """Export indicators."""
+    if persist and environment:
+        save_indicators(environment, indicators)
+
+    if create_artifact:
+        create_markdown_artifact(
+            key=flow_name, markdown=indicators.to_markdown(), description=description
+        )
