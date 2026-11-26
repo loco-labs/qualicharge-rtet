@@ -28,6 +28,7 @@ from utils import (
 # HISTORY_STRATEGY_FIELD: str = "mean"
 PERIOD = "d"
 POOLS_FILE = "../data_DMR/aires_dmr_2026-08-03.geojson"
+RAYON_ECHANGEUR: float = 3000.0
 
 
 def init_pools(
@@ -65,7 +66,9 @@ def get_station_pool_for_day(from_date: date) -> pd.DataFrame:
     aires_with_stations = gpd.sjoin(aires, stations, how="left", predicate="contains")
 
     echangeurs = pools[pools["id_pool"].str[:1] == NaturePool.ECHANGEUR.value]
-    echangeurs_with_stations = stations_echangeurs(stations, echangeurs)
+    echangeurs_with_stations = stations_echangeurs(
+        stations, echangeurs, RAYON_ECHANGEUR
+    )
 
     pools_with_stations = pd.concat(
         [

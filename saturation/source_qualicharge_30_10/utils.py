@@ -63,6 +63,7 @@ class NaturePool(StrEnum):
 def stations_echangeurs(
     stations: gpd.GeoDataFrame,
     echangeurs: gpd.GeoDataFrame,
+    rayon_echangeur: float
 ) -> gpd.GeoDataFrame:
     """Return the nearest echangeur for each station within a maximum distance."""
     stations = stations.drop_duplicates(subset=["id_station_itinerance"])
@@ -81,7 +82,7 @@ def stations_echangeurs(
         stations_geo[["id_station_itinerance", "geometry"]].to_crs(epsg=2154),
         ech_geo[["id_pool", "geometry"]].to_crs(epsg=2154),
         how="inner",
-        max_distance=RAYON_ECHANGEUR,
+        max_distance=rayon_echangeur,
         distance_col="distance",
     )
     return (
